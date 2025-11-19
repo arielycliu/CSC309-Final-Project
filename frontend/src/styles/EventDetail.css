@@ -1,0 +1,257 @@
+.event-detail-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px 24px 48px;
+  text-align: left;
+}
+
+.event-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.event-detail-back-button {
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px;
+  border: 1px solid #e5e7eb;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  color: #4b5563;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.event-detail-back-button:hover {
+  background-color: #f3f4f6;
+}
+
+.event-detail-back-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.event-detail-title {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.event-detail-subtitle {
+  margin: 2px 0 0;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* Main card */
+.event-detail-card {
+  background-color: #ffffff;
+  border-radius: 18px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+  padding: 20px 20px 24px;
+}
+
+.event-detail-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.event-detail-badges-left {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Badges */
+.event-detail-badge-points {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  font-size: 11px;
+  border-radius: 9999px;
+  background-color: #e0ebff;
+  color: #1d4ed8;
+}
+
+.event-detail-badge-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  font-size: 11px;
+  border-radius: 9999px;
+  border: 1px solid #e5e7eb;
+  color: #4b5563;
+}
+
+.event-detail-badge-rsvped {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  font-size: 11px;
+  border-radius: 9999px;
+  background-color: #dcfce7;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+.event-detail-badge-icon {
+  width: 12px;
+  height: 12px;
+}
+
+/* Card body */
+.event-detail-card-body {
+  padding-top: 6px;
+}
+
+.event-detail-card-title {
+  margin: 0 0 6px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.event-detail-description {
+  margin: 0 0 20px;
+  font-size: 14px;
+  color: #4b5563;
+}
+
+.event-detail-info-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+@media (min-width: 768px) {
+  .event-detail-info-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.event-detail-info-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.event-detail-info-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.event-detail-info-icon {
+  width: 20px;
+  height: 20px;
+  color: #9ca3af;
+  margin-top: 2px;
+}
+
+.event-detail-info-label {
+  font-size: 12px;
+  color: #6b7280;
+  margin: 0 0 2px;
+}
+
+.event-detail-info-main {
+  margin: 0;
+  font-size: 14px;
+  color: #111827;
+}
+
+.event-detail-info-secondary {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* Attendance progress bar */
+.event-detail-progress-bar {
+  width: 100%;
+  height: 6px;
+  border-radius: 9999px;
+  background-color: #e5e7eb;
+  overflow: hidden;
+  margin-top: 6px;
+}
+
+.event-detail-progress-fill {
+  height: 100%;
+  background-color: #2563eb;
+}
+
+/* Sections */
+.event-detail-section {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 16px;
+  margin-top: 8px;
+}
+
+.event-detail-section-title {
+  margin: 0 0 8px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.event-detail-long-description {
+  margin: 0;
+  font-size: 14px;
+  color: #4b5563;
+  white-space: pre-line;
+}
+
+/* RSVP */
+.event-detail-rsvp {
+  margin-top: 12px;
+}
+
+.event-detail-rsvp-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 18px;
+  border-radius: 9999px;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  background-color: #020617;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.event-detail-rsvp-button:hover {
+  background-color: #111827;
+}
+
+.event-detail-rsvp-button-outline {
+  background-color: #ffffff;
+  color: #111827;
+  border: 1px solid #d1d5db;
+}
+
+.event-detail-rsvp-button-outline:hover {
+  background-color: #f3f4f6;
+}
+
+.event-detail-rsvp-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.event-detail-rsvp-note {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #6b7280;
+}

@@ -1,0 +1,142 @@
+
+.events-page {
+  max-width: 1120px;      
+  margin: 0 auto;
+  padding: 32px 24px 48px;
+  text-align: left;
+}
+
+/* Header */
+.events-header h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.events-header p {
+  margin: 4px 0 24px;
+  font-size: 14px;
+  color: #6b7280; /* muted grey */
+}
+
+/* Grid of cards */
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+/* Card */
+.event-card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+  padding: 16px 16px 12px;
+  display: flex;
+  flex-direction: column;
+
+  transition:
+    transform 150ms ease,
+    box-shadow 150ms ease,
+    border-color 150ms ease;
+}
+
+.event-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.12);
+  border-color: #d1d5db;
+}
+
+
+/* Top row: points badge + status */
+.event-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.event-badge-points {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 9999px;
+  font-size: 11px;
+  background-color: #e0ebff;
+  color: #1d4ed8;
+}
+
+.event-badge-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 9999px;
+  font-size: 11px;
+  border: 1px solid #e5e7eb;
+  color: #4b5563;
+}
+
+/* Main text */
+.event-card-body {
+  padding: 0 4px 12px;
+}
+
+.event-title {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.event-description {
+  margin: 0 0 16px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.event-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.event-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #4b5563;
+}
+
+.event-icon {
+  width: 16px;
+  height: 16px;
+  color: #9ca3af;
+}
+
+.event-button {
+  margin-top: auto;
+  margin-inline: 0;
+  width: 100%;
+  border: none;
+  border-radius: 9999px;
+  padding: 10px 16px;
+  background-color: #020617; 
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.event-button:hover {
+  background-color: #111827; 
+}
+
+.event-button-icon {
+  width: 16px;
+  height: 16px;
+}

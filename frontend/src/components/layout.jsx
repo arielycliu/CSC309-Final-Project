@@ -35,7 +35,7 @@ const Layout = () => {
                 <NavLink to="/not-working" className="nav-button">
                 <Clock className="icon" />Pending Redemptions
                 </NavLink>
-                <NavLink to="/not-working" className="nav-button">
+                <NavLink to="/events" className="nav-button">
                 <Calendar className="icon" />Events
                 </NavLink>
                 <NavLink to="/not-working" className="nav-button">
@@ -62,7 +62,7 @@ const Layout = () => {
                             <NavLink to="/not-working" className="nav-button">
                         <Clock className="icon" />Pending Redemptions
                         </NavLink>
-                            <NavLink to="/not-working" className="nav-button">
+                            <NavLink to="/events" className="nav-button">
                         <Calendar className="icon" />Events
                         </NavLink>
                         <NavLink to="/not-working" className="nav-button">

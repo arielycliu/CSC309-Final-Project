@@ -1,4 +1,4 @@
-import * as Icons from '../icons';
+import { Wallet, LayoutDashboard, QrCode, Send, Gift, Clock, Calendar, History, User, Settings, LogOut} from "lucide-react";
 import './Layout.css';
 import{NavLink, Outlet, useNavigate } from "react-router-dom"
 
@@ -15,39 +15,70 @@ const Layout = () => {
     return <div className="layout-container">
         <header className='top-bar'>
             
-            <NavLink to="/" id="app-icon">
-                <Icons.WalletIcon className="" /> App
+            <NavLink to="/" id="app-div">
+                <Wallet id="app-icon" />App
             </NavLink>
 
             <nav id='page-links'>
                 <NavLink to="/" className="nav-button">
-                <Icons.DashboardIcon className="icon" />Dashboard
+                <LayoutDashboard className="icon" />Dashboard
                 </NavLink>
                 <NavLink to="/not-working" className="nav-button">
-                <Icons.QRIcon className="icon" /> My QR Code 
+                <QrCode className="icon" /> My QR Code 
                 </NavLink>
                 <NavLink to="/not-working" className="nav-button">
-                <Icons.TransferIcon className="icon" /> Transfer Points
+                <Send className="icon" /> Transfer Points
                 </NavLink>
                 <NavLink to="/not-working" className="nav-button">
-                <Icons.RedeemIcon className="icon" />Reedeem points 
+                <Gift className="icon" />Reedeem points 
                 </NavLink>
                 <NavLink to="/not-working" className="nav-button">
-                <Icons.PendingIcon className="icon" />Pending Redemption
+                <Clock className="icon" />Pending Redemptions
                 </NavLink>
                 <NavLink to="/not-working" className="nav-button">
-                <Icons.EventIcon className="icon" />Events
+                <Calendar className="icon" />Events
                 </NavLink>
                 <NavLink to="/not-working" className="nav-button">
-                <Icons.HistoryIcon className="icon" />Transaction History
+                <History className="icon" />Transaction History
                 </NavLink>
             </nav>
 
             <div id="user-dropdown">
-                <Icons.UserIcon className="icon" />
+                <User id="user-icon" />
                 <div className="dropdown-content">
-                    <NavLink to="/">Profile Settings</NavLink>
-                    <button onClick={handleLogout}>Logout</button>
+                     <div className="extra-dropdown">
+                        <NavLink to="/" className="nav-button">
+                            <LayoutDashboard className="icon" />Dashboard
+                        </NavLink>
+                            <NavLink to="/not-working" className="nav-button">
+                        <QrCode className="icon" /> My QR Code 
+                        </NavLink>
+                            <NavLink to="/not-working" className="nav-button">
+                        <Send className="icon" /> Transfer Points
+                        </NavLink>
+                            <NavLink to="/not-working" className="nav-button">
+                        <Gift className="icon" />Reedeem points 
+                        </NavLink>
+                            <NavLink to="/not-working" className="nav-button">
+                        <Clock className="icon" />Pending Redemptions
+                        </NavLink>
+                            <NavLink to="/not-working" className="nav-button">
+                        <Calendar className="icon" />Events
+                        </NavLink>
+                        <NavLink to="/not-working" className="nav-button">
+                            <History className="icon" />Transaction History
+                        </NavLink>
+                        <hr id="line"/>
+                    </div>
+
+                    <NavLink to="/not-working" className="dropdown-button">
+                        <Settings className="icon"/> Profile Settings
+                    </NavLink>
+                    <button onClick={handleLogout} className="dropdown-button">
+                        <LogOut className="icon"/> Logout
+                    </button>
+
+                   
                 </div>
             </div>
         </header>

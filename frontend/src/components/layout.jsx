@@ -1,5 +1,5 @@
 import { Wallet, LayoutDashboard, QrCode, Send, Gift, Clock, Calendar, History, User, Settings, LogOut} from "lucide-react";
-import './Layout.css';
+import '../styles/layout.css';
 import{NavLink, Outlet, useNavigate } from "react-router-dom"
 
 const Layout = () => {
@@ -71,7 +71,7 @@ const Layout = () => {
                         <hr id="line"/>
                     </div>
 
-                    <NavLink to="/not-working" className="dropdown-button">
+                    <NavLink to="settings/profile" className="dropdown-button">
                         <Settings className="icon"/> Profile Settings
                     </NavLink>
                     <button onClick={handleLogout} className="dropdown-button">

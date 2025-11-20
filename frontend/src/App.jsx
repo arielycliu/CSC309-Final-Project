@@ -3,6 +3,7 @@ import Layout from './components/layout.jsx';
 import Profile from './components/Profile.jsx'
 import Dashboard from './pages/Dashboard.jsx';
 import Events from './pages/Events.jsx';
+import Promotions from './pages/Promotions.jsx';
 import EventDetails from './pages/EventDetails.jsx';
 import ProfileSettings from './pages/ProfileSettings.jsx'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -20,6 +21,7 @@ function App() {
             <Route path="settings/profile" element={<Profile />}>
               <Route path="edit" element={<ProfileSettings />} />
             </Route>
+            <Route path="promotions" element={<Promotions />} />
             <Route path="/" element={<Dashboard />} />
             {/* add other route paths as they are created*/}
           </Route>

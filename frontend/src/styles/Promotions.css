@@ -1,0 +1,11 @@
+.promotions-page {
+    width: auto;
+    text-align: left;
+    margin: 2rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+.promotions-page .header p {
+    color: grey;
+}

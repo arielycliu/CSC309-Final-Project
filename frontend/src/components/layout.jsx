@@ -1,4 +1,4 @@
-import { Wallet, LayoutDashboard, QrCode, Send, Gift, Clock, Calendar, History, User, Settings, LogOut} from "lucide-react";
+import { Wallet, LayoutDashboard, QrCode, Send, Gift, Clock, Tag, Calendar, History, User, Settings, LogOut} from "lucide-react";
 import '../styles/layout.css';
 import{NavLink, Outlet, useNavigate } from "react-router-dom"
 
@@ -34,6 +34,9 @@ const Layout = () => {
                 </NavLink>
                 <NavLink to="/not-working" className="nav-button">
                 <Clock className="icon" />Pending Redemptions
+                </NavLink>
+                <NavLink to="/promotions" className="nav-button">
+                <Tag className="icon" />Promotions
                 </NavLink>
                 <NavLink to="/events" className="nav-button">
                 <Calendar className="icon" />Events

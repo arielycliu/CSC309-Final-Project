@@ -82,6 +82,10 @@ export default function Dashboard() {
                     <p className="right">{status}</p>
                 </div>
             </div>
+            <div className="recent-transactions-div">
+                <h4>Recent Transactions</h4>
+                {/* todo after transactions done */}
+            </div>
         </div>
     </>
 }

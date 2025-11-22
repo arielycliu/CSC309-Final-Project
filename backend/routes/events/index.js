@@ -240,6 +240,7 @@ router.get('/:eventId', requireClearance(CLEARANCE.REGULAR), async (req, res) =>
       pointsAwarded: ev.pointsAwarded,
       published: ev.published,
       organizers: ev.organizers.map(o => ({ id: o.user.id, utorid: o.user.utorid, name: o.user.name })),
+      numGuests: confirmedGuests,
       guests: confirmedGuestRows.map(g => ({
         id: g.user.id,
         utorid: g.user.utorid,

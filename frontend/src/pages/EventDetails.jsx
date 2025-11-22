@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import {
   Calendar,
@@ -9,49 +9,123 @@ import {
   Check,
 } from "lucide-react";
 import "../styles/EventDetail.css";
-import { toast } from 'sonner';
-
+import { toast } from "sonner";
+import {
+  fetchEventById,
+  rsvpMe,
+  unRsvpMe,
+} from "../lib/events";
 
 export default function EventDetail() {
   const { id } = useParams();
-  const [isRsvped, setIsRsvped] = useState(false);
 
-  // Mock event data
-  const event = {
-    id: id || "1",
-    title: "Mock 1",
-    description:
-      "Mock event",
-    longDescription:
-      "forgot if we have long description field in db.",
-    date: "2025-11-25",
-    time: "14:00",
-    endTime: "18:00",
-    location: "123",
-    attendees: 45,
-    maxAttendees: 100,
-    pointsReward: 200,
-    published: true,
-    organizer: "John 111",
+  const [event, setEvent] = useState(null);
+  const [isRsvped, setIsRsvped] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [err, setErr] = useState("");
+
+  // ─────────────────────────────
+  // Load event details
+  // ─────────────────────────────
+  useEffect(() => {
+    if (!id) return;
+
+    async function load() {
+      try {
+        setLoading(true);
+        setErr("");
+
+        const data = await fetchEventById(id);
+        setEvent(data);
+
+        // If later your backend returns something like `isGuest`,
+        // you can init from it:
+        // setIsRsvped(!!data.isGuest);
+      } catch (e) {
+        setErr(e.message || "Failed to load event");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    load();
+  }, [id]);
+
+  // ─────────────────────────────
+  // RSVP / cancel
+  // ─────────────────────────────
+  const handleRsvp = async () => {
+    if (!event) return;
+
+    try {
+      if (!isRsvped) {
+        // RSVP
+        await rsvpMe(event.id);
+        setIsRsvped(true);
+        setEvent((prev) =>
+          prev
+            ? { ...prev, numGuests: (prev.numGuests ?? 0) + 1 }
+            : prev
+        );
+        toast.success(`Successfully RSVP'd to ${event.name}`);
+      } else {
+        // Cancel
+        await unRsvpMe(event.id);
+        setIsRsvped(false);
+        setEvent((prev) =>
+          prev
+            ? { ...prev, numGuests: Math.max(0, (prev.numGuests ?? 1) - 1) }
+            : prev
+        );
+        toast.success("RSVP cancelled");
+      }
+    } catch (e) {
+      toast.error(e.message || "Something went wrong");
+    }
   };
 
-  const handleRsvp = () => {
-    setIsRsvped((prev) => {
-        const next = !prev;
-        if (next) {
-        console.log(`RSVP'd to event ${event.id}`);
-        toast.success(`Successfully RSVP'd to ${event.title}`);
-        } else {
-        toast.success("RSVP cancelled");
-        }
-        return next;
-    });
-    };  
+  // ─────────────────────────────
+  // Loading / error states
+  // ─────────────────────────────
+  if (loading) {
+    return (
+      <div className="event-detail-page">
+        <p>Loading event…</p>
+      </div>
+    );
+  }
 
+  if (err || !event) {
+    return (
+      <div className="event-detail-page">
+        <Link to="/events" className="event-detail-back-button-inline">
+          <ArrowLeft className="event-detail-back-icon" /> Back to events
+        </Link>
+        <p className="event-detail-error">{err || "Event not found"}</p>
+      </div>
+    );
+  }
 
-  const attendancePercent = Math.round(
-    (event.attendees / event.maxAttendees) * 100
-  );
+  // ─────────────────────────────
+  // data from backend 
+  // ─────────────────────────────
+  const attendees = event.numGuests ?? 0;
+  const maxAttendees = event.capacity ?? 0;
+  const attendancePercent =
+    maxAttendees > 0 ? Math.round((attendees / maxAttendees) * 100) : 0;
+
+  const start = new Date(event.startTime || event.date);
+  const end = new Date(event.endTime || event.date);
+
+  const organizerNames =
+    event.organizers && event.organizers.length > 0
+      ? event.organizers.map((o) => o.name).join(", ")
+      : event.organizer || "TBA";
+
+  const pointsReward =
+    event.pointsReward ?? event.pointsTotal ?? event.pointsRemain ?? null;
+
+  const pointRemained = event.pointsRemain ?? null;
 
   return (
     <div className="event-detail-page">
@@ -61,7 +135,7 @@ export default function EventDetail() {
           <ArrowLeft className="event-detail-back-icon" />
         </Link>
         <div>
-          <h1 className="event-detail-title">{event.title}</h1>
+          <h1 className="event-detail-title">{event.name}</h1>
           <p className="event-detail-subtitle">Event details and RSVP</p>
         </div>
       </div>
@@ -70,11 +144,24 @@ export default function EventDetail() {
       <div className="event-detail-card">
         <div className="event-detail-card-header">
           <div className="event-detail-badges-left">
-            <span className="event-detail-badge-points">
-              <Award className="event-detail-badge-icon" />
-              {event.pointsReward} pts reward
-            </span>
-            <span className="event-detail-badge-status">Published</span>
+            {pointsReward != null && (
+              <span className="event-detail-badge-points">
+                <Award className="event-detail-badge-icon" />
+                {pointsReward} pts in total
+              </span>
+            )}
+            {/* Points remained*/}
+            {pointRemained != null && (
+              <span className="event-detail-badge-points">
+                <Award className="event-detail-badge-icon" />
+                {pointRemained} pts remained
+              </span>
+            )}
+            {"published" in event && (
+              <span className="event-detail-badge-status">
+                {event.published ? "Published" : "Unpublished"}
+              </span>
+            )}
           </div>
           {isRsvped && (
             <span className="event-detail-badge-rsvped">
@@ -85,8 +172,10 @@ export default function EventDetail() {
         </div>
 
         <div className="event-detail-card-body">
-          <h2 className="event-detail-card-title">{event.title}</h2>
-          <p className="event-detail-description">{event.description}</p>
+          <h2 className="event-detail-card-title">{event.name}</h2>
+          {event.description && (
+            <p className="event-detail-description">{event.description}</p>
+          )}
 
           <div className="event-detail-info-grid">
             {/* Left column: date/time + location */}
@@ -96,7 +185,7 @@ export default function EventDetail() {
                 <div>
                   <p className="event-detail-info-label">Date &amp; Time</p>
                   <p className="event-detail-info-main">
-                    {new Date(event.date).toLocaleDateString("en-US", {
+                    {start.toLocaleDateString("en-US", {
                       weekday: "long",
                       year: "numeric",
                       month: "long",
@@ -104,7 +193,7 @@ export default function EventDetail() {
                     })}
                   </p>
                   <p className="event-detail-info-secondary">
-                    {event.time} - {event.endTime}
+                    {start.toLocaleTimeString()} – {end.toLocaleTimeString()}
                   </p>
                 </div>
               </div>
@@ -125,17 +214,22 @@ export default function EventDetail() {
                 <div>
                   <p className="event-detail-info-label">Attendance</p>
                   <p className="event-detail-info-main">
-                    {event.attendees} / {event.maxAttendees} attending
+                    {attendees}
+                    {maxAttendees ? ` / ${maxAttendees}` : ""} attending
                   </p>
-                  <div className="event-detail-progress-bar">
-                    <div
-                      className="event-detail-progress-fill"
-                      style={{ width: `${attendancePercent}%` }}
-                    />
-                  </div>
-                  <p className="event-detail-info-secondary">
-                    {attendancePercent}% full
-                  </p>
+                  {maxAttendees > 0 && (
+                    <>
+                      <div className="event-detail-progress-bar">
+                        <div
+                          className="event-detail-progress-fill"
+                          style={{ width: `${attendancePercent}%` }}
+                        />
+                      </div>
+                      <p className="event-detail-info-secondary">
+                        {attendancePercent}% full
+                      </p>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -143,19 +237,21 @@ export default function EventDetail() {
                 <Award className="event-detail-info-icon" />
                 <div>
                   <p className="event-detail-info-label">Organizer</p>
-                  <p className="event-detail-info-main">{event.organizer}</p>
+                  <p className="event-detail-info-main">{organizerNames}</p>
                 </div>
               </div>
             </div>
           </div>
 
           {/* About section */}
-          <div className="event-detail-section">
-            <h3 className="event-detail-section-title">About This Event</h3>
-            <p className="event-detail-long-description">
-              {event.longDescription}
-            </p>
-          </div>
+          {event.description && (
+            <div className="event-detail-section">
+              <h3 className="event-detail-section-title">About This Event</h3>
+              <p className="event-detail-long-description">
+                {event.description}
+              </p>
+            </div>
+          )}
 
           {/* RSVP section */}
           <div className="event-detail-section event-detail-rsvp">
@@ -177,12 +273,14 @@ export default function EventDetail() {
                 "RSVP to Event"
               )}
             </button>
+
             {isRsvped && (
               <p className="event-detail-rsvp-note">
-                You&apos;ll receive {event.pointsReward} points when you attend
-                this event.
+                You&apos;ll receive points when you attend this
+                event. Specific amount will be decided by the organizers.
               </p>
             )}
+               
           </div>
         </div>
       </div>

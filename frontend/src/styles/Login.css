@@ -37,6 +37,7 @@
 }
 
 .login-title {
+  text-align: left;
   font-size: 3rem;
   font-weight: 700;
   color: #1a1a1a;
@@ -46,6 +47,7 @@
 }
 
 .login-description {
+  text-align: left;
   font-size: 1.0625rem;
   color: #6b6b6b;
   margin: 0 0 4rem 0;
@@ -53,6 +55,7 @@
 }
 
 .features-list {
+  text-align: left;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -109,13 +112,14 @@
   align-items: center;
   justify-content: center;
   padding: 3rem;
-  background-color: #ffffff;
+  background: linear-gradient(135deg, #e8e9f3 0%, #f0f0f5 100%);
 }
 
 .login-form-container {
   width: 100%;
   max-width: 420px;
-  background: white;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
   border-radius: 16px;
   padding: 3rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02), 0 1px 3px rgba(0, 0, 0, 0.04);
@@ -123,6 +127,7 @@
 
 .login-form-header {
   margin-bottom: 2rem;
+  text-align: left;
 }
 
 .login-form-header h2 {
@@ -130,12 +135,14 @@
   font-weight: 700;
   color: #1a1a1a;
   margin: 0 0 0.5rem 0;
+  text-align: left;
 }
 
 .login-form-header p {
   font-size: 0.9375rem;
   color: #6b6b6b;
   margin: 0;
+  text-align: left;
 }
 
 .login-form {
@@ -154,6 +161,7 @@
   font-size: 0.9375rem;
   font-weight: 500;
   color: #1a1a1a;
+  text-align: left;
 }
 
 .form-group input {
@@ -234,7 +242,7 @@
 }
 
 .signup-prompt {
-  text-align: center;
+  text-align: left;
   font-size: 0.9375rem;
   color: #6b6b6b;
 }

@@ -26,12 +26,14 @@ function Login() {
     e.preventDefault();
     setLoading(true);
 
-    const result = await login(formData.userId, formData.password);
-    
+    const result = await login(formData.userId.trim(), formData.password);
+
     if (!result.success) {
       toast.error(result.error || 'Login failed');
+    } else {
+      toast.success('Welcome back!');
     }
-    
+
     setLoading(false);
   };
 
@@ -140,7 +142,7 @@ function Login() {
                 />
                 <span>Remember me</span>
               </label>
-              <Link to="/forgot-password" className="forgot-password">
+              <Link to="/password-reset" className="forgot-password">
                 Forgot password?
               </Link>
             </div>

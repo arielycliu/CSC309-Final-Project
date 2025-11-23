@@ -1,6 +1,7 @@
 import { Wallet, LayoutDashboard, QrCode, Send, Gift, Clock, Tag, Calendar, History, User, Settings, LogOut} from "lucide-react";
 import '../styles/layout.css';
-import{NavLink, Outlet, useNavigate } from "react-router-dom"
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import RoleSwitcher from "./RoleSwitcher.jsx";
 
 const Layout = () => {
     //const { logout } = useContext(AuthContext); //assumming some sort of context that allows logout
@@ -46,6 +47,7 @@ const Layout = () => {
                 </NavLink>
             </nav>
 
+            <RoleSwitcher />
             <div id="user-dropdown">
                 <User id="user-icon" />
                 <div className="dropdown-content">

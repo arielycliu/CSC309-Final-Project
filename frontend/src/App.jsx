@@ -10,6 +10,9 @@ import Login from './pages/Login.jsx';
 import ProfileStatus   from './pages/profileStatus.jsx';
 import ProfileAuthUpdate from './pages/ProfileAuthUpdate';
 import PasswordReset from './pages/PasswordReset.jsx';
+import TransactionHistory from './pages/TransactionHistory.jsx';
+import PurchaseTransaction from './pages/PurchaseTransaction.jsx';
+import AdjustmentTransaction from './pages/AdjustmentTransaction.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'sonner';
@@ -35,6 +38,9 @@ function App() {
                   <Route path="security" element={<ProfileAuthUpdate />} />
                 </Route>
                 <Route path="promotions" element={<Promotions />} />
+                <Route path="transactions" element={<TransactionHistory />} />
+                <Route path="transactions/purchase" element={<PurchaseTransaction />} />
+                <Route path="transactions/adjustment" element={<AdjustmentTransaction />} />
                 {/* add other route paths as they are created*/}
               </Route>
             </Route>

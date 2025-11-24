@@ -71,3 +71,95 @@
 .dashboard-page .account-info-div .info-grid .right {
     text-align: right;
 }
+
+.dashboard-page .recent-transactions-div {
+    background-color: #FFFFFF;
+    padding: 1.5rem;
+    border-radius: 1rem;
+}
+
+.dashboard-page .transactions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.dashboard-page .view-all-link {
+    color: #155DFC;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.dashboard-page .view-all-link:hover {
+    text-decoration: underline;
+}
+
+.dashboard-page .no-transactions {
+    color: #6b7280;
+    font-size: 0.875rem;
+    text-align: center;
+    padding: 2rem;
+}
+
+.dashboard-page .transactions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.dashboard-page .transaction-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    background-color: #f9fafb;
+    transition: background-color 0.2s;
+}
+
+.dashboard-page .transaction-item:hover {
+    background-color: #f3f4f6;
+}
+
+.dashboard-page .transaction-icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 0.5rem;
+    background-color: #DBEAFE;
+    color: #155DFC;
+    flex-shrink: 0;
+}
+
+.dashboard-page .transaction-info {
+    flex: 1;
+}
+
+.dashboard-page .transaction-type {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: #111827;
+    text-transform: capitalize;
+}
+
+.dashboard-page .transaction-id {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-top: 0.125rem;
+}
+
+.dashboard-page .transaction-amount {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #155DFC;
+}
+
+.dashboard-page .loading-state {
+    text-align: center;
+    padding: 3rem;
+    color: #6b7280;
+}

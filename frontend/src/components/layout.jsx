@@ -1,18 +1,22 @@
-import { Wallet, LayoutDashboard, QrCode, Send, Gift, Clock, Tag, Calendar, History, User, Settings, LogOut} from "lucide-react";
+import { Wallet, LayoutDashboard, QrCode, Send, Gift, Clock, Tag, Calendar, History, User, Settings, LogOut, DollarSign, TrendingUp} from "lucide-react";
 import '../styles/layout.css';
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import RoleSwitcher from "./RoleSwitcher.jsx";
+import { useAuth } from "../context/AuthContext";
 
 const Layout = () => {
-    //const { logout } = useContext(AuthContext); //assumming some sort of context that allows logout
+    const { logout, activeRole } = useAuth();
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        console.log("call logout function");           
-        navigate('/');  // link to profile page 
+        logout();
+        navigate('/login');
     };
 
-    //update links to link to different pages 
+    // Determine if user has cashier or higher role
+    const isCashierOrAbove = activeRole && ['cashier', 'manager', 'superuser'].includes(activeRole);
+    const isManagerOrAbove = activeRole && ['manager', 'superuser'].includes(activeRole);
+
     return <div className="layout-container">
         <header className='top-bar'>
             
@@ -22,28 +26,40 @@ const Layout = () => {
 
             <nav id='page-links'>
                 <NavLink to="/" className="nav-button">
-                <LayoutDashboard className="icon" />Dashboard
+                    <LayoutDashboard className="icon" />Dashboard
                 </NavLink>
                 <NavLink to="/not-working" className="nav-button">
-                <QrCode className="icon" /> My QR Code 
+                    <QrCode className="icon" /> My QR Code 
                 </NavLink>
                 <NavLink to="/not-working" className="nav-button">
-                <Send className="icon" /> Transfer Points
+                    <Send className="icon" /> Transfer Points
                 </NavLink>
                 <NavLink to="/not-working" className="nav-button">
-                <Gift className="icon" />Reedeem points 
+                    <Gift className="icon" />Redeem Points 
                 </NavLink>
-                <NavLink to="/not-working" className="nav-button">
-                <Clock className="icon" />Pending Redemptions
-                </NavLink>
+                {isCashierOrAbove && (
+                    <NavLink to="/not-working" className="nav-button">
+                        <Clock className="icon" />Process Redemptions
+                    </NavLink>
+                )}
+                {isCashierOrAbove && (
+                    <NavLink to="/transactions/purchase" className="nav-button">
+                        <DollarSign className="icon" />Create Purchase
+                    </NavLink>
+                )}
+                {isManagerOrAbove && (
+                    <NavLink to="/transactions/adjustment" className="nav-button">
+                        <TrendingUp className="icon" />Create Adjustment
+                    </NavLink>
+                )}
                 <NavLink to="/promotions" className="nav-button">
-                <Tag className="icon" />Promotions
+                    <Tag className="icon" />Promotions
                 </NavLink>
                 <NavLink to="/events" className="nav-button">
-                <Calendar className="icon" />Events
+                    <Calendar className="icon" />Events
                 </NavLink>
-                <NavLink to="/not-working" className="nav-button">
-                <History className="icon" />Transaction History
+                <NavLink to="/transactions" className="nav-button">
+                    <History className="icon" />Transaction History
                 </NavLink>
             </nav>
 
@@ -55,22 +71,34 @@ const Layout = () => {
                         <NavLink to="/" className="nav-button">
                             <LayoutDashboard className="icon" />Dashboard
                         </NavLink>
-                            <NavLink to="/not-working" className="nav-button">
-                        <QrCode className="icon" /> My QR Code 
-                        </NavLink>
-                            <NavLink to="/not-working" className="nav-button">
-                        <Send className="icon" /> Transfer Points
-                        </NavLink>
-                            <NavLink to="/not-working" className="nav-button">
-                        <Gift className="icon" />Reedeem points 
-                        </NavLink>
-                            <NavLink to="/not-working" className="nav-button">
-                        <Clock className="icon" />Pending Redemptions
-                        </NavLink>
-                            <NavLink to="/events" className="nav-button">
-                        <Calendar className="icon" />Events
+                        <NavLink to="/not-working" className="nav-button">
+                            <QrCode className="icon" /> My QR Code 
                         </NavLink>
                         <NavLink to="/not-working" className="nav-button">
+                            <Send className="icon" /> Transfer Points
+                        </NavLink>
+                        <NavLink to="/not-working" className="nav-button">
+                            <Gift className="icon" />Redeem Points 
+                        </NavLink>
+                        {isCashierOrAbove && (
+                            <NavLink to="/not-working" className="nav-button">
+                                <Clock className="icon" />Process Redemptions
+                            </NavLink>
+                        )}
+                        {isCashierOrAbove && (
+                            <NavLink to="/transactions/purchase" className="nav-button">
+                                <DollarSign className="icon" />Create Purchase
+                            </NavLink>
+                        )}
+                        {isManagerOrAbove && (
+                            <NavLink to="/transactions/adjustment" className="nav-button">
+                                <TrendingUp className="icon" />Create Adjustment
+                            </NavLink>
+                        )}
+                        <NavLink to="/events" className="nav-button">
+                            <Calendar className="icon" />Events
+                        </NavLink>
+                        <NavLink to="/transactions" className="nav-button">
                             <History className="icon" />Transaction History
                         </NavLink>
                         <hr id="line"/>

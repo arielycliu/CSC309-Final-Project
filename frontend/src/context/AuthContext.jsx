@@ -1,7 +1,8 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { createContext, useContext, useState, useEffect, useMemo } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const AuthContext = createContext(null);
+const ROLE_ORDER = ['regular', 'cashier', 'manager', 'superuser'];
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -17,41 +18,63 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [activeRole, setActiveRole] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const API_BASE = 'http://localhost:3000';
+  const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3000';
 
-  useEffect(() => {
-    if (token) {
-      fetchUserProfile();
-    } else {
-      setLoading(false);
-    }
-  }, [token]);
-
-  const fetchUserProfile = async () => {
-    try {
-      const response = await fetch(`${API_BASE}/users/me`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (response.ok) {
-        const userData = await response.json();
-        setUser(userData);
-        setActiveRole(userData.role);
-      } else {
-        logout();
-      }
-    } catch (error) {
-      console.error('Failed to fetch user profile:', error);
-      logout();
-    } finally {
-      setLoading(false);
-    }
+  const clearSession = (redirectTo = '/login') => {
+    setToken(null);
+    setUser(null);
+    setActiveRole(null);
+    localStorage.removeItem('token');
+    navigate(redirectTo, { replace: true });
   };
 
+  useEffect(() => {
+    if (!token) {
+      setUser(null);
+      setActiveRole(null);
+      setLoading(false);
+      return;
+    }
+
+    const fetchUserProfile = async () => {
+      try {
+        const response = await fetch(`${API_BASE}/users/me`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Unable to fetch profile');
+        }
+
+        const userData = await response.json();
+        setUser(userData);
+        setActiveRole((prev) => {
+          if (!prev) {
+            return userData.role;
+          }
+
+          const prevIdx = ROLE_ORDER.indexOf(prev);
+          const maxIdx = ROLE_ORDER.indexOf(userData.role);
+          return prevIdx >= 0 && prevIdx <= maxIdx ? prev : userData.role;
+        });
+      } catch (error) {
+        console.error('Failed to fetch user profile:', error);
+        clearSession();
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    setLoading(true);
+    fetchUserProfile();
+  }, [token, API_BASE]);
+
   const login = async (utorid, password) => {
+    setLoading(true);
     try {
       const response = await fetch(`${API_BASE}/auth/tokens`, {
         method: 'POST',
@@ -69,45 +92,82 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
       setToken(data.token);
       localStorage.setItem('token', data.token);
-      
-      // Fetch user profile after login
-      const userResponse = await fetch(`${API_BASE}/users/me`, {
+
+      const profileResponse = await fetch(`${API_BASE}/users/me`, {
         headers: {
-          'Authorization': `Bearer ${data.token}`,
+          Authorization: `Bearer ${data.token}`,
         },
       });
 
-      if (userResponse.ok) {
-        const userData = await userResponse.json();
-        setUser(userData);
-        setActiveRole(userData.role);
-        navigate('/dashboard');
-        return { success: true };
+      if (!profileResponse.ok) {
+        throw new Error('Unable to load profile');
       }
+
+      const userData = await profileResponse.json();
+      setUser(userData);
+      setActiveRole(userData.role);
+
+      const redirectPath = location.state?.from?.pathname || '/';
+      navigate(redirectPath, { replace: true });
+      return { success: true };
     } catch (error) {
+      console.error('Login failed:', error);
       return { success: false, error: error.message };
+    } finally {
+      setLoading(false);
     }
   };
 
   const logout = () => {
-    setToken(null);
-    setUser(null);
-    setActiveRole(null);
-    localStorage.removeItem('token');
-    navigate('/login');
+    clearSession('/login');
   };
 
   const switchRole = (newRole) => {
-    // Validate that user has access to this role
-    const roleHierarchy = ['regular', 'cashier', 'manager', 'superuser'];
-    const userRoleIndex = roleHierarchy.indexOf(user?.role);
-    const newRoleIndex = roleHierarchy.indexOf(newRole);
+    if (!user) {
+      return false;
+    }
 
-    if (newRoleIndex <= userRoleIndex) {
+    const userRoleIndex = ROLE_ORDER.indexOf(user.role);
+    const requestedIndex = ROLE_ORDER.indexOf(newRole);
+
+    if (requestedIndex === -1 || userRoleIndex === -1) {
+      return false;
+    }
+
+    if (requestedIndex <= userRoleIndex) {
       setActiveRole(newRole);
       return true;
     }
+
     return false;
+  };
+
+  const availableRoles = useMemo(() => {
+    if (!user) {
+      return [];
+    }
+
+    const idx = ROLE_ORDER.indexOf(user.role);
+    if (idx === -1) {
+      return [user.role];
+    }
+
+    return ROLE_ORDER.slice(0, idx + 1);
+  }, [user]);
+
+  const hasRole = (role) => {
+    if (!user) {
+      return false;
+    }
+
+    const requiredIdx = ROLE_ORDER.indexOf(role);
+    const userIdx = ROLE_ORDER.indexOf(user.role);
+
+    if (requiredIdx === -1 || userIdx === -1) {
+      return false;
+    }
+
+    return userIdx >= requiredIdx;
   };
 
   const value = {
@@ -115,16 +175,12 @@ export const AuthProvider = ({ children }) => {
     token,
     loading,
     activeRole,
+    availableRoles,
     login,
     logout,
     switchRole,
     isAuthenticated: !!token && !!user,
-    hasRole: (role) => {
-      const roleHierarchy = ['regular', 'cashier', 'manager', 'superuser'];
-      const userRoleIndex = roleHierarchy.indexOf(user?.role);
-      const requiredRoleIndex = roleHierarchy.indexOf(role);
-      return userRoleIndex >= requiredRoleIndex;
-    },
+    hasRole,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

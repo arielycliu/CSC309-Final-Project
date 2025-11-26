@@ -1,26 +1,16 @@
 import{NavLink, Outlet, useNavigate } from "react-router-dom"
-import testImage from "../icons/test_image.png";
 import '../styles/profile.css';
 import{User, UserPen, UserLock} from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
-const Profile = ()=>{
-    //questions to ask: avatar url where is that saved 
-    //GET user as context eventually 
-    //const navigate = useNavigate();
-
-    const user = { //not sure if all information would actually be in like this may need to be api call instead 
-        name: "John Doe",
-        avatarUrl: testImage,
-        role: "user",
-        verified: true, 
-        points: 1200
-    }
+const Profile = ()=>{;
+    const {user} = useAuth();
 
     return (
     <div id="settings_body">
         <div className="profile-header">
             <img 
-                src={user?.avatarUrl} 
+                src={user.avatarUrl}
                 alt="User Avatar" 
                 className="profile-avatar"
             />

@@ -1,8 +1,10 @@
 import '../styles/profile.css';
 import {Shield} from "lucide-react";
+import {useAuth} from "../context/AuthContext";
 
 const ProfileStatus = () => {
-    const user = { utorid: "johndoe001", role: "User", verified: true, points: 1250}; //check that users come in like this
+    
+    const {user} = useAuth();
     return (
         <div className="settings-page">
             <div className="description">

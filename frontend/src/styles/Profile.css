@@ -16,7 +16,7 @@
     height: 48px;
     width: 48px;
     border-radius: 50%;      
-    border: 1px solid #717182;  
+    border: 1px solid #717182;
     object-fit: cover;       
     margin-right: 1rem;
 }
@@ -29,7 +29,7 @@
     font-size: x-large;
     font-weight: 600;
     margin: 0;
-    line-height: 1;
+    line-height: 1.2;
 }
 
 #profile-name p{
@@ -131,6 +131,21 @@ form.password input{
     display:flex;
     flex-direction:column;
     text-align: left;
+}
+
+.password-input-wrapper{
+    display: flex;
+    align-items: center;
+}
+
+.eyeToggle{
+    position: relative;
+    background: none;
+    right: 1.8rem;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    width: fit-content;
 }
 
 

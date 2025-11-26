@@ -1,8 +1,8 @@
 import { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-
+import UserImage from '../icons/user_image.png';
 const AuthContext = createContext(null);
-const ROLE_ORDER = ['regular', 'cashier', 'manager', 'superuser'];
+const ROLE_ORDER = ['regular', 'organizer', 'cashier', 'manager', 'superuser'];
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -51,6 +51,7 @@ export const AuthProvider = ({ children }) => {
         }
 
         const userData = await response.json();
+        userData.avatarUrl = userData.avatarUrl ? `${API_BASE}${userData.avatarUrl}` : UserImage;
         setUser(userData);
         setActiveRole((prev) => {
           if (!prev) {
@@ -104,6 +105,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       const userData = await profileResponse.json();
+      userData.avatarUrl = userData.avatarUrl ? `${API_BASE}${userData.avatarUrl}` : UserImage;
       setUser(userData);
       setActiveRole(userData.role);
 
@@ -170,6 +172,14 @@ export const AuthProvider = ({ children }) => {
     return userIdx >= requiredIdx;
   };
 
+  const updateUser = (updates) => {
+    updates.avatarUrl = updates.avatarUrl ? `${API_BASE}${updates.avatarUrl}` : UserImage;
+    setUser((prev) => ({
+      ...prev,
+      ...updates,   
+    }));
+  };
+
   const value = {
     user,
     token,
@@ -181,6 +191,7 @@ export const AuthProvider = ({ children }) => {
     switchRole,
     isAuthenticated: !!token && !!user,
     hasRole,
+    updateUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

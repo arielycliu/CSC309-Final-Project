@@ -1,11 +1,13 @@
-import { Wallet, LayoutDashboard, QrCode, Send, Gift, Clock, Tag, Calendar, History, User, Settings, LogOut, DollarSign, TrendingUp} from "lucide-react";
+import { Wallet, LayoutDashboard, QrCode, Send, Gift, Clock, Tag, Calendar, History, User, Settings, 
+    LogOut, DollarSign, TrendingUp, ArrowLeftRight, ChevronDown, ChevronUp, Gem, ClipboardClock, FolderPen,
+    Users } from "lucide-react";
 import '../styles/layout.css';
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import RoleSwitcher from "./RoleSwitcher.jsx";
 import { useAuth } from "../context/AuthContext";
 
 const Layout = () => {
-    const { logout, activeRole } = useAuth();
+    const { logout, activeRole, user} = useAuth();
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -14,104 +16,144 @@ const Layout = () => {
     };
 
     // Determine if user has cashier or higher role
+    const isRegular = activeRole && activeRole === 'regular'; // put back after testing 
+    const isCashier = activeRole && activeRole === 'cashier';
+    const isOrganizer = activeRole && activeRole === 'organizer';
     const isCashierOrAbove = activeRole && ['cashier', 'manager', 'superuser'].includes(activeRole);
     const isManagerOrAbove = activeRole && ['manager', 'superuser'].includes(activeRole);
 
+    const PageLinks = () => {
+        return <>
+            <NavLink to="/" className="nav-button">
+                <LayoutDashboard className="icon" />Dashboard
+            </NavLink>
+
+            {isRegular && (
+                <>
+                    <NavLink to="/not-working" className="nav-button">
+                        <QrCode className="icon" /> My QR Code 
+                    </NavLink>
+
+                    <div className="points nav-button user-dropdown">
+                        <NavLink to="/not-working" className="nav-button">
+                            <Gem className="icon"/>
+                            <p>Points
+                                <ChevronDown className=" icon chevron-down" />
+                            </p>
+                           
+                        </NavLink>
+
+                        <div className="dropdown-content">
+                            <NavLink to="/not-working" className="nav-button">
+                                <Send className="icon" /> Transfer Points
+                            </NavLink>
+                            <NavLink to="/not-working" className="nav-button">
+                                <Gift className="icon" />Redeem Points 
+                            </NavLink>
+                            <NavLink to="/not-working" className="nav-button">
+                                <Clock className="icon" />Pending Redemptions
+                            </NavLink>
+                        </div>
+                    
+                    </div>
+
+                    <NavLink to="/transactions" className="nav-button">
+                        <History className="icon" />Transaction History
+                    </NavLink>
+                </>
+            )} 
+            {isCashierOrAbove && (
+                    <>
+                    <NavLink to="/not-working" className="nav-button">
+                        <ClipboardClock className="icon" />Process Redemptions
+                    </NavLink>
+                    </>
+                )
+            }
+            {isCashier && (
+                <NavLink to="/transactions/purchase" className="nav-button">
+                        <DollarSign className="icon" />Create Purchase
+                </NavLink>
+            )}
+
+            {isManagerOrAbove && (
+                <> 
+                <div className="transactions nav-button user-dropdown">
+                    <NavLink to="/transactions" className="nav-button">
+                        <ArrowLeftRight className="icon"/>
+                        <p>Transactions <ChevronDown className="icon" /></p>
+                    </NavLink>
+                    <div className="dropdown-content">
+                        <NavLink to="/transactions/purchase" className="nav-button">
+                            <DollarSign className="icon" />Create Purchase
+                        </NavLink>
+
+                        <NavLink to="/transactions/adjustment" className="nav-button">
+                            <TrendingUp className="icon" />Create Adjustment
+                        </NavLink>
+
+                        <NavLink to="/Not-working" className="nav-button">
+                            <FolderPen className="icon" />Manage Transactions
+                        </NavLink>
+
+                    </div>
+                    
+                    
+
+                </div>
+                <NavLink to="/Not-working" className="nav-button">
+                        <Users className="icon" />Manage Users
+                </NavLink>
+                </>
+            )}
+
+                {(isManagerOrAbove || isRegular || isOrganizer) && (
+                <>
+                    <NavLink to="/events" className="nav-button">
+                        <Calendar className="icon" />{ (isManagerOrAbove || isOrganizer) ? "Manage Events" : "Events"}
+                    </NavLink>
+
+                    {!isOrganizer && (
+                        <NavLink to="/promotions" className="nav-button">
+                            <Tag className="icon" />{isManagerOrAbove ? "Manage Promotions" : "Promotions"}
+                        </NavLink>
+                    )}
+                </>
+            )}
+        </>
+    }
+
     return <div className="layout-container">
-        <header className='top-bar'>
-            
+        <header className='top-bar'> 
             <NavLink to="/" id="app-div">
                 <Wallet id="app-icon" />App
             </NavLink>
 
             <nav id='page-links'>
-                <NavLink to="/" className="nav-button">
-                    <LayoutDashboard className="icon" />Dashboard
-                </NavLink>
-                <NavLink to="/not-working" className="nav-button">
-                    <QrCode className="icon" /> My QR Code 
-                </NavLink>
-                <NavLink to="/not-working" className="nav-button">
-                    <Send className="icon" /> Transfer Points
-                </NavLink>
-                <NavLink to="/not-working" className="nav-button">
-                    <Gift className="icon" />Redeem Points 
-                </NavLink>
-                {isCashierOrAbove && (
-                    <NavLink to="/not-working" className="nav-button">
-                        <Clock className="icon" />Process Redemptions
-                    </NavLink>
-                )}
-                {isCashierOrAbove && (
-                    <NavLink to="/transactions/purchase" className="nav-button">
-                        <DollarSign className="icon" />Create Purchase
-                    </NavLink>
-                )}
-                {isManagerOrAbove && (
-                    <NavLink to="/transactions/adjustment" className="nav-button">
-                        <TrendingUp className="icon" />Create Adjustment
-                    </NavLink>
-                )}
-                <NavLink to="/promotions" className="nav-button">
-                    <Tag className="icon" />Promotions
-                </NavLink>
-                <NavLink to="/events" className="nav-button">
-                    <Calendar className="icon" />Events
-                </NavLink>
-                <NavLink to="/transactions" className="nav-button">
-                    <History className="icon" />Transaction History
-                </NavLink>
+                <PageLinks />
             </nav>
 
-            <RoleSwitcher />
-            <div id="user-dropdown">
-                <User id="user-icon" />
-                <div className="dropdown-content">
-                     <div className="extra-dropdown">
-                        <NavLink to="/" className="nav-button">
-                            <LayoutDashboard className="icon" />Dashboard
+            <div id="user-section">
+                <RoleSwitcher/>
+                <div className="user-dropdown">
+                    <img
+                        src={user.avatarUrl}
+                        alt="User Avatar"
+                        id="user-avatar"
+                    />
+                    <div className="dropdown-content">
+                        <div className="extra-dropdown">
+                            <PageLinks />
+                            <hr id="line"/>
+                        </div>
+
+                        <NavLink to="/settings/profile" className="dropdown-button">
+                            <Settings className="icon"/> Profile Settings
                         </NavLink>
-                        <NavLink to="/not-working" className="nav-button">
-                            <QrCode className="icon" /> My QR Code 
-                        </NavLink>
-                        <NavLink to="/not-working" className="nav-button">
-                            <Send className="icon" /> Transfer Points
-                        </NavLink>
-                        <NavLink to="/not-working" className="nav-button">
-                            <Gift className="icon" />Redeem Points 
-                        </NavLink>
-                        {isCashierOrAbove && (
-                            <NavLink to="/not-working" className="nav-button">
-                                <Clock className="icon" />Process Redemptions
-                            </NavLink>
-                        )}
-                        {isCashierOrAbove && (
-                            <NavLink to="/transactions/purchase" className="nav-button">
-                                <DollarSign className="icon" />Create Purchase
-                            </NavLink>
-                        )}
-                        {isManagerOrAbove && (
-                            <NavLink to="/transactions/adjustment" className="nav-button">
-                                <TrendingUp className="icon" />Create Adjustment
-                            </NavLink>
-                        )}
-                        <NavLink to="/events" className="nav-button">
-                            <Calendar className="icon" />Events
-                        </NavLink>
-                        <NavLink to="/transactions" className="nav-button">
-                            <History className="icon" />Transaction History
-                        </NavLink>
-                        <hr id="line"/>
+                        <button onClick={handleLogout} className="dropdown-button">
+                            <LogOut className="icon"/> Logout
+                        </button> 
                     </div>
-
-                    <NavLink to="settings/profile" className="dropdown-button">
-                        <Settings className="icon"/> Profile Settings
-                    </NavLink>
-                    <button onClick={handleLogout} className="dropdown-button">
-                        <LogOut className="icon"/> Logout
-                    </button>
-
-                   
                 </div>
             </div>
         </header>

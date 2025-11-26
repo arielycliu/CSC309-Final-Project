@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Shuffle} from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useNavigate } from "react-router-dom";
 import '../styles/RoleSwitcher.css';
 
 const LABELS = {
@@ -8,9 +9,11 @@ const LABELS = {
   cashier: 'Cashier',
   manager: 'Manager',
   superuser: 'Superuser',
+  organizer: 'Organizer',
 };
 
 const RoleSwitcher = () => {
+  const navigate = useNavigate();
   const { availableRoles, activeRole, switchRole } = useAuth();
 
   const currentValue = useMemo(() => {
@@ -32,14 +35,16 @@ const RoleSwitcher = () => {
   const handleChange = (event) => {
     const nextRole = event.target.value;
     switchRole(nextRole);
+    navigate('/');
   };
 
   return (
     <div className="role-switcher">
-      <label htmlFor="role-select">Interface</label>
+      {/* <label htmlFor="role-select">Switch Interface</label> */}
       <div className="role-select-wrapper">
         <select
           id="role-select"
+          title="switch interface"
           value={currentValue}
           onChange={handleChange}
           aria-label="Switch interface role"

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 require('dotenv').config();
+const path = require('path');
 
 const Port = () => {
     const args = process.argv;
@@ -31,6 +32,9 @@ app.use(cors({
 }));
 
 app.use(express.json());
+
+// Serve avatars statically
+app.use('/uploads/avatars', express.static(path.join(__dirname, 'uploads/avatars')));
 
 // JWT middleware - decodes token and attaches to req.auth
 app.use(

@@ -2,6 +2,9 @@ import {useState } from "react";
 import { z } from "zod";
 import '../styles/profile.css';
 import{NavLink} from "react-router-dom"
+import { toast } from 'sonner';
+import {useAuth} from "../context/AuthContext";
+import { Eye, EyeOff } from "lucide-react";
 
 const updateOwnPasswordSchema = z.object({
    old: z.string(),
@@ -18,7 +21,11 @@ const updateOwnPasswordSchema = z.object({
 });
 
 const ProfileAuthUpdate = () => {
+    const {token, user} = useAuth();
     const [errors, setErrors] = useState({});
+    const [showold, setShowOld] = useState(false);
+    const [shownew, setShowNew] = useState(false);
+    const [showconfirm, setShowConfirm] = useState(false);
     const [formData, setFormData] = useState({
             old: "",
             new: "",
@@ -32,7 +39,41 @@ const ProfileAuthUpdate = () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const UpdatePassword = async () => {
+        const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3000';
+        console.log("Updating password with data:", formData);
+        
+      try {
+            const response = await fetch(`${API_BASE}/users/me/password`, {
+                method: 'PATCH',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({old: formData.old, new: formData.new}),
+            });
+
+            const userData = await response.json();
+
+            if (!response.ok) {
+                setErrors(userData.error || {});
+                throw new Error(`${JSON.stringify(userData.error)}`);
+            }
+
+            setErrors({});
+            setFormData({
+                old: "",
+                new: "",
+                confirm: "",
+            });
+            toast.success("Profile updated successfully!");
+      } catch (error) {
+        console.error(`Error updating profile: ${error.message}`);
+        toast.error(`Failed to update profile. Please try again.`);
+      }
+    };
+
+    const handleSubmit = async(e) => {
         e.preventDefault();
 
         const result = updateOwnPasswordSchema.safeParse(formData);
@@ -50,7 +91,20 @@ const ProfileAuthUpdate = () => {
         }
 
         setErrors({});
+        await UpdatePassword();
         console.log("VALID form:", result.data);
+    };
+
+    const EyeToggle = ({ show, setShow, size = 20, color = "black" }) => {
+    return (
+        <button
+            type="button"
+            className="eyeToggle"
+            onClick={() => setShow(prev => !prev)}
+        >
+            {show ? <EyeOff size={size} color={color} /> : <Eye size={size} color={color} />}
+        </button>
+    );
     };
 
     return(
@@ -62,19 +116,28 @@ const ProfileAuthUpdate = () => {
             <form className="password" onSubmit={handleSubmit}>
                 <div className="right-inputs">
                     <label>Old Password</label>
-                    <input type="password" name="old" onChange={handleChange} />
+                    <div className="password-input-wrapper">
+                        <input type={showold ? "text" : "password"} name="old" value={formData.old} onChange={handleChange} />
+                        <EyeToggle show={showold} setShow={setShowOld} color="black"/>
+                    </div>
                     <p className="input-error">{errors.old || "\u00A0"}</p>
 
                     <label>New Password</label>
-                    <input type="password"  name="new" onChange={handleChange} />
+                    <div className="password-input-wrapper">
+                        <input type={shownew ? "text" : "password"}  name="new" value={formData.new} onChange={handleChange} />
+                       <EyeToggle show={shownew} setShow={setShowNew} color="black"/>
+                    </div>
                     <p className={errors.new? "input-error": "input-error message"}>{errors.new || 
                     "Password must be 8–20 characters with one upper, lower, number, and special character."}</p>
 
                     <label>Confirm Password</label>
-                    <input type="password" name="confirm" onChange={handleChange}/>
+                    <div className="password-input-wrapper">
+                        <input type={showconfirm ? "text" : "password"} name="confirm" value={formData.confirm} onChange={handleChange}/>
+                        <EyeToggle show={showconfirm} setShow={setShowConfirm} color="black"/>
+                    </div>
                     <p className="input-error">{errors.confirm || "\u00A0"}</p>
 
-                    <NavLink to="/" id="forgot-password">Forgot password?</NavLink>
+                    <NavLink to="/password-reset" id="forgot-password">Forgot password?</NavLink>
                     <button className="submit-form password" type="submit">Update Password</button>
                 </div>
             </form>

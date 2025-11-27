@@ -4,6 +4,7 @@ import Profile from './components/Profile.jsx'
 import Dashboard from './pages/Dashboard.jsx';
 import Events from './pages/Events.jsx';
 import Promotions from './pages/Promotions.jsx';
+import ManagePromotions from './pages/ManagePromotions.jsx';
 import EventDetails from './pages/EventDetails.jsx';
 import ProfileSettings from './pages/ProfileSettings.jsx';
 import Login from './pages/Login.jsx';
@@ -38,6 +39,7 @@ function App() {
                   <Route path="security" element={<ProfileAuthUpdate />} />
                 </Route>
                 <Route path="promotions" element={<Promotions />} />
+                <Route path="promotions/manage" element={<ProtectedRoute minRole="manager"><ManagePromotions /></ProtectedRoute>} />
                 <Route path="transactions" element={<TransactionHistory />} />
                 <Route path="transactions/purchase" element={<PurchaseTransaction />} />
                 <Route path="transactions/adjustment" element={<AdjustmentTransaction />} />

@@ -111,7 +111,7 @@ router.get('/me/transactions', requireClearance(CLEARANCE.REGULAR), async (req, 
         amount,
         page,
         limit
-    } = req.body;
+    } = req.query;
 
     const transactionTypes = ['purchase', 'redemption', 'adjustment', 'event', 'transfer'];
     let validations = [
@@ -167,7 +167,10 @@ router.get('/me/transactions', requireClearance(CLEARANCE.REGULAR), async (req, 
             amount: true,
             promotions: { select: { promotionId: true }},
             remark: true
-        }
+        },
+        orderBy: { createdAt: 'desc' },
+        skip: skip,
+        take: take
     });
     const results = transactions.map(t => ({
         id: t.id,

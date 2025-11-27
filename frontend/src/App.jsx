@@ -14,6 +14,7 @@ import PasswordReset from './pages/PasswordReset.jsx';
 import TransactionHistory from './pages/TransactionHistory.jsx';
 import PurchaseTransaction from './pages/PurchaseTransaction.jsx';
 import AdjustmentTransaction from './pages/AdjustmentTransaction.jsx';
+import TransferTransaction from './pages/TransferTransaction.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 
 import ManagerEvents from "./pages/ManagerEvents.jsx";
@@ -48,6 +49,7 @@ function App() {
                 <Route path="transactions" element={<TransactionHistory />} />
                 <Route path="transactions/purchase" element={<PurchaseTransaction />} />
                 <Route path="transactions/adjustment" element={<AdjustmentTransaction />} />
+                <Route path="transactions/transfer/:userId?" element={<TransferTransaction />} />
                 {/* add other route paths as they are created*/}
               </Route>
             </Route>

@@ -92,6 +92,10 @@ const Layout = () => {
                             <TrendingUp className="icon" />Create Adjustment
                         </NavLink>
 
+                        <NavLink to="/transactions/transfer" className="nav-button">
+                            <Send className="icon" />Transfer Points
+                        </NavLink>
+
                         <NavLink to="/Not-working" className="nav-button">
                             <FolderPen className="icon" />Manage Transactions
                         </NavLink>

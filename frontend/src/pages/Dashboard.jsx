@@ -61,11 +61,17 @@ export default function Dashboard() {
     const [userData, setUserData] = useState(null);
     const [recentTransactions, setRecentTransactions] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalCount, setTotalCount] = useState(0);
+    const limit = 5;
 
     useEffect(() => {
         fetchUserData();
-        fetchRecentTransactions();
     }, []);
+
+    useEffect(() => {
+        fetchRecentTransactions();
+    }, [currentPage]);
 
     const fetchUserData = async () => {
         try {
@@ -90,7 +96,7 @@ export default function Dashboard() {
 
     const fetchRecentTransactions = async () => {
         try {
-            const response = await fetch(`${API_BASE}/users/me/transactions?limit=5`, {
+            const response = await fetch(`${API_BASE}/users/me/transactions?page=${currentPage}&limit=${limit}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -102,10 +108,17 @@ export default function Dashboard() {
 
             const data = await response.json();
             setRecentTransactions(data.results || []);
+            setTotalCount(data.count || 0);
         } catch (error) {
             console.error('Failed to load recent transactions:', error);
         }
     };
+
+    const handlePageChange = (newPage) => {
+        setCurrentPage(newPage);
+    };
+
+    const totalPages = Math.ceil(totalCount / limit);
 
     const formatAmount = (transaction) => {
         const type = transaction.type;
@@ -171,23 +184,46 @@ export default function Dashboard() {
                 {recentTransactions.length === 0 ? (
                     <p className="no-transactions">No recent transactions</p>
                 ) : (
-                    <div className="transactions-list">
-                        {recentTransactions.map((transaction) => {
-                            const Icon = transactionIcons[transaction.type] || DollarSign;
-                            return (
-                                <div key={transaction.id} className="transaction-item">
-                                    <div className="transaction-icon-wrap">
-                                        <Icon size={20} />
+                    <>
+                        <div className="transactions-list">
+                            {recentTransactions.map((transaction) => {
+                                const Icon = transactionIcons[transaction.type] || DollarSign;
+                                return (
+                                    <div key={transaction.id} className="transaction-item">
+                                        <div className="transaction-icon-wrap">
+                                            <Icon size={20} />
+                                        </div>
+                                        <div className="transaction-info">
+                                            <p className="transaction-type">{transaction.type}</p>
+                                            <p className="transaction-id">ID: {transaction.id}</p>
+                                        </div>
+                                        <p className="transaction-amount">{formatAmount(transaction)}</p>
                                     </div>
-                                    <div className="transaction-info">
-                                        <p className="transaction-type">{transaction.type}</p>
-                                        <p className="transaction-id">ID: {transaction.id}</p>
-                                    </div>
-                                    <p className="transaction-amount">{formatAmount(transaction)}</p>
-                                </div>
-                            );
-                        })}
-                    </div>
+                                );
+                            })}
+                        </div>
+                        {totalPages > 1 && (
+                            <div className="pagination">
+                                <button
+                                    className="page-btn"
+                                    disabled={currentPage === 1}
+                                    onClick={() => handlePageChange(currentPage - 1)}
+                                >
+                                    Previous
+                                </button>
+                                <span className="page-info">
+                                    Page {currentPage} of {totalPages}
+                                </span>
+                                <button
+                                    className="page-btn"
+                                    disabled={currentPage >= totalPages}
+                                    onClick={() => handlePageChange(currentPage + 1)}
+                                >
+                                    Next
+                                </button>
+                            </div>
+                        )}
+                    </>
                 )}
             </div>
         </div>

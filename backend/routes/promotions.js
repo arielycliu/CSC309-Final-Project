@@ -145,7 +145,7 @@ router.get('/', requireClearance(CLEARANCE.REGULAR), async (req, res) => {
     }
     if (type && ['automatic', 'one-time'].includes(type)) {
         const prismaType = type === 'one-time' ? PromotionType.onetime : PromotionType.automatic;
-        filters.type = { prismaType };
+        filters.type = prismaType;
     }
 
     if (isManagerOrHigher) {
@@ -191,7 +191,7 @@ router.get('/', requireClearance(CLEARANCE.REGULAR), async (req, res) => {
         where: filters,
         skip,
         take,
-        orderBy: { startTime: 'asc' },
+        orderBy: { id: 'asc' },
         select: {
             id: true,
             name: true,
@@ -423,7 +423,7 @@ router.delete('/:promotionId', requireClearance(CLEARANCE.MANAGER), async (req, 
     const originalStartTime = new Date(existingPromotion.startTime);
     const hasStarted = originalStartTime < now;
     if (hasStarted) {
-        return res.status(403).json({ 'error': 'Forbidden to edit ongoing promotion' });
+        return res.status(403).json({ 'error': 'Forbidden to delete a promotion that has started' });
     }
 
     await prisma.promotion.delete({

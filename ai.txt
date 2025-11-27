@@ -1,0 +1,1 @@
+- used AI in setting up QR code scanning and generation

@@ -38,9 +38,7 @@ export default function EventDetail() {
         const data = await fetchEventById(id);
         setEvent(data);
 
-        // If later your backend returns something like `isGuest`,
-        // you can init from it:
-        // setIsRsvped(!!data.isGuest);
+        setIsRsvped(Boolean(data.isRsvped));
       } catch (e) {
         setErr(e.message || "Failed to load event");
       } finally {

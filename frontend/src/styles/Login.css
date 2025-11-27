@@ -189,6 +189,7 @@
   justify-content: space-between;
   align-items: center;
   margin-top: -0.5rem;
+  gap: 2rem;
 }
 
 .remember-me {
@@ -198,6 +199,7 @@
   font-size: 0.875rem;
   color: #1a1a1a;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 .remember-me input[type="checkbox"] {
@@ -213,6 +215,8 @@
   text-decoration: none;
   font-weight: 500;
   transition: color 0.2s ease;
+  white-space: nowrap;
+  margin-left: auto;
 }
 
 .forgot-password:hover {

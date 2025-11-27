@@ -20,6 +20,8 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const [isOrganizer, setIsOrganizer] = useState(false);
+
   const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3000';
 
   const clearSession = (redirectTo = '/login') => {
@@ -35,11 +37,13 @@ export const AuthProvider = ({ children }) => {
       setUser(null);
       setActiveRole(null);
       setLoading(false);
+      setIsOrganizer(false);
       return;
     }
 
     const fetchUserProfile = async () => {
       try {
+        setLoading(true);
         const response = await fetch(`${API_BASE}/users/me`, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -62,6 +66,24 @@ export const AuthProvider = ({ children }) => {
           const maxIdx = ROLE_ORDER.indexOf(userData.role);
           return prevIdx >= 0 && prevIdx <= maxIdx ? prev : userData.role;
         });
+
+
+        // Event Organizer 
+        try {
+          const orgRes = await fetch(`${API_BASE}/users/me/organizer-events`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          if (orgRes.ok) {
+            const orgData = await orgRes.json();
+            setIsOrganizer(!!orgData.isOrganizer);
+          } else {
+            setIsOrganizer(false);
+          }
+        } catch {
+          setIsOrganizer(false);
+        }
+        // Event Organizer END
+
       } catch (error) {
         console.error('Failed to fetch user profile:', error);
         clearSession();
@@ -129,19 +151,28 @@ export const AuthProvider = ({ children }) => {
       return false;
     }
 
-    const userRoleIndex = ROLE_ORDER.indexOf(user.role);
-    const requestedIndex = ROLE_ORDER.indexOf(newRole);
+    // const userRoleIndex = ROLE_ORDER.indexOf(user.role);
+    // const requestedIndex = ROLE_ORDER.indexOf(newRole);
 
-    if (requestedIndex === -1 || userRoleIndex === -1) {
+    // if (requestedIndex === -1 || userRoleIndex === -1) {
+    //   return false;
+    // }
+
+    // if (requestedIndex <= userRoleIndex) {
+    //   setActiveRole(newRole);
+    //   return true;
+    // }
+
+    // return false;
+
+
+    // only allow switching to a role that is in the precomputed availableRoles
+    if (!availableRoles.includes(newRole)) {
       return false;
     }
 
-    if (requestedIndex <= userRoleIndex) {
-      setActiveRole(newRole);
-      return true;
-    }
-
-    return false;
+    setActiveRole(newRole);
+    return true;
   };
 
   const availableRoles = useMemo(() => {
@@ -149,13 +180,28 @@ export const AuthProvider = ({ children }) => {
       return [];
     }
 
+    const roles = new Set();
+
     const idx = ROLE_ORDER.indexOf(user.role);
     if (idx === -1) {
-      return [user.role];
+      // return [user.role];
+      roles.add(user.role);
+    } else {
+      for (let i = 0; i <= idx; i++) {
+        roles.add(ROLE_ORDER[i]);
+      }
     }
 
-    return ROLE_ORDER.slice(0, idx + 1);
-  }, [user]);
+    if (isOrganizer) {
+      roles.add('organizer');
+    }
+
+
+
+    return Array.from(roles).sort(
+      (a, b) => ROLE_ORDER.indexOf(a) - ROLE_ORDER.indexOf(b)
+    );
+  }, [user, isOrganizer]);
 
   const hasRole = (role) => {
     if (!user) {
@@ -186,6 +232,7 @@ export const AuthProvider = ({ children }) => {
     loading,
     activeRole,
     availableRoles,
+    isOrganizer, 
     login,
     logout,
     switchRole,

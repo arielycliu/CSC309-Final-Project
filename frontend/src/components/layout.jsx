@@ -108,8 +108,9 @@ const Layout = () => {
             )}
 
                 {(isManagerOrAbove || isRegular || isOrganizer) && (
-                <>
-                    <NavLink to="/events" className="nav-button">
+                <>  
+                    
+                    <NavLink to={isManagerOrAbove || isOrganizer ? "/events/manage" : "/events"} className="nav-button">
                         <Calendar className="icon" />{ (isManagerOrAbove || isOrganizer) ? "Manage Events" : "Events"}
                     </NavLink>
 

@@ -168,11 +168,11 @@ export const AuthProvider = ({ children }) => {
 
     // only allow switching to a role that is in the precomputed availableRoles
     if (!availableRoles.includes(newRole)) {
-    return false;
-  }
+      return false;
+    }
 
-  setActiveRole(newRole);
-  return true;
+    setActiveRole(newRole);
+    return true;
   };
 
   const availableRoles = useMemo(() => {

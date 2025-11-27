@@ -279,6 +279,52 @@ router.get("/me", requireClearance(CLEARANCE.REGULAR), async(req, res) =>{
       
 });
 
+// Check if current user is an organizer of any events
+router.get("/me/organizer-events", requireClearance(CLEARANCE.REGULAR), async (req, res) => {
+  try {
+    const userId = req.auth.sub;
+
+    // Find all organizer assignments for this user
+    const assignments = await prisma.eventOrganizer.findMany({
+      where: { userId },
+      include: {
+        event: {
+          select: {
+            id: true,
+            name: true,
+            description: true,
+            location: true,
+            startTime: true,
+            endTime: true,
+            published: true,
+          },
+        },
+      },
+    });
+
+    const events = assignments
+      .filter(a => a.event)
+      .map(a => ({
+        id: a.event.id,
+        name: a.event.name,
+        description: a.event.description,
+        location: a.event.location,
+        startTime: a.event.startTime.toISOString(),
+        endTime: a.event.endTime.toISOString(),
+        published: a.event.published,
+      }));
+
+    return res.status(200).json({
+      isOrganizer: events.length > 0,
+      events,
+    });
+  } catch (err) {
+    console.error("GET /users/me/organizer-events error:", err);
+    return res.status(500).json({ error: `error checking organizer status ${err.message}` });
+  }
+});
+
+
 router.get("/:userId", requireClearance(CLEARANCE.CASHIER), async(req, res)=>{
     //console.log("get user", req.body);
 

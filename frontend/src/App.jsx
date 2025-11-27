@@ -14,6 +14,8 @@ import TransactionHistory from './pages/TransactionHistory.jsx';
 import PurchaseTransaction from './pages/PurchaseTransaction.jsx';
 import AdjustmentTransaction from './pages/AdjustmentTransaction.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
+
+import ManagerEvents from "./pages/ManagerEvents.jsx";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import { AuthProvider } from './context/AuthContext';
@@ -32,6 +34,9 @@ function App() {
                 <Route index element={<Dashboard />} />
                 <Route path="events" element={<Events />} />
                 <Route path="events/:id" element={<EventDetails />} />
+
+                <Route path="events/manage" element={<ManagerEvents />} />
+                
                 <Route path="settings/profile" element={<Profile />}>
                   <Route index element={<ProfileStatus />} />
                   <Route path="edit" element={<ProfileSettings />} />

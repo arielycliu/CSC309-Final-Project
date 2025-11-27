@@ -1,0 +1,148 @@
+import {useState } from "react";
+import { z } from "zod";
+import '../styles/profile.css';
+import{NavLink} from "react-router-dom"
+import { toast } from 'sonner';
+import {useAuth} from "../context/AuthContext";
+import { Eye, EyeOff } from "lucide-react";
+
+const updateOwnPasswordSchema = z.object({
+   old: z.string(),
+   new: z.string().min(8, "Password must be at least 8 characters long")
+  .max(20, "Password must be at most 20 characters long")
+  .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+  .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+  .regex(/[0-9]/, "Password must contain at least one number")
+  .regex(/[^A-Za-z0-9]/, "Password must contain at least one special character"),
+  confirm:z.string(),
+}).refine((data) => data.new === data.confirm, {
+  message: "Passwords do not match",
+  path: ["confirm"], // error will appear on confirm field
+});
+
+const ProfileAuthUpdate = () => {
+    const {token, user} = useAuth();
+    const [errors, setErrors] = useState({});
+    const [showold, setShowOld] = useState(false);
+    const [shownew, setShowNew] = useState(false);
+    const [showconfirm, setShowConfirm] = useState(false);
+    const [formData, setFormData] = useState({
+            old: "",
+            new: "",
+            confirm: "",
+    });
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const UpdatePassword = async () => {
+        const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3000';
+        console.log("Updating password with data:", formData);
+        
+      try {
+            const response = await fetch(`${API_BASE}/users/me/password`, {
+                method: 'PATCH',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({old: formData.old, new: formData.new}),
+            });
+
+            const userData = await response.json();
+
+            if (!response.ok) {
+                setErrors(userData.error || {});
+                throw new Error(`${JSON.stringify(userData.error)}`);
+            }
+
+            setErrors({});
+            setFormData({
+                old: "",
+                new: "",
+                confirm: "",
+            });
+            toast.success("Profile updated successfully!");
+      } catch (error) {
+        console.error(`Error updating profile: ${error.message}`);
+        toast.error(`Failed to update profile. Please try again.`);
+      }
+    };
+
+    const handleSubmit = async(e) => {
+        e.preventDefault();
+
+        const result = updateOwnPasswordSchema.safeParse(formData);
+
+        if (!result.success) {
+            // Convert Zod errors into { field: message }
+            const fieldErrors = {};
+            console.log("FULL ZOD ERROR OBJ:", result.error._zod.def);
+            result.error._zod.def.forEach(err => {
+                const field = err.path[0];
+                fieldErrors[field] = err.message;
+            });
+            setErrors(fieldErrors);
+            return; // stop submit
+        }
+
+        setErrors({});
+        await UpdatePassword();
+        console.log("VALID form:", result.data);
+    };
+
+    const EyeToggle = ({ show, setShow, size = 20, color = "black" }) => {
+    return (
+        <button
+            type="button"
+            className="eyeToggle"
+            onClick={() => setShow(prev => !prev)}
+        >
+            {show ? <EyeOff size={size} color={color} /> : <Eye size={size} color={color} />}
+        </button>
+    );
+    };
+
+    return(
+         <div className="settings-page">
+            <div className="description">
+                <p id="title">Account Access</p>
+                <p id="explanation">Change password</p>
+            </div> 
+            <form className="password" onSubmit={handleSubmit}>
+                <div className="right-inputs">
+                    <label>Old Password</label>
+                    <div className="password-input-wrapper">
+                        <input type={showold ? "text" : "password"} name="old" value={formData.old} onChange={handleChange} />
+                        <EyeToggle show={showold} setShow={setShowOld} color="black"/>
+                    </div>
+                    <p className="input-error">{errors.old || "\u00A0"}</p>
+
+                    <label>New Password</label>
+                    <div className="password-input-wrapper">
+                        <input type={shownew ? "text" : "password"}  name="new" value={formData.new} onChange={handleChange} />
+                       <EyeToggle show={shownew} setShow={setShowNew} color="black"/>
+                    </div>
+                    <p className={errors.new? "input-error": "input-error message"}>{errors.new || 
+                    "Password must be 8–20 characters with one upper, lower, number, and special character."}</p>
+
+                    <label>Confirm Password</label>
+                    <div className="password-input-wrapper">
+                        <input type={showconfirm ? "text" : "password"} name="confirm" value={formData.confirm} onChange={handleChange}/>
+                        <EyeToggle show={showconfirm} setShow={setShowConfirm} color="black"/>
+                    </div>
+                    <p className="input-error">{errors.confirm || "\u00A0"}</p>
+
+                    <NavLink to="/password-reset" id="forgot-password">Forgot password?</NavLink>
+                    <button className="submit-form password" type="submit">Update Password</button>
+                </div>
+            </form>
+         </div>
+    )
+}
+
+export default ProfileAuthUpdate;

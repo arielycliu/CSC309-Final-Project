@@ -1,6 +1,6 @@
 #settings_body{
     padding: 4rem 1rem;
-    margin: 0 130px
+    margin: 0 130px;
 }
 
 .profile-header{
@@ -16,7 +16,7 @@
     height: 48px;
     width: 48px;
     border-radius: 50%;      
-    border: 1px solid #717182;  
+    border: 1px solid #717182;
     object-fit: cover;       
     margin-right: 1rem;
 }
@@ -29,7 +29,7 @@
     font-size: x-large;
     font-weight: 600;
     margin: 0;
-    line-height: 1;
+    line-height: 1.2;
 }
 
 #profile-name p{
@@ -48,13 +48,15 @@
     align-items: flex-start;
     padding: 0.5rem 1rem 0.5rem 0.5rem;
     gap: 0.5rem;
-    color:#717182
+    color:#717182;
+    text-align: left;
 }
 
 .icon{
   color: #717182;
   width: 20px;
   height: 20px;
+  align-self: start;
 }
 
 .button:hover{
@@ -83,11 +85,13 @@
     border-radius: 16px;
     box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
     color:#0A0A0A;
+    width: clamp(350px, 50vw, 900px);
 
 }
 
 .description{
     text-align: left;
+    flex: 1;
     padding: 1rem;
     line-height: 1;
     margin-bottom: 2rem;
@@ -95,7 +99,8 @@
 
 .description #title{
     font-size: larger;
-    font-weight: 400;
+    font-weight: 600;
+    color: #0A0A0A;
 }
 
 .description #explanation{
@@ -103,27 +108,44 @@
     color: #717182;
 }
 
-.profile-avatar{
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    border: 1px solid #717182;  
-    object-fit: cover;       
+
+form {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2rem;
+  padding: 2rem;
+  align-items: start;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-form{
-    display: flex;
-    flex-direction: row;
-    gap: 2rem;
-    padding: 2rem;
+form.password{
+    grid-template-columns: 1fr;
 }
 
-.left-inputs{
+form.password input{
+    width: 70%;
+}
+
+.right-inputs{
     display:flex;
     flex-direction:column;
     text-align: left;
-    min-width: 400px;
-    
+}
+
+.password-input-wrapper{
+    display: flex;
+    align-items: center;
+}
+
+.eyeToggle{
+    position: relative;
+    background: none;
+    right: 1.8rem;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    width: fit-content;
 }
 
 
@@ -134,12 +156,13 @@ form label{
 }
 
 form input {
-    padding: 0.6em 0.8em;
+    padding: 0.6em 0.8rem;
+    width: 100%;          
+    max-width: 100%;      
     border-radius: 10px;
     background-color: #F3F3F5;
     border: 2px solid #D0D0D5;   
     color: #0A0A0A;              
-    margin-bottom: 2rem;
     font-size: 14px;
 }
 
@@ -165,20 +188,32 @@ input[type="date"]{
     text-align: left;
 }
 
-.profile-avatar-section button{
+.avatar-wrapper {
+    position: relative;
+    width: fit-content;
+}
+
+.edit-avatar-button {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
     background-color:#F3F3F5; 
     color:#0A0A0A;
-    max-width: fit-content;
-    position: absolute;
-    bottom: 130px;
-    right: 125px;
     border: none;
-    padding: 0.1rem 0.6rem;
+    padding: 0.2rem 0.6rem;
     border-radius: 8px;
     display: flex;
     align-items: center;
     gap: 4px;
     cursor: pointer;
+}
+
+.profile-avatar {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 1px solid #717182;
+    object-fit: cover;
 }
 
 .profile-avatar-section button:focus{
@@ -196,28 +231,131 @@ input[type="date"]{
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
+    align-self: flex-end;
 }
 
-    
+
+
 
 .submit-form:hover {
     background-color: #1c1c1c;
     border-color: #D0D0D5; 
 }
 
+.input-error {
+    color: #d32f2f;
+    font-size: 0.75rem;
+    padding-bottom: 1rem;
+}
+
+.input-error.message{
+    color:#717182
+}
+
+.account-info{
+    display: flex;
+    flex-direction: column;
+    margin: 2rem;
+}
+
+.user-info-div{
+    padding: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.user-info-div .title{
+    padding: 0.5rem;
+    color: #717182;
+    font-weight: 400;
+    font-size: large;
+}
+
+.user-info-div .info{
+   padding: 0.5rem 1rem;
+   font-size: 18px;
+}
+
+.user-info-div .info.points{
+   color:#0A0A0A;
+   font-weight: 600;
+}
+
+.user-info-div .info.role {
+   color: #0A0A0A;
+   border: 2px solid #F3F4F6; 
+   border-radius: 20px;
+   font-weight: 400;
+   display: inline-block;
+}
+
+.user-info-div .info.utorid {
+   color: #0A0A0A;
+   font-weight: 500;
+   background-color: #F3F4F6;
+   font-family: 'Courier New', Courier, monospace;
+   border-radius: 20px;
+   display: inline-block;       
+}
+
+.user-info-div .info.verified {
+   border: 2px solid #7BF1A8; 
+   background-color: #DCFCE7;
+   border-radius: 20px;
+   font-weight: 400;
+   display: inline-block;
+   color: #008236;
+}
+   
+.user-info-div .info.unverified {
+    color: #B91C1C;
+    border: 2px solid #FCA5A5; 
+    background-color: #FEE2E2;
+    border-radius: 20px;
+    font-weight: 400;
+    display: inline-block;
+}
+
+#forgot-password:hover{
+    text-decoration: underline;
+}
 
 
-@media (max-width: 1100px) {
+
+
+@media (max-width: 1100px) { 
+    .settings-page {
+        width: 80%;      
+        max-width: 900px;  
+        margin: 0 auto;    
+    }
+
     #settings_body{
         display: flex;
         flex-direction: column;
-        margin: 50px;
+        margin: 0;
     }
 
     .profile-page{
         display: flex;
         flex-direction: column;
     }
+
+    form{
+        display: flex;
+        flex-direction: column;
+        padding: 0.5rem;
+    }
+
+    form.password input{
+        width: 1000%;
+    }
+
+    .right-inputs{
+        width: 100%; 
+    }
+
 }
 
 

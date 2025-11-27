@@ -198,24 +198,40 @@ router.patch("/me", requireClearance(CLEARANCE.REGULAR), upload.single("avatar")
     if(email){
 
         //check email still unique 
-        const duplicate_email = await prisma.findFirst({
-            where: {email: email, not: {id: userId}}
+        const duplicate_email = await prisma.user.findFirst({
+            where: {email: email, NOT: {id: req.auth.sub}}
         })
 
         if(duplicate_email){
-            return res.status(400).json({error: "another user with that email already exists"});
+            return res.status(400).json({error: {email: "Another user with that email already exists"}});
         }
 
         data.email = email;
     }
     if(birthday) data.birthday = birthday;
-    if(req.file){
-        const savePath = path.join(__dirname, "../uploads/avatars", req.file.originalname);
-      fs.writeFileSync(savePath, req.file.buffer);
+    if (req.file) {
+        const userDir = path.join(__dirname, `../uploads/avatars/user-${req.auth.sub}`);
+        
+        // Create folder if it doesn't exist
+        if (!fs.existsSync(userDir)) {
+            fs.mkdirSync(userDir, { recursive: true });
+        }else{
+            const files = fs.readdirSync(userDir);
+            for (const file of files) {
+                const filePath = path.join(userDir, file);
+                fs.unlinkSync(filePath); // deletes the file
+            }
+        }
+
+        const fileName = `${Date.now()}-icon.png`;
+        const savePath = path.join(userDir, fileName);
+        data.avatarUrl = `/uploads/avatars/user-${req.auth.sub}/${fileName}`;
+
+        fs.writeFileSync(savePath, req.file.buffer);
     }
 
     if(!data|| Object.keys(data).length === 0){
-        return res.status(400).json({error: "empty payload"})
+        return res.status(400).json({error: {general: "Empty payload"}})
     }
 
     try{
@@ -229,7 +245,7 @@ router.patch("/me", requireClearance(CLEARANCE.REGULAR), upload.single("avatar")
         return res.json(user);
 
     }catch(err){
-        return res.status(500).json({error: `error patching self ${err.message}`});
+        return res.status(500).json({error: {general: `Error updating profile: ${err.message}`}});
     }
 
 });
@@ -354,7 +370,7 @@ router.patch("/:userId", requireClearance(CLEARANCE.MANAGER), validatePayload(pa
 
         if(duplicate_email){
             //console.log("another user with that email already exists");
-            return res.status(400).json({error: "another user with that email already exists"});
+            return res.status(400).json({error: {email: "Another user with that email already exists"}});
         }
 
         data.email = email;
@@ -441,12 +457,12 @@ router.patch("/me/password", requireClearance(CLEARANCE.REGULAR), validatePayloa
         });
 
         if (!user) {
-            return res.status(404).json({ error: "User not found" });
+            return res.status(404).json({ error: {regular: "User not found"} });
         }
 
         const match = await bcrypt.compare(old, user.password);
         if (!match) {
-            return res.status(403).json({ error: "Old password is incorrect" });
+            return res.status(403).json({ error: {old: "Old password is incorrect"} });
         }
 
         const hashed = await bcrypt.hash(newPassword, 10);
@@ -458,7 +474,7 @@ router.patch("/me/password", requireClearance(CLEARANCE.REGULAR), validatePayloa
         return res.status(200).json({message: "Password updated successfully" });
 
     }catch(err){
-        return res.status(500).json({error: `error updating password ${err.message}`});
+        return res.status(500).json({error: {general: `error updating password ${err.message}`}});
     }
     
 

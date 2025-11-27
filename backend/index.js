@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 require('dotenv').config();
+const path = require('path');
 
 const Port = () => {
     const args = process.argv;
@@ -21,9 +22,19 @@ const Port = () => {
 
 const express = require("express");
 const { expressjwt: jwt } = require("express-jwt");
+const cors = require("cors");
 const app = express();
 
+// CORS configuration - allow frontend to access backend
+app.use(cors({
+    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    credentials: true,
+}));
+
 app.use(express.json());
+
+// Serve avatars statically
+app.use('/uploads/avatars', express.static(path.join(__dirname, 'uploads/avatars')));
 
 // JWT middleware - decodes token and attaches to req.auth
 app.use(

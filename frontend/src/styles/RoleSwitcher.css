@@ -1,0 +1,46 @@
+.role-switcher {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  gap: 0.25rem;
+  min-width: 180px;
+}
+
+.role-switcher label {
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  color: #6b6b6b;
+}
+
+.role-select-wrapper {
+  position: relative;
+}
+
+.role-select-wrapper select {
+  width: 100%;
+  appearance: none;
+  border-radius: 999px;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  padding: 0.5rem 2rem 0.5rem 0.75rem;
+  background: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  color: #1f1f1f;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.role-select-wrapper select:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.role-select-wrapper .chevron {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #4f46e5;
+}

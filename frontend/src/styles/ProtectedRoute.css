@@ -1,0 +1,28 @@
+.route-guard-loading {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  color: #4f46e5;
+  font-weight: 500;
+}
+
+.route-guard-loading .spinner {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 3px solid rgba(99, 102, 241, 0.2);
+  border-top-color: #6366f1;
+  animation: route-guard-spin 0.8s linear infinite;
+}
+
+@keyframes route-guard-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

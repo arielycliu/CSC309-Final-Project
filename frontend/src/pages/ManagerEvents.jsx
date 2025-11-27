@@ -1,5 +1,6 @@
 // src/pages/ManagerEvents.jsx
 import { useEffect, useState } from "react";
+import { searchAddresses } from "../lib/locations";
 import {
   Calendar,
   MapPin,
@@ -43,6 +44,16 @@ export default function ManagerEvents() {
   const [loadingDetail, setLoadingDetail] = useState(false);
   const [publishing, setPublishing] = useState(false);
   const [error, setError] = useState("");
+
+  // CREATE location autocomplete
+  const [createLocationQuery, setCreateLocationQuery] = useState("");
+  const [createLocationSuggestions, setCreateLocationSuggestions] = useState([]);
+  const [createSelectedLocation, setCreateSelectedLocation] = useState(null);
+
+  // EDIT location autocomplete
+  const [editLocationQuery, setEditLocationQuery] = useState("");
+  const [editLocationSuggestions, setEditLocationSuggestions] = useState([]);
+  const [editSelectedLocation, setEditSelectedLocation] = useState(null);
 
   // create form state (manager/superuser only)
   const [createForm, setCreateForm] = useState({
@@ -103,7 +114,7 @@ export default function ManagerEvents() {
 
   // ---------- load list ----------
   useEffect(() => {
-    if (loadingRole) return; 
+    if (loadingRole) return;
 
     async function loadList() {
       try {
@@ -177,6 +188,13 @@ export default function ManagerEvents() {
               ? String((data.pointsRemain || 0) + (data.pointsAwarded || 0))
               : "",
         });
+        setEditLocationQuery(data.location || "");
+        setEditSelectedLocation(
+          data.location
+            ? { id: null, label: data.location, coordinates: null }
+            : null
+        );
+
       } catch (e) {
         toast.error(e.message || "Failed to load event detail");
         setSelectedEvent(null);
@@ -187,7 +205,7 @@ export default function ManagerEvents() {
 
     loadDetail();
   }, [selectedId]);
-  
+
 
   // ---------------- handlers: create event (manager/superuser only) ----------------
   const handleCreateChange = (field, value) => {
@@ -246,9 +264,22 @@ export default function ManagerEvents() {
     if (editForm.description.trim() !== selectedEvent.description) {
       payload.description = editForm.description.trim();
     }
-    if (editForm.location.trim() !== selectedEvent.location) {
-      payload.location = editForm.location.trim();
+
+
+    if (editSelectedLocation) {
+      if (editSelectedLocation.label !== selectedEvent.location) {
+        payload.location = editSelectedLocation.label;
+      }
+    } else if (
+      editLocationQuery.trim() !== "" &&
+      editLocationQuery.trim() !== selectedEvent.location
+    ) {
+      payload.location = editLocationQuery.trim();
     }
+
+
+
+
     if (
       editForm.startTime &&
       editForm.startTime !== selectedEvent.startTime?.slice(0, 16)
@@ -363,27 +394,27 @@ export default function ManagerEvents() {
     if (!window.confirm("Remove this organizer from the event?")) return;
 
     try {
-        await removeOrganizerFromEvent(selectedEvent.id, userId);
-        toast.success("Organizer removed");
+      await removeOrganizerFromEvent(selectedEvent.id, userId);
+      toast.success("Organizer removed");
 
-        // update local state so UI reflects change immediately
-        setSelectedEvent((prev) =>
+      // update local state so UI reflects change immediately
+      setSelectedEvent((prev) =>
         prev
-            ? {
-                ...prev,
-                organizers: (prev.organizers || []).filter(
-                (o) => o.id !== userId
-                ),
-            }
-            : prev
-        );
+          ? {
+            ...prev,
+            organizers: (prev.organizers || []).filter(
+              (o) => o.id !== userId
+            ),
+          }
+          : prev
+      );
 
-        // also keep list in sync if you show organizers there later
-        // (optional, currently not needed for list)
+      // also keep list in sync if you show organizers there later
+      // (optional, currently not needed for list)
     } catch (e) {
-        toast.error(e.message || "Failed to remove organizer");
+      toast.error(e.message || "Failed to remove organizer");
     }
- };
+  };
 
   // ---------------- handlers: guests (both roles) ----------------
   const handleAddGuest = async (e) => {
@@ -503,17 +534,54 @@ export default function ManagerEvents() {
                     rows={2}
                   />
                 </label>
-                <label>
-                  Location
+
+
+
+
+
+                <div className="location-autocomplete">
+                  <label htmlFor="create-location">Location</label>
                   <input
+                    id="create-location"
                     type="text"
-                    value={createForm.location}
-                    onChange={(e) =>
-                      handleCreateChange("location", e.target.value)
-                    }
+                    value={createLocationQuery}
+                    onChange={async (e) => {
+                      const value = e.target.value;
+                      setCreateLocationQuery(value);
+                      setCreateSelectedLocation(null); // typing invalidates selection
+
+                      if (value.trim().length >= 3) {
+                        const results = await searchAddresses(value);
+                        setCreateLocationSuggestions(results);
+                      } else {
+                        setCreateLocationSuggestions([]);
+                      }
+                    }}
+                    placeholder="Start typing an address…"
                     required
                   />
-                </label>
+
+                  {createLocationSuggestions.length > 0 && (
+                    <ul className="location-suggestions">
+                      {createLocationSuggestions.map((s) => (
+                        <li
+                          key={s.id}
+                          onClick={() => {
+                            setCreateSelectedLocation(s);
+                            setCreateLocationQuery(s.label);
+                            setCreateLocationSuggestions([]);
+                          }}
+                        >
+                          {s.label}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+
+
+
+
                 <div className="manager-form-row">
                   <label>
                     Start
@@ -747,16 +815,63 @@ export default function ManagerEvents() {
                       rows={2}
                     />
                   </label>
-                  <label>
-                    Location
+
+
+
+
+
+                  <div className="location-autocomplete">
+                    <label htmlFor="edit-location">Location</label>
                     <input
+                      id="edit-location"
                       type="text"
-                      value={editForm.location}
-                      onChange={(e) =>
-                        handleEditChange("location", e.target.value)
-                      }
+                      value={editLocationQuery}
+                      onChange={async (e) => {
+                        const value = e.target.value;
+                        setEditLocationQuery(value);
+                        setEditSelectedLocation(null);
+
+                        if (value.trim().length >= 3) {
+                          const results = await searchAddresses(value);
+                          setEditLocationSuggestions(results);
+                        } else {
+                          setEditLocationSuggestions([]);
+                        }
+                      }}
+                      placeholder="Start typing an address…"
                     />
-                  </label>
+
+                    {editLocationSuggestions.length > 0 && (
+                      <ul className="location-suggestions">
+                        {editLocationSuggestions.map((s) => (
+                          <li
+                            key={s.id}
+                            onClick={() => {
+                              setEditSelectedLocation(s);
+                              setEditLocationQuery(s.label);
+                              setEditLocationSuggestions([]);
+                            }}
+                          >
+                            {s.label}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                   <div className="manager-form-row">
                     <label>
                       Start
@@ -841,8 +956,8 @@ export default function ManagerEvents() {
                         {selectedEvent.published
                           ? "Published"
                           : publishing
-                          ? "Publishing…"
-                          : "Publish Event"}
+                            ? "Publishing…"
+                            : "Publish Event"}
                       </button>
                     )}
                   </div>
@@ -853,50 +968,50 @@ export default function ManagerEvents() {
               <div className="manager-bottom-grid">
                 {/* Organizers: manager/superuser only for edit; organizers can still see list */}
                 {isManagerOrSuper && (
-                <div className="manager-card manager-small-card">
+                  <div className="manager-card manager-small-card">
                     <h2>
-                    <UserPlus className="manager-card-icon" /> Organizers
+                      <UserPlus className="manager-card-icon" /> Organizers
                     </h2>
                     <form
-                    className="manager-inline-form"
-                    onSubmit={handleAddOrganizer}
+                      className="manager-inline-form"
+                      onSubmit={handleAddOrganizer}
                     >
-                    <input
+                      <input
                         type="text"
                         placeholder="utorid"
                         value={organizerUtorid}
                         onChange={(e) => setOrganizerUtorid(e.target.value)}
-                    />
-                    <button
+                      />
+                      <button
                         type="submit"
                         className="manager-secondary-btn"
-                    >
+                      >
                         Add
-                    </button>
+                      </button>
                     </form>
                     <ul className="manager-people-list">
-                    {selectedEvent.organizers?.length ? (
+                      {selectedEvent.organizers?.length ? (
                         selectedEvent.organizers.map((o) => (
-                        <li key={o.id}>
+                          <li key={o.id}>
                             <div>
-                            <span className="manager-person-main">{o.name}</span>
-                            <span className="manager-person-sub">{o.utorid}</span>
+                              <span className="manager-person-main">{o.name}</span>
+                              <span className="manager-person-sub">{o.utorid}</span>
                             </div>
                             {/* remove button only for manager/superuser */}
                             <button
-                            type="button"
-                            className="manager-icon-btn"
-                            onClick={() => handleRemoveOrganizer(o.id)}
+                              type="button"
+                              className="manager-icon-btn"
+                              onClick={() => handleRemoveOrganizer(o.id)}
                             >
-                            <Trash2 size={14} />
+                              <Trash2 size={14} />
                             </button>
-                        </li>
+                          </li>
                         ))
-                    ) : (
+                      ) : (
                         <li className="manager-muted">No organizers yet.</li>
-                    )}
+                      )}
                     </ul>
-                </div>
+                  </div>
                 )}
 
                 {/* Guests: both roles */}

@@ -570,6 +570,11 @@ export default function ManagerEvents() {
                             setCreateSelectedLocation(s);
                             setCreateLocationQuery(s.label);
                             setCreateLocationSuggestions([]);
+
+                            setCreateForm(prev => ({
+                              ...prev,
+                              location: s.label,
+                            }));
                           }}
                         >
                           {s.label}
@@ -850,6 +855,12 @@ export default function ManagerEvents() {
                               setEditSelectedLocation(s);
                               setEditLocationQuery(s.label);
                               setEditLocationSuggestions([]);
+
+                              setEditForm(prev => ({
+                              ...prev,
+                              location: s.label,
+                            }));
+                              
                             }}
                           >
                             {s.label}

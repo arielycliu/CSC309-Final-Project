@@ -11,6 +11,7 @@ import Login from './pages/Login.jsx';
 import ProfileStatus   from './pages/profileStatus.jsx';
 import ProfileAuthUpdate from './pages/ProfileAuthUpdate';
 import PasswordReset from './pages/PasswordReset.jsx';
+import Signup from './pages/Signup.jsx';
 import TransactionHistory from './pages/TransactionHistory.jsx';
 import PurchaseTransaction from './pages/PurchaseTransaction.jsx';
 import AdjustmentTransaction from './pages/AdjustmentTransaction.jsx';
@@ -30,6 +31,7 @@ function App() {
         <AuthProvider>
           <Routes>
             <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
             <Route path="/password-reset" element={<PasswordReset />} />
             <Route element={<ProtectedRoute />}>
               <Route path="/" element={<Layout />}>

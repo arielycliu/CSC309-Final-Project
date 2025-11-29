@@ -15,6 +15,11 @@ import {
   rsvpMe,
   unRsvpMe,
 } from "../lib/events";
+import "mapbox-gl/dist/mapbox-gl.css";
+import { EventMap } from "../lib/eventMap";
+
+const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
+const MAPBOX_SESSION_TOKEN = "event-detail-static-session";
 
 export default function EventDetail() {
   const { id } = useParams();
@@ -23,6 +28,10 @@ export default function EventDetail() {
   const [isRsvped, setIsRsvped] = useState(false);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState("");
+
+  const [mapCoords, setMapCoords] = useState(null);
+  const [mapLoading, setMapLoading] = useState(false);
+  const [mapErr, setMapErr] = useState("");
 
   // ─────────────────────────────
   // Load event details
@@ -48,6 +57,73 @@ export default function EventDetail() {
 
     load();
   }, [id]);
+
+  // ─────────────────────────────
+  // Load event GEO coordinates for map display
+  // ─────────────────────────────
+  useEffect(() => {
+    if (!event?.location || !MAPBOX_TOKEN) return;
+
+    async function geocode() {
+      try {
+        setMapLoading(true);
+        setMapErr("");
+
+        // 1) Get a suggestion for this full location text
+        const suggestRes = await fetch(
+          `https://api.mapbox.com/search/searchbox/v1/suggest` +
+          `?q=${encodeURIComponent(event.location)}` +
+          `&limit=1` +
+          `&session_token=${MAPBOX_SESSION_TOKEN}` +
+          `&access_token=${MAPBOX_TOKEN}`
+        );
+
+        if (!suggestRes.ok) throw new Error("Suggest request failed");
+        const suggestData = await suggestRes.json();
+        const first = suggestData.suggestions?.[0];
+        if (!first) {
+          setMapErr("Map not available for this address.");
+          return;
+        }
+        
+        // bug in eventMap.js
+        // ok its dumb lol ya js definitely cannot parse jsx or html components
+        // changed eventMap.js to .jsx.
+        // fixed 
+
+        // 2) Retrieve full feature to get precise coordinates
+
+        const retrieveUrl =
+        `https://api.mapbox.com/search/searchbox/v1/retrieve/${first.mapbox_id}` +
+        `?session_token=${MAPBOX_SESSION_TOKEN}` +
+        `&access_token=${MAPBOX_TOKEN}`;
+        
+        const retrieveRes = await fetch(retrieveUrl);
+        // 1) + 2) kind of overkill. It's a tradeoff between modifying DB to store coords vs extra API calls (higher token consumption).
+        // I chose to keep DB unchanged for now.
+
+        if (!retrieveRes.ok) throw new Error("Retrieve request failed");
+        const retrieveData = await retrieveRes.json();
+        const feature = retrieveData.features?.[0];
+        const coords = feature?.geometry?.coordinates; // [lng, lat]
+
+        if (!coords) {
+          setMapErr("Map not available for this address.");
+          return;
+        }
+
+        setMapCoords({ lng: coords[0], lat: coords[1] });
+      } catch (err) {
+        console.error("Failed to load map:", err);
+        setMapErr("Failed to load map.");
+      } finally {
+        setMapLoading(false);
+      }
+    }
+
+    geocode();
+  }, [event?.location]);
+
 
   // ─────────────────────────────
   // RSVP / cancel
@@ -196,6 +272,21 @@ export default function EventDetail() {
                 </div>
               </div>
 
+              {/* Map section */}
+              <div className="event-detail-section">
+                <h3 className="event-detail-section-title">Location Map</h3>
+
+                {mapLoading && <p className="event-detail-info-secondary">Loading map…</p>}
+                {mapErr && <p className="event-detail-error">{mapErr}</p>}
+
+                {mapCoords && (
+                  <div className="event-detail-map">
+                    <EventMap lng={mapCoords.lng} lat={mapCoords.lat} />
+                  </div>
+                )}
+              </div>
+
+
               <div className="event-detail-info-row">
                 <MapPin className="event-detail-info-icon" />
                 <div>
@@ -278,7 +369,7 @@ export default function EventDetail() {
                 event. Specific amount will be decided by the organizers.
               </p>
             )}
-               
+
           </div>
         </div>
       </div>

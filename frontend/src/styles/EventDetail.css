@@ -255,3 +255,16 @@
   font-size: 13px;
   color: #6b7280;
 }
+
+.event-detail-map {
+  margin-top: 0.75rem;
+  border-radius: 12px;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.event-detail-map img {
+  display: block;
+  width: 100%;
+  height: auto;
+}

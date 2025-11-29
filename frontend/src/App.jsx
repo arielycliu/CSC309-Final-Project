@@ -16,6 +16,7 @@ import TransactionHistory from './pages/TransactionHistory.jsx';
 import PurchaseTransaction from './pages/PurchaseTransaction.jsx';
 import AdjustmentTransaction from './pages/AdjustmentTransaction.jsx';
 import TransferTransaction from './pages/TransferTransaction.jsx';
+import ManageTransactions from './pages/ManageTransactions.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 
 import ManagerEvents from "./pages/ManagerEvents.jsx";
@@ -49,6 +50,7 @@ function App() {
                 <Route path="promotions" element={<Promotions />} />
                 <Route path="promotions/manage" element={<ProtectedRoute minRole="manager"><ManagePromotions /></ProtectedRoute>} />
                 <Route path="transactions" element={<TransactionHistory />} />
+                <Route path="transactions/manage" element={<ProtectedRoute minRole="manager"><ManageTransactions /></ProtectedRoute>} />
                 <Route path="transactions/purchase" element={<PurchaseTransaction />} />
                 <Route path="transactions/adjustment" element={<AdjustmentTransaction />} />
                 <Route path="transactions/transfer/:userId?" element={<TransferTransaction />} />

@@ -197,6 +197,8 @@ router.get('/:eventId', requireClearance(CLEARANCE.REGULAR), async (req, res) =>
     const eventId = Number(req.params.eventId);
     if (!Number.isInteger(eventId)) return res.status(400).json({ error: 'Invalid eventId' });
 
+    const userId = Number(req.auth.sub);
+
     const ev = await prisma.event.findUnique({
       where: { id: eventId },
       include: {
@@ -211,6 +213,12 @@ router.get('/:eventId', requireClearance(CLEARANCE.REGULAR), async (req, res) =>
     const confirmedGuestRows = ev.guests.filter(g => isConfirmed(g.confirmed));
     const confirmedGuests = confirmedGuestRows.length;
 
+    const isRsvped =
+      Number.isFinite(userId) &&
+      confirmedGuestRows.some((g) => Number(g.userId) === userId);
+    
+      console.log("isRsvped:", isRsvped);
+
     const elevated = await isManagerOrOrganizer(req, eventId);
     if (!elevated) {
       if (!ev.published) return res.status(404).json({ error: 'Event not found (not published)' });
@@ -224,6 +232,7 @@ router.get('/:eventId', requireClearance(CLEARANCE.REGULAR), async (req, res) =>
         capacity: ev.capacity,
         organizers: ev.organizers.map(o => ({ id: o.user.id, utorid: o.user.utorid, name: o.user.name })),
         numGuests: confirmedGuests, // only confirmed count for regular users
+        isRsvped, // whether current user has RSVPed
       });
     }
 
@@ -241,6 +250,7 @@ router.get('/:eventId', requireClearance(CLEARANCE.REGULAR), async (req, res) =>
       published: ev.published,
       organizers: ev.organizers.map(o => ({ id: o.user.id, utorid: o.user.utorid, name: o.user.name })),
       numGuests: confirmedGuests,
+      isRsvped,
       guests: confirmedGuestRows.map(g => ({
         id: g.user.id,
         utorid: g.user.utorid,

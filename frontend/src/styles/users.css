@@ -10,17 +10,24 @@
     flex-direction: row;
     align-items: center;
     color: #0A0A0A;
-    margin-bottom: 2rem;
-}
+    margin-bottom: 1rem;
+}u
 
+#title-section h2{
+    font-size: 2rem;
+    color: #1e293b;
+    margin: 0 0 0.5rem 0;
+    font-weight: 700;
+}
 
 #title-section{
     text-align: left;
 }
 
 #title-section h2{
-    font-size: x-large;
-    font-weight: 600;
+    font-size: xx-large;
+    color:#213547;
+    font-weight: 700;
     margin: 0;
     line-height: 1.2;
 }
@@ -46,6 +53,43 @@
     padding: 1rem;
     padding-bottom: 0rem;
     width: max-content;
+    height: fit-content;
+}
+
+.filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.filter-header p {
+    margin: 0;
+}
+
+.create-user-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: #0A0A0A;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    justify-self: flex-end;
+    margin-bottom: 1.5rem;
+}
+
+.create-user-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    background: #1a1a1a;
 }
 
 .filter-form{
@@ -102,5 +146,149 @@
     border-radius: 10px;
     color: #0A0A0A;
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
     text-align: left;
+    justify-content: space-evenly;
+}
+
+.user-profile{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: #fff;
+    border-radius: 10px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: auto;
+    padding: 1rem;
+}
+
+.pagination-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1rem;
+    background: white;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 8px;
+    color: #334155;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.5s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background: #f8fafc;
+    border-color: #667eea;
+    color: #667eea;
+}
+
+.pagination-btn:active:not(:disabled) {
+    transition: all 0.1s ease;
+}
+
+.pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pagination-info {
+    color: #64748b;
+    font-size: 0.9375rem;
+    font-weight: 500;
+}
+
+.profile-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 1px solid #717182;
+    object-fit: cover;
+}
+
+.verified {
+   border: 2px solid #7BF1A8; 
+   background-color: #DCFCE7;
+   border-radius: 20px;
+   font-weight: 400;
+   display: inline-block;
+   color: #008236;
+   padding: 0rem 0.6rem;
+   font-size: small;
+}
+   
+.unverified {
+    color: #B91C1C;
+    border: 2px solid #FCA5A5; 
+    background-color: #FEE2E2;
+    border-radius: 20px;
+    font-weight: 400;
+    display: inline-block;
+    padding: 0rem 0.6rem;
+    font-size: small;
+}
+
+.suspicious{
+    color: #c2410c;
+    border: 2px solid #fdba74; 
+    background-color: #ffedd5;
+    border-radius: 20px;
+    font-weight: 400;
+    display: inline-block;
+    padding: 0rem 0.6rem;
+    font-size: small;
+}
+
+.user-name-status{
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.user-name-status  .name{
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.user-details{
+    margin-top: 0.2rem;
+    font-size: small;
+    color: #717182;
+}
+
+.edit-user-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: transparent;
+    color: #0A0A0A;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-left: auto;
+    border: 2px solid #e2e8f0; 
+}
+
+.edit-user-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+#utorid{
+    font-family: 'Courier New', Courier, monospace;
 }

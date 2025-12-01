@@ -92,7 +92,11 @@ const Layout = () => {
                             <TrendingUp className="icon" />Create Adjustment
                         </NavLink>
 
-                        <NavLink to="/Not-working" className="nav-button">
+                        <NavLink to="/transactions/transfer" className="nav-button">
+                            <Send className="icon" />Transfer Points
+                        </NavLink>
+
+                        <NavLink to="/transactions/manage" className="nav-button">
                             <FolderPen className="icon" />Manage Transactions
                         </NavLink>
 
@@ -108,8 +112,9 @@ const Layout = () => {
             )}
 
                 {(isManagerOrAbove || isRegular || isOrganizer) && (
-                <>
-                    <NavLink to="/events" className="nav-button">
+                <>  
+                    
+                    <NavLink to={isManagerOrAbove || isOrganizer ? "/events/manage" : "/events"} className="nav-button">
                         <Calendar className="icon" />{ (isManagerOrAbove || isOrganizer) ? "Manage Events" : "Events"}
                     </NavLink>
 

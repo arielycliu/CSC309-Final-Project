@@ -2,99 +2,228 @@ import "../styles/users.css"
 import{NavLink, Outlet, useNavigate } from "react-router-dom"; 
 import { useAuth } from "../context/AuthContext";
 import { useEffect, useState } from "react";
+import { ChevronLeft, ChevronRight, Edit, UserPlus } from 'lucide-react';
+import { getUsers, getUserAvatarUrl} from "../lib/Users";
+import UserImage from '../icons/user_image.png';
+import { toast } from 'sonner';
 
 
 const UserSearch = () => {
     const { logout, activeRole, user} = useAuth();
     const [page, setPage] = useState(1);
+    const [limit] = useState(5);
+    const [count, setCount] = useState(0);
+    const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const isSuperuser = activeRole && activeRole.includes('superuser');
+    
+    const [filters, setFilters] = useState({
+        search: '',
+        role: '',
+        verified: '',
+        suspicious: '',
+        orderByPoints: 'desc'
+    });
+    
+    const totalPages = Math.ceil(count / limit);
+
+    const fetchUsers = async () => {
+        try {
+            setLoading(true);
+            const params = {
+                page,
+                limit,
+                ...(filters.search && { name: filters.search }),
+                ...(filters.role && { role: filters.role }),
+                ...(filters.verified && { verified: filters.verified }),
+                ...(filters.suspicious && { suspicious: filters.suspicious }),
+                ...(filters.orderByPoints && { orderByPoints: filters.orderByPoints })
+            };
+            const data = await getUsers(params);
+            setUsers(data.results || []);
+            setCount(data.count || 0);
+        } catch (e) {
+            console.error("Failed to load users:", e);
+            setUsers([]);
+            setCount(0);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        async function get_Total_users() { //maybe filter out self? 
-          try {
-            setLoading(true);
-            setErr("");
-    
-            const data  = await 
-            setCount(data.count || 0);
-          } catch (e) {
-            setErr(e.message || "Failed to load events");
-            setEvents([]);
-            setCount(0);
-          } finally {
-            setLoading(false);
-          }
-        }
-    
-        get_Total_users();
-      }, [page]);
+        fetchUsers();
+    }, [page]);
+
+    const handleFilterChange = (field, value) => {
+        setFilters(prev => ({ ...prev, [field]: value }));
+    };
+
+    const applyFilters = (e) => {
+        e.preventDefault();
+        setPage(1);
+        fetchUsers();
+    };
+
+    const clearFilters = () => {
+        setFilters({
+            search: '',
+            role: '',
+            verified: '',
+            suspicious: '',
+            orderByPoints: 'desc'
+        });
+        setPage(1);
+        setTimeout(fetchUsers, 100);
+    };
     
 
-    const UserProfile = () => {
+    const UserProfile = ({ user }) => {
         return(
-            <>
-            </>
+            <div className="user-profile" key={user.id}>
+                <img className="profile-image" 
+                    src={user.avatarUrl ? getUserAvatarUrl(user.avatarUrl) : UserImage}
+                />
+                <div className="user-info">
+                    <div className="user-name-status">
+                        <p className="name">{user.name}</p>
+                        <p className={user?.verified ? "verified" : "unverified"}>
+                            {user?.verified ? "Verified" : "Unverified"}
+                        </p>
+                        {user?.suspicious && <p className="suspicious">
+                            Suspicious
+                        </p>}
+                    </div>
+                    <div className="user-details">
+                        <p><strong>Role:</strong> {user.role}</p>
+                        <p><strong>Points:</strong> {user.points.toLocaleString()}</p>
+                        <p id="utorid"><strong>UtorId:</strong> {user.utorid}</p> 
+                    </div>
+                </div>
+                <button className="edit-user-btn" onClick={() => console.log('Edit user', user.id)}>
+                    <Edit size={16} />
+                    Edit
+                </button>
+            </div>
         )
     }
 
-    // first get all users to store the 
-
     return(
-        <div id="user-search-page"> 
-            <div className="filter-bar">
-                <p>Filters and search</p>
-                <form className="filter-form">
-                    <div className="filters"> 
-                        <div>
-                            <label>Search</label>
-                            <input type="search" placeholder="name, email, utorid"/>
-                        </div>
-                        <div>
-                            <label>Role</label>
-                            <select className="select-dropdown">
-                                <option value="">All</option>
-                                <option value="regular">Regular</option>
-                                <option value="cashier">Cashier</option>
-                                <option value="Manager">Organizer</option>
-                                {isSuperuser && <option value="superuser">Superuser</option>}
-                            </select>
-                        </div>
-                        <div>
-                            <label>Verification Status</label>
-                            <select className="select-dropdown">
-                                <option value="">All</option>
-                                <option value="verified">Verified</option>
-                                <option value="unverified">Unverified</option>
-                            </select>
-                        </div>
+        <div>
+            <button className="create-user-btn" onClick={() => console.log('Create user')}>
+                    <UserPlus size={16} />
+                    Create User
+            </button>
 
-                        <div>
-                            <label>Suspicion Status</label>
-                            <select className="select-dropdown">
-                                <option value="">All</option>
-                                <option value="verified"> Suspiscious</option>
-                                <option value="unverified">Not Suspiscions</option>
-                            </select>
-                        </div>
+            <div id="user-search-page"> 
+                <div className="filter-bar">
+                    <p>Filters and search</p>
+                    <form className="filter-form" onSubmit={applyFilters}>
+                        <div className="filters"> 
+                            <div>
+                                <label>Search</label>
+                                <input 
+                                    type="search" 
+                                    placeholder="name, email, utorid"
+                                    value={filters.search}
+                                    onChange={(e) => handleFilterChange('search', e.target.value)}
+                                />
+                            </div>
+                            <div>
+                                <label>Role</label>
+                                <select 
+                                    className="select-dropdown"
+                                    value={filters.role}
+                                    onChange={(e) => handleFilterChange('role', e.target.value)}
+                                >
+                                    <option value="">All</option>
+                                    <option value="regular">Regular</option>
+                                    <option value="cashier">Cashier</option>
+                                    <option value="manager">Manager</option>
+                                    {isSuperuser && <option value="superuser">Superuser</option>}
+                                </select>
+                            </div>
+                            <div>
+                                <label>Verification Status</label>
+                                <select 
+                                    className="select-dropdown"
+                                    value={filters.verified}
+                                    onChange={(e) => handleFilterChange('verified', e.target.value)}
+                                >
+                                    <option value="">All</option>
+                                    <option value="true">Verified</option>
+                                    <option value="false">Unverified</option>
+                                </select>
+                            </div>
 
-                        <div>
-                            <label>Order by Points</label>
-                            <select className="select-dropdown">
-                                <option value="desc">Highest to Lowest</option>
-                                <option value="asc">Lowest to Highest</option>
-                            </select>
+                            <div>
+                                <label>Suspicion Status</label>
+                                <select 
+                                    className="select-dropdown"
+                                    value={filters.suspicious}
+                                    onChange={(e) => handleFilterChange('suspicious', e.target.value)}
+                                >
+                                    <option value="">All</option>
+                                    <option value="true">Suspicious</option>
+                                    <option value="false">Not Suspicious</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label>Order by Points</label>
+                                <select 
+                                    className="select-dropdown"
+                                    value={filters.orderByPoints}
+                                    onChange={(e) => handleFilterChange('orderByPoints', e.target.value)}
+                                >
+                                    <option value="desc">Highest to Lowest</option>
+                                    <option value="asc">Lowest to Highest</option>
+                                </select>
+                            </div>
+                            
                         </div>
+                        <div className="update-filters">
+                            <button type="submit" className="apply-filters-button">Apply Filters</button>
+                            <button type="button" className="reset-filters-button" onClick={clearFilters}>Reset Filters</button>
+                        </div>
+                    </form>
+                </div>
+                <div className="users-list">
+                    {loading ? (
+                        <div className="loading-state">Loading users...</div>
+                    ) : users.length === 0 ? (
+                        <div className="empty-state">No users found</div>
+                    ) : (
+                        users.map(user => (
+                            <UserProfile key={user.id} user={user} />
+                        ))
+                    )}
+                
+                    {/* Pagination */}
+                    <div className="pagination">
+                        <button
+                            className="pagination-btn"
+                            onClick={() => setPage(p => Math.max(1, p - 1))}
+                            disabled={page === 1}
+                        >
+                            <ChevronLeft size={18} />
+                            Previous
+                        </button>
                         
+                        <span className="pagination-info">
+                            Page {page} of {totalPages || 1} ({count} {count === 1 ? 'user' : 'users'})
+                        </span>
+                        
+                        <button
+                            className="pagination-btn"
+                            onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                            disabled={page === totalPages || totalPages === 0}
+                        >
+                            Next
+                            <ChevronRight size={18} />
+                        </button>
                     </div>
-                    <div className="update-filters">
-                        <button type="submit" className="apply-filters-button">Apply Filters</button>
-                         <button type="button" className="reset-filters-button">Reset Filters</button>
-                    </div>
-                </form>
-            </div>
-            <div className="users-list">
-
+                </div>
             </div>
         </div>
     )

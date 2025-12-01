@@ -76,8 +76,10 @@ const getUsersPayload = z.object({
     role: z.enum(['regular', 'cashier', 'manager', 'superuser']).optional().nullable(),
     verified: z.string().optional().transform(val => val === undefined ? undefined : val === "true"),
     activated: z.string().optional().transform(val => val === undefined ? undefined : val === "true"),
+    suspicious: z.string().optional().transform(val => val === undefined ? undefined : val === "true"),
     page: z.coerce.number().int().positive().optional().nullable(),
-    limit: z.coerce.number().int().positive().optional().nullable()
+    limit: z.coerce.number().int().positive().optional().nullable(),
+    orderByPoints: z.enum(['asc', 'desc']).optional().nullable(),
 
 });
 
@@ -93,15 +95,18 @@ router.get("/", requireClearance(CLEARANCE.MANAGER), validatePayload(getUsersPay
     // });
 
     //check which fields were included in request 
-    const {name, role, verified, activated, page, limit} = req.query;
+    const {name, role, verified, activated, page, limit, suspicious, orderByPoints} = req.query;
     const page_check = page|| 1;
     const take = limit || 10;
     const skip = (page_check - 1) * take;
 
-    const where = {};
+    const where = {
+        NOT: { id: req.auth.sub } // Exclude self
+    };
 
     if (name) where.name = name;
     if (role) where.role = role;
+    if (suspicious !== undefined && suspicious !== null) where.suspicious = suspicious;
     
     if (verified !== undefined && verified !== null) where.verified = verified;
     if (activated !== undefined && activated !== null) {
@@ -112,16 +117,20 @@ router.get("/", requireClearance(CLEARANCE.MANAGER), validatePayload(getUsersPay
         }
     }
 
+    // Default to descending order (highest to lowest), allow 'asc' to reverse
+    const orderBy = { points: orderByPoints === 'asc' ? 'asc' : 'desc' };
+
     try{
         const count = await prisma.user.count({ where: where });
         const totalPages = Math.ceil(count / take);
         const users = await prisma.user.findMany({
             where, 
             skip, 
-            take, 
+            take,
+            orderBy,
             select: {id: true, utorid: true, name: true, email: true, 
                     birthday: true, role: true, points: true, createdAt: true, 
-                    lastLogin: true, verified: true, avatarUrl: true}
+                    lastLogin: true, verified: true, avatarUrl: true, suspicious: true}
         })
         return res.status(200).json({count: count, results: users});
     }catch(err){
@@ -290,6 +299,52 @@ router.get("/me", requireClearance(CLEARANCE.REGULAR), async(req, res) =>{
     }
       
 });
+
+// Check if current user is an organizer of any events
+router.get("/me/organizer-events", requireClearance(CLEARANCE.REGULAR), async (req, res) => {
+  try {
+    const userId = req.auth.sub;
+
+    // Find all organizer assignments for this user
+    const assignments = await prisma.eventOrganizer.findMany({
+      where: { userId },
+      include: {
+        event: {
+          select: {
+            id: true,
+            name: true,
+            description: true,
+            location: true,
+            startTime: true,
+            endTime: true,
+            published: true,
+          },
+        },
+      },
+    });
+
+    const events = assignments
+      .filter(a => a.event)
+      .map(a => ({
+        id: a.event.id,
+        name: a.event.name,
+        description: a.event.description,
+        location: a.event.location,
+        startTime: a.event.startTime.toISOString(),
+        endTime: a.event.endTime.toISOString(),
+        published: a.event.published,
+      }));
+
+    return res.status(200).json({
+      isOrganizer: events.length > 0,
+      events,
+    });
+  } catch (err) {
+    console.error("GET /users/me/organizer-events error:", err);
+    return res.status(500).json({ error: `error checking organizer status ${err.message}` });
+  }
+});
+
 
 router.get("/:userId", requireClearance(CLEARANCE.CASHIER), async(req, res)=>{
     //console.log("get user", req.body);

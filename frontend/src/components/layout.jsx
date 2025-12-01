@@ -101,7 +101,7 @@ const Layout = () => {
                     
 
                 </div>
-                <NavLink to="/Not-working" className="nav-button">
+                <NavLink to="/users" className="nav-button">
                         <Users className="icon" />Manage Users
                 </NavLink>
                 </>

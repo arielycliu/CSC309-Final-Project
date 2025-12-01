@@ -14,6 +14,8 @@ import TransactionHistory from './pages/TransactionHistory.jsx';
 import PurchaseTransaction from './pages/PurchaseTransaction.jsx';
 import AdjustmentTransaction from './pages/AdjustmentTransaction.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
+import Users from './components/Users.jsx';
+import UserSearch from './pages/UsersSearch.jsx';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import { AuthProvider } from './context/AuthContext';
@@ -41,6 +43,9 @@ function App() {
                 <Route path="transactions" element={<TransactionHistory />} />
                 <Route path="transactions/purchase" element={<PurchaseTransaction />} />
                 <Route path="transactions/adjustment" element={<AdjustmentTransaction />} />
+                <Route path="users" element={<Users />}>
+                  <Route index element={<UserSearch />} />
+                </Route>
                 {/* add other route paths as they are created*/}
               </Route>
             </Route>

@@ -130,6 +130,18 @@ router.get("/", requireClearance(CLEARANCE.MANAGER), validatePayload(getUsersPay
 
 });
 
+router.get("/count", requireClearance(CLEARANCE.MANAGER), async(req, res)=> {
+
+    try{
+        const count = await prisma.user.count();
+        return res.status(200).json({count: count});
+    }catch(err){
+        return res.status(500).json({error: `error getting users count ${err.message}`});
+    }
+
+});
+
+
 async function getUsersValidPromotions(user){
     promotions = [];
 

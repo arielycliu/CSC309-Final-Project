@@ -4,6 +4,7 @@ import { z } from "zod";
 import '../styles/profile.css';
 import { useAuth } from "../context/AuthContext";
 import { toast } from 'sonner';
+import { updateUserProfile } from "../lib/Profile";
 
 
 const patchSelfPayload = z.object({
@@ -30,8 +31,9 @@ const patchSelfPayload = z.object({
 
 
 const ProfileSettings = () => {
-    const {user, token, updateUser} = useAuth();
+    const {user, updateUser} = useAuth();
     const [errors, setErrors] = useState({});
+    const [loading, setLoading] = useState(false);
     const [avatar, setAvatar] = useState(user.avatarUrl);
     const fileInputRef = useRef(null);
 
@@ -42,41 +44,23 @@ const ProfileSettings = () => {
         birthday: undefined
     });
 
-    const UpdateUserProfile = async () => {
-        const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3000';
-        const formPayload = new FormData();
-            if(formData.name)
-            formPayload.append('name', formData.name);
-            if(formData.email)
-            formPayload.append('email', formData.email);
-            if(formData.birthday)
-            formPayload.append('birthday', formData.birthday);
-            if (fileInputRef.current?.files[0]) {
-                formPayload.append('avatar', fileInputRef.current.files[0]);
-            }
-      try {
-            const response = await fetch(`${API_BASE}/users/me`, {
-                method: 'PATCH',
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-                body: formPayload
-            });
-
-            const userData = await response.json();
-
-            if (!response.ok) {
-                setErrors(userData.error || {});
-                throw new Error(`${JSON.stringify(userData.error)}`);
-            }
+    const handleUpdateProfile = async () => {
+        setLoading(true);
+        try {
+            const avatarFile = fileInputRef.current?.files[0];
+            const userData = await updateUserProfile(formData, avatarFile);
+            
             setErrors({});
             console.log("Updated user data:", userData, "user", user);
             updateUser(userData);
             toast.success("Profile updated successfully!");
-      } catch (error) {
-        console.error(`Error updating profile: ${error.message}`);
-        toast.error(`Failed to update profile. Please try again.`);
-      }
+        } catch (error) {
+            setErrors(error.error || {});
+            console.error(`Error updating profile:`, error);
+            toast.error(`Failed to update profile. Please try again.`);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleChange = (e) => {
@@ -122,7 +106,7 @@ const ProfileSettings = () => {
         }
 
         setErrors({});
-        await UpdateUserProfile();
+        await handleUpdateProfile();
     };
 
     useEffect(() => {
@@ -168,7 +152,7 @@ const ProfileSettings = () => {
                 <div className="right-inputs">
                     <label className="required">Full Name</label>
                     <input type="text"  placeholder="Your Name" value={formData?.name ?? ""} name="name" onChange={handleChange} required/>
-                    <p className={errors.name? "input-error": "input-error message"}>{errors.name || "Maximum 50 chanracters"}</p>
+                    <p className={errors.name? "input-error": "input-error message"}>{errors.name || "Maximum 50 characters"}</p>
 
                     <label className="required">Email</label>
                     <input type="email"  placeholder="@mail.utoronto.ca" value={formData?.email ?? ""} name="email" onChange={handleChange} required/>
@@ -178,7 +162,7 @@ const ProfileSettings = () => {
                     <input type="date" name="birthday" placeholder="MM/DD/YYYY"  value={formData?.birthday ?? ""} onChange={handleChange}/>
                     <p className="input-error">{errors.birthday || "\u00A0"}</p>
 
-                    <button className="submit-form" type="submit">Save Changes</button>
+                    <button className="submit-form" type="submit" disabled={loading}>{loading ? "Saving..." : "Save Changes"}</button>
                 </div>  
             </form>
         </div>

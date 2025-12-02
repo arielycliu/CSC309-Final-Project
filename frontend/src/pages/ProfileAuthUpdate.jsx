@@ -5,6 +5,7 @@ import{NavLink} from "react-router-dom"
 import { toast } from 'sonner';
 import {useAuth} from "../context/AuthContext";
 import { Eye, EyeOff } from "lucide-react";
+import { updatePassword } from "../lib/Profile";
 
 const updateOwnPasswordSchema = z.object({
    old: z.string(),
@@ -21,8 +22,9 @@ const updateOwnPasswordSchema = z.object({
 });
 
 const ProfileAuthUpdate = () => {
-    const {token, user} = useAuth();
+    const {user} = useAuth();
     const [errors, setErrors] = useState({});
+    const [loading, setLoading] = useState(false);
     const [showold, setShowOld] = useState(false);
     const [shownew, setShowNew] = useState(false);
     const [showconfirm, setShowConfirm] = useState(false);
@@ -39,38 +41,25 @@ const ProfileAuthUpdate = () => {
         });
     };
 
-    const UpdatePassword = async () => {
-        const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3000';
-        console.log("Updating password with data:", formData);
-        
-      try {
-            const response = await fetch(`${API_BASE}/users/me/password`, {
-                method: 'PATCH',
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({old: formData.old, new: formData.new}),
-            });
-
-            const userData = await response.json();
-
-            if (!response.ok) {
-                setErrors(userData.error || {});
-                throw new Error(`${JSON.stringify(userData.error)}`);
-            }
-
+    const handleUpdatePassword = async () => {
+        setLoading(true);
+        try {
+            await updatePassword(formData.old, formData.new);
+            
             setErrors({});
             setFormData({
                 old: "",
                 new: "",
                 confirm: "",
             });
-            toast.success("Profile updated successfully!");
-      } catch (error) {
-        console.error(`Error updating profile: ${error.message}`);
-        toast.error(`Failed to update profile. Please try again.`);
-      }
+            toast.success("Password updated successfully!");
+        } catch (error) {
+            setErrors(error.error || {});
+            console.error(`Error updating password:`, error);
+            toast.error(`Failed to update password. Please try again.`);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleSubmit = async(e) => {
@@ -91,7 +80,7 @@ const ProfileAuthUpdate = () => {
         }
 
         setErrors({});
-        await UpdatePassword();
+        await handleUpdatePassword();
         console.log("VALID form:", result.data);
     };
 
@@ -138,7 +127,7 @@ const ProfileAuthUpdate = () => {
                     <p className="input-error">{errors.confirm || "\u00A0"}</p>
 
                     <NavLink to="/password-reset" id="forgot-password">Forgot password?</NavLink>
-                    <button className="submit-form password" type="submit">Update Password</button>
+                    <button className="submit-form password" type="submit" disabled={loading}>{loading ? "Updating..." : "Update Password"}</button>
                 </div>
             </form>
          </div>

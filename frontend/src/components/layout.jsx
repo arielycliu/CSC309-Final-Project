@@ -63,13 +63,15 @@ const Layout = () => {
                 </>
             )} 
             {isCashierOrAbove && (
-                    <>
-                    <NavLink to="/not-working" className="nav-button">
-                        <ClipboardClock className="icon" />Process Redemptions
-                    </NavLink>
-                    </>
-                )
-            }
+                <>
+                    <div className="transactions nav-button user-dropdown">
+                        <NavLink to="/transactions/process-redemptions" className="nav-button">
+                            <ClipboardClock className="icon"/>
+                            <p>Process Redemptions</p>
+                        </NavLink>
+                    </div>
+                </>
+            )}
             {isCashier && (
                 <NavLink to="/transactions/purchase" className="nav-button">
                         <DollarSign className="icon" />Create Purchase
@@ -94,6 +96,10 @@ const Layout = () => {
 
                         <NavLink to="/transactions/transfer" className="nav-button">
                             <Send className="icon" />Transfer Points
+                        </NavLink>
+
+                        <NavLink to="/transactions/redemption" className="nav-button">
+                            <Gift className="icon" />Redemption Request
                         </NavLink>
 
                         <NavLink to="/Not-working" className="nav-button">

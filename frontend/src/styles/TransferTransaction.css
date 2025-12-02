@@ -60,6 +60,7 @@
 }
 
 .transaction-form {
+	height: fit-content;
 	background: white;
 	border-radius: 12px;
 	padding: 2rem;

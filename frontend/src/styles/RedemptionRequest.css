@@ -1,0 +1,261 @@
+.redemption-request-page {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 2rem;
+}
+
+.redemption-request-page .page-header {
+	margin-bottom: 2rem;
+}
+
+.redemption-request-page .page-header h2 {
+	font-size: 2rem;
+	font-weight: 700;
+	color: #111827;
+	margin-bottom: 0.5rem;
+}
+
+.redemption-request-page .page-header p {
+	color: #6b7280;
+	font-size: 1rem;
+}
+
+.redemption-request-page .transaction-form-container {
+	display: grid;
+	grid-template-columns: 2fr 1fr;
+	gap: 2rem;
+}
+
+.redemption-request-page .transaction-form {
+	height: fit-content;
+	background: white;
+	border-radius: 12px;
+	padding: 2rem;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.redemption-request-page .form-group {
+	margin-bottom: 1.5rem;
+}
+
+.redemption-request-page .form-group label {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 0.875rem;
+	font-weight: 600;
+	color: #374151;
+	margin-bottom: 0.5rem;
+}
+
+.redemption-request-page .form-group input,
+.redemption-request-page .form-group textarea {
+	width: 100%;
+	padding: 0.75rem;
+	border: 1px solid #d1d5db;
+	border-radius: 8px;
+	font-size: 1rem;
+	transition: border-color 0.2s;
+}
+
+.redemption-request-page .form-group input:focus,
+.redemption-request-page .form-group textarea:focus {
+	outline: none;
+	border-color: #030213;
+	box-shadow: 0 0 0 3px rgba(3, 2, 19, 0.1);
+}
+
+.redemption-request-page .form-group small {
+	display: block;
+	margin-top: 0.5rem;
+	font-size: 0.75rem;
+	color: #6b7280;
+}
+
+.redemption-request-page .form-group textarea {
+	resize: vertical;
+	font-family: inherit;
+}
+
+.redemption-request-page .form-actions {
+	display: flex;
+	gap: 1rem;
+	margin-top: 2rem;
+}
+
+.redemption-request-page .cancel-btn,
+.redemption-request-page .submit-btn {
+	flex: 1;
+	padding: 0.875rem 1.5rem;
+	border: none;
+	border-radius: 8px;
+	font-size: 1rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.2s;
+}
+
+.redemption-request-page .cancel-btn {
+	background: #f3f4f6;
+	color: #374151;
+}
+
+.redemption-request-page .cancel-btn:hover {
+	background: #e5e7eb;
+}
+
+.redemption-request-page .submit-btn {
+	background: #030213;
+	color: white;
+}
+
+.redemption-request-page .submit-btn:hover:not(:disabled) {
+	background: #202025;
+}
+
+.redemption-request-page .submit-btn:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+.redemption-request-page .info-panel {
+	background: white;
+	border-radius: 12px;
+	padding: 2rem;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	height: fit-content;
+}
+
+.redemption-request-page .info-panel h3 {
+	font-size: 1.25rem;
+	font-weight: 700;
+	margin-bottom: 1.5rem;
+}
+
+.redemption-request-page .info-item {
+	margin-bottom: 1.5rem;
+	padding-bottom: 1.5rem;
+	border-bottom: 1px solid #d9dbde;
+}
+
+.redemption-request-page .info-item:last-child {
+	border-bottom: none;
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+.redemption-request-page .info-item strong {
+	display: block;
+	font-size: 0.875rem;
+	font-weight: 600;
+	color: #353e4c;
+	margin-bottom: 0.5rem;
+}
+
+.redemption-request-page .info-item p {
+	font-size: 0.875rem;
+	color: #484d56;
+	line-height: 1.5;
+	margin: 0.25rem 0;
+}
+
+.redemption-request-page .redemption-success {
+	background: white;
+	border-radius: 12px;
+	padding: 2rem;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	text-align: center;
+}
+
+.redemption-request-page .success-message {
+	margin-bottom: 2rem;
+}
+
+.redemption-request-page .success-message h3 {
+	font-size: 1.5rem;
+	font-weight: 700;
+	color: #10b981;
+	margin-bottom: 1rem;
+}
+
+.redemption-request-page .success-message p {
+	font-size: 1rem;
+	color: #6b7280;
+	margin: 0.5rem 0;
+}
+
+.redemption-request-page .qr-instruction {
+	font-weight: 600;
+	color: #374151;
+	margin-top: 1rem;
+}
+
+.redemption-request-page .qr-code-display {
+	margin: 2rem 0;
+}
+
+.redemption-request-page .qr-code-wrapper {
+	display: inline-block;
+	padding: 1rem;
+	background: white;
+	border-radius: 8px;
+	border: 2px solid #e5e7eb;
+}
+
+.redemption-request-page .qr-code-label {
+	margin-top: 1rem;
+	font-size: 0.875rem;
+	color: #6b7280;
+	font-weight: 600;
+}
+
+.redemption-request-page .success-actions {
+	display: flex;
+	gap: 1rem;
+	margin-top: 2rem;
+	justify-content: center;
+}
+
+.redemption-request-page .create-another-btn,
+.redemption-request-page .view-transactions-btn {
+	padding: 0.875rem 1.5rem;
+	border: none;
+	border-radius: 8px;
+	font-size: 1rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.2s;
+}
+
+.redemption-request-page .create-another-btn {
+	background: #030213;
+	color: white;
+}
+
+.redemption-request-page .create-another-btn:hover {
+	background: #202025;
+}
+
+.redemption-request-page .view-transactions-btn {
+	background: #f3f4f6;
+	color: #374151;
+}
+
+.redemption-request-page .view-transactions-btn:hover {
+	background: #e5e7eb;
+}
+
+@media (max-width: 768px) {
+	.redemption-request-page .transaction-form-container {
+		grid-template-columns: 1fr;
+	}
+
+	.redemption-request-page .redemption-request-page {
+		padding: 1rem;
+	}
+
+	.redemption-request-page .success-actions {
+		flex-direction: column;
+	}
+}
+

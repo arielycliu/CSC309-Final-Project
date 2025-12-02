@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+FROM node:24
 
 cd backend
 npm run clean

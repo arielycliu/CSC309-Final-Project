@@ -12,14 +12,22 @@ export default function Promotions() {
     const isNestedRoute = location.pathname !== '/promotions';
     const [promotions, setPromotions] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalCount, setTotalCount] = useState(0);
+    const limit = 5;
 
     useEffect(() => {
         fetchPromotions();
-    }, []);
+    }, [currentPage]);
 
     const fetchPromotions = async () => {
+        setLoading(true);
         try {
-            const response = await fetch(`${API_BASE}/promotions`, {
+            const params = new URLSearchParams();
+            params.append('page', currentPage.toString());
+            params.append('limit', limit.toString());
+
+            const response = await fetch(`${API_BASE}/promotions?${params}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -32,6 +40,7 @@ export default function Promotions() {
 
             const data = await response.json();
             setPromotions(data.results || []);
+            setTotalCount(data.count || 0);
         } catch (error) {
             console.error('Failed to load promotions:', error);
             toast.error(error.message || 'Failed to load promotions');
@@ -39,6 +48,12 @@ export default function Promotions() {
             setLoading(false);
         }
     };
+
+    const handlePageChange = (newPage) => {
+        setCurrentPage(newPage);
+    };
+
+    const totalPages = Math.ceil(totalCount / limit);
 
     const getStatus = (promotion) => {
         const now = new Date();
@@ -121,25 +136,48 @@ export default function Promotions() {
                 {formattedPromotions.length === 0 ? (
                     <p className="no-promotions">No promotions available</p>
                 ) : (
-                    <div className="promotions-grid">
-                        {formattedPromotions.map((promotion) => (
-                            <div key={promotion.id} className="promotion-card">
-                                <div className="promotion-header">
-                                    <h4>{promotion.title}</h4>
-                                    <span className={
-                                        `promotion-status ${promotion.status.toLowerCase()}`
-                                    }>
-                                        {promotion.status}
-                                    </span>
+                    <>
+                        <div className="promotions-grid">
+                            {formattedPromotions.map((promotion) => (
+                                <div key={promotion.id} className="promotion-card">
+                                    <div className="promotion-header">
+                                        <h4>{promotion.title}</h4>
+                                        <span className={
+                                            `promotion-status ${promotion.status.toLowerCase()}`
+                                        }>
+                                            {promotion.status}
+                                        </span>
+                                    </div>
+                                    <p>{promotion.description}</p>
+                                    <div className="promotion-footer">
+                                        <p>{promotion.points}</p>
+                                        <p>{promotion.dateRange}</p>
+                                    </div>
                                 </div>
-                                <p>{promotion.description}</p>
-                                <div className="promotion-footer">
-                                    <p>{promotion.points}</p>
-                                    <p>{promotion.dateRange}</p>
-                                </div>
+                            ))}
+                        </div>
+                        {totalPages > 1 && (
+                            <div className="pagination">
+                                <button
+                                    className="page-btn"
+                                    disabled={currentPage === 1}
+                                    onClick={() => handlePageChange(currentPage - 1)}
+                                >
+                                    Previous
+                                </button>
+                                <span className="page-info">
+                                    Page {currentPage} of {totalPages}
+                                </span>
+                                <button
+                                    className="page-btn"
+                                    disabled={currentPage >= totalPages}
+                                    onClick={() => handlePageChange(currentPage + 1)}
+                                >
+                                    Next
+                                </button>
                             </div>
-                        ))}
-                    </div>
+                        )}
+                    </>
                 )}
             </div>
         )}

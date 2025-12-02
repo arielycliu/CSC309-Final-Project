@@ -232,7 +232,7 @@ export default function Dashboard() {
     const formatAmount = (transaction) => {
         const type = transaction.type;
         if (type === 'purchase') return `+${transaction.amount || 0}`;
-        if (type === 'redemption') return `-${transaction.amount || 0}`;
+        if (type === 'redemption') return `-${Math.abs(transaction.amount || 0)}`;
         if (type === 'adjustment') {
             const amt = transaction.amount || 0;
             return amt >= 0 ? `+${amt}` : `${amt}`;

@@ -57,9 +57,9 @@ function App() {
                 <Route path="transactions/purchase" element={<PurchaseTransaction />} />
                 <Route path="transactions/adjustment" element={<AdjustmentTransaction />} />
                 <Route path="transactions/transfer/:userId?" element={<TransferTransaction />} />
-                <Route path="users" element={<Users />}>
-                  <Route index element={<UserSearch />} />
-                  <Route path="edit" element={<EditUser />} />
+                <Route path="users" element={<ProtectedRoute minRole="cashier"><Users /></ProtectedRoute>}>
+                  <Route index element={<ProtectedRoute minRole="manager"><UserSearch /></ProtectedRoute>} />
+                  <Route path="edit" element={<ProtectedRoute minRole="manager"><EditUser /></ProtectedRoute>} />
                   <Route path="create" element={<CreateUser />} />
                 </Route>
                 {/* add other route paths as they are created*/}

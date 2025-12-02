@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'sonner';
 import { Filter, ChevronDown, ChevronUp, TrendingUp, TrendingDown, ArrowRightLeft, Award, Gift, DollarSign } from 'lucide-react';
@@ -24,8 +25,11 @@ const transactionColors = {
 
 const TransactionHistory = () => {
   const { token } = useAuth();
+  const location = useLocation();
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
+  
+  const isNestedRoute = location.pathname !== '/transactions';
   const [filters, setFilters] = useState({
     type: '',
     relatedId: '',
@@ -141,10 +145,12 @@ const TransactionHistory = () => {
 
   return (
     <div className="transaction-history-page">
-      <div className="page-header">
-        <h2>Transaction History</h2>
-        <p>View all your point transactions</p>
-      </div>
+      {!isNestedRoute && (
+        <>
+          <div className="page-header">
+            <h2>Transaction History</h2>
+            <p>View all your point transactions</p>
+          </div>
 
       <div className="filter-section">
         <button 
@@ -313,6 +319,9 @@ const TransactionHistory = () => {
           </button>
         </div>
       )}
+        </>
+      )}
+      <Outlet />
     </div>
   );
 };

@@ -140,7 +140,7 @@ router.get('/me/transactions', requireClearance(CLEARANCE.REGULAR), async (req, 
 
     filters = { userId: userId }
     if (type != null) {
-        filters.type = { type }
+        filters.type = type
     }
     if (relatedId != null && type != null) {
         filters.relatedTransactionId = { relatedId }

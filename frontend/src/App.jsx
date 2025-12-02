@@ -16,12 +16,9 @@ import TransactionHistory from './pages/TransactionHistory.jsx';
 import PurchaseTransaction from './pages/PurchaseTransaction.jsx';
 import AdjustmentTransaction from './pages/AdjustmentTransaction.jsx';
 import TransferTransaction from './pages/TransferTransaction.jsx';
-<<<<<<< HEAD
 import ManageTransactions from './pages/ManageTransactions.jsx';
-=======
 import RedemptionRequest from './pages/RedemptionRequest.jsx';
 import ProcessRedemptions from './pages/ProcessRedemptions.jsx';
->>>>>>> c39e969 (Add redemption requests)
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import ManagerEvents from "./pages/ManagerEvents.jsx";
 import Users from './components/Users.jsx';

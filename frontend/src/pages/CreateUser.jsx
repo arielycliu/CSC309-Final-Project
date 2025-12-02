@@ -20,6 +20,7 @@ const CreateUser = () => {
     const {activeRole} = useAuth();
     const navigate = useNavigate();
     const [errors, setErrors] = useState({});
+    const isCashier = activeRole === 'cashier';
 
 
     const [formData, setFormData] = useState({
@@ -38,7 +39,7 @@ const CreateUser = () => {
             setLoading(false);
             toast.success(`User ${newUser.name} created successfully.`);
             setErrors({});
-            navigate(-1);
+            navigate(isCashier ? '/' : '/users');
         } catch (error) {
             setLoading(false);
             setErrors(error.error || {});
@@ -105,7 +106,7 @@ const CreateUser = () => {
 
 
                 <div className="user-form-buttons">
-                    <button className="cancel-btn" type="button" onClick={() => navigate(-1)} disabled={loading}>
+                    <button className="cancel-btn" type="button" onClick={() => navigate(isCashier ? '/' : '/users')} disabled={loading}>
                         Cancel
                     </button>
                     <button className="submit-user-form-btn" type="submit" disabled={loading}>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import "../styles/Promotions.css";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "sonner";
@@ -8,6 +8,8 @@ const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3000';
 
 export default function Promotions() {
     const { token, hasRole } = useAuth();
+    const location = useLocation();
+    const isNestedRoute = location.pathname !== '/promotions';
     const [promotions, setPromotions] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -24,6 +26,7 @@ export default function Promotions() {
             });
 
             if (!response.ok) {
+                console.log(response);
                 throw new Error('Failed to fetch promotions');
             }
 
@@ -107,41 +110,39 @@ export default function Promotions() {
     const formattedPromotions = promotions.map(formatPromotion);
 
     return <>
-        <div className="promotions-page">
-            <div className="header">
-                <div>
-                    <h2>Promotions</h2>
-                    <p>Active promotions and special offers</p>
+        {!isNestedRoute && (
+            <div className="promotions-page">
+                <div className="header">
+                    <div>
+                        <h2>Promotions</h2>
+                        <p>Active promotions and special offers</p>
+                    </div>
                 </div>
-                {hasRole('manager') && (
-                    <Link to="/promotions/manage" className="manage-promotions-button">
-                        Manage Promotions
-                    </Link>
+                {formattedPromotions.length === 0 ? (
+                    <p className="no-promotions">No promotions available</p>
+                ) : (
+                    <div className="promotions-grid">
+                        {formattedPromotions.map((promotion) => (
+                            <div key={promotion.id} className="promotion-card">
+                                <div className="promotion-header">
+                                    <h4>{promotion.title}</h4>
+                                    <span className={
+                                        `promotion-status ${promotion.status.toLowerCase()}`
+                                    }>
+                                        {promotion.status}
+                                    </span>
+                                </div>
+                                <p>{promotion.description}</p>
+                                <div className="promotion-footer">
+                                    <p>{promotion.points}</p>
+                                    <p>{promotion.dateRange}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 )}
             </div>
-            {formattedPromotions.length === 0 ? (
-                <p className="no-promotions">No promotions available</p>
-            ) : (
-                <div className="promotions-grid">
-                    {formattedPromotions.map((promotion) => (
-                        <div key={promotion.id} className="promotion-card">
-                            <div className="promotion-header">
-                                <h4>{promotion.title}</h4>
-                                <span className={
-                                    `promotion-status ${promotion.status.toLowerCase()}`
-                                }>
-                                    {promotion.status}
-                                </span>
-                            </div>
-                            <p>{promotion.description}</p>
-                            <div className="promotion-footer">
-                                <p>{promotion.points}</p>
-                                <p>{promotion.dateRange}</p>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )}
-        </div>
+        )}
+        <Outlet />
     </>
 }

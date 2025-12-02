@@ -4,30 +4,35 @@
 	padding: 2rem;
 }
 
-.page-header {
+.transfer-transaction-page .page-header {
 	margin-bottom: 2rem;
 }
 
-.page-header h2 {
+.transfer-transaction-page .page-header h2 {
 	font-size: 2rem;
 	font-weight: 700;
 	color: #111827;
 	margin-bottom: 0.5rem;
 }
 
-.page-header p {
+.transfer-transaction-page .page-header p {
 	color: #6b7280;
 	font-size: 1rem;
 }
 
-.page-header-content {
+.transfer-transaction-page .page-header-content {
 	display: flex;
+	width: 100%;
+	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
 	margin-bottom: 0.5rem;
 }
+.transfer-transaction-page .page-header-content p {
+	text-align: left;
+}
 
-.show-qr-btn {
+.transfer-transaction-page .show-qr-btn {
 	padding: 0.75rem 1.5rem;
 	background-color: #030213;
 	color: white;
@@ -41,25 +46,25 @@
 	font-weight: 600;
 }
 
-.show-qr-btn:hover {
+.transfer-transaction-page .show-qr-btn:hover {
 	background-color: #030213;
 }
 
-.show-qr-btn-active {
+.transfer-transaction-page .show-qr-btn-active {
 	background-color: #ef4444;
 }
 
-.show-qr-btn-active:hover {
+.transfer-transaction-page .show-qr-btn-active:hover {
 	background-color: #dc2626;
 }
 
-.transaction-form-container {
+.transfer-transaction-page .transaction-form-container {
 	display: grid;
 	grid-template-columns: 2fr 1fr;
 	gap: 2rem;
 }
 
-.transaction-form {
+.transfer-transaction-page .transaction-form {
 	height: fit-content;
 	background: white;
 	border-radius: 12px;
@@ -71,12 +76,12 @@
 	justify-content: space-between;
 }
 
-.form-group {
+.transfer-transaction-page .form-group {
 	display: flex;
 	margin-bottom: 1.5rem;
 }
 
-.form-group label {
+.transfer-transaction-page .form-group label {
 	display: flex;
 	align-items: center;
 	gap: 0.5rem;
@@ -86,8 +91,8 @@
 	margin-bottom: 0.5rem;
 }
 
-.form-group input,
-.form-group textarea {
+.transfer-transaction-page .form-group input,
+.transfer-transaction-page .form-group textarea {
 	width: 100%;
 	padding: 0.75rem;
 	border: 1px solid #d1d5db;
@@ -96,33 +101,33 @@
 	transition: border-color 0.2s;
 }
 
-.form-group input:focus,
-.form-group textarea:focus {
+.transfer-transaction-page .form-group input:focus,
+.transfer-transaction-page .form-group textarea:focus {
 	outline: none;
 	border-color: #030213;
 	box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
 }
 
-.form-group small {
+.transfer-transaction-page .form-group small {
 	display: block;
 	margin-top: 0.5rem;
 	font-size: 0.75rem;
 	color: #6b7280;
 }
 
-.form-group textarea {
+.transfer-transaction-page .form-group textarea {
 	resize: vertical;
 	font-family: inherit;
 }
 
-.form-actions {
+.transfer-transaction-page .form-actions {
 	display: flex;
 	gap: 1rem;
 	margin-top: 2rem;
 }
 
-.cancel-btn,
-.submit-btn {
+.transfer-transaction-page .cancel-btn,
+.transfer-transaction-page .submit-btn {
 	flex: 1;
 	padding: 0.875rem 1.5rem;
 	border: none;
@@ -133,30 +138,30 @@
 	transition: all 0.2s;
 }
 
-.cancel-btn {
+.transfer-transaction-page .cancel-btn {
 	background: #f3f4f6;
 	color: #374151;
 }
 
-.cancel-btn:hover {
+.transfer-transaction-page .cancel-btn:hover {
 	background: #e5e7eb;
 }
 
-.submit-btn {
+.transfer-transaction-page .submit-btn {
 	background: #030213;
 	color: white;
 }
 
-.submit-btn:hover:not(:disabled) {
+.transfer-transaction-page .submit-btn:hover:not(:disabled) {
 	background: #202025;
 }
 
-.submit-btn:disabled {
+.transfer-transaction-page .submit-btn:disabled {
 	opacity: 0.6;
 	cursor: not-allowed;
 }
 
-.info-panel {
+.transfer-transaction-page .info-panel {
 	background: white;
 	border-radius: 12px;
 	padding: 2rem;
@@ -164,25 +169,25 @@
 	height: fit-content;
 }
 
-.info-panel h3 {
+.transfer-transaction-page .info-panel h3 {
 	font-size: 1.25rem;
 	font-weight: 700;
 	margin-bottom: 1.5rem;
 }
 
-.info-item {
+.transfer-transaction-page .info-item {
 	margin-bottom: 1.5rem;
 	padding-bottom: 1.5rem;
 	border-bottom: 1px solid #d9dbde;
 }
 
-.info-item:last-child {
+.transfer-transaction-page .info-item:last-child {
 	border-bottom: none;
 	margin-bottom: 0;
 	padding-bottom: 0;
 }
 
-.info-item strong {
+.transfer-transaction-page .info-item strong {
 	display: block;
 	font-size: 0.875rem;
 	font-weight: 600;
@@ -190,14 +195,14 @@
 	margin-bottom: 0.5rem;
 }
 
-.info-item p {
+.transfer-transaction-page .info-item p {
 	font-size: 0.875rem;
 	color: #484d56;
 	line-height: 1.5;
 	margin: 0.25rem 0;
 }
 
-.my-qr-container {
+.transfer-transaction-page .my-qr-container {
 	background: white;
 	border-radius: 12px;
 	padding: 2rem;
@@ -206,31 +211,31 @@
 	text-align: center;
 }
 
-.my-qr-container h3 {
+.transfer-transaction-page .my-qr-container h3 {
 	font-size: 1.25rem;
 	font-weight: 700;
 	color: #0f141e;
 	margin-bottom: 0.5rem;
 }
 
-.my-qr-description {
+.transfer-transaction-page .my-qr-description {
 	color: #6b7280;
 	font-size: 0.875rem;
 	margin-bottom: 1rem;
 }
 
-.my-qr-user-id {
+.transfer-transaction-page .my-qr-user-id {
 	margin-top: 1rem;
 	color: #6b7280;
 	font-size: 0.875rem;
 }
 
-.my-qr-user-name {
+.transfer-transaction-page .my-qr-user-name {
 	color: #6b7280;
 	font-size: 0.875rem;
 }
 
-.qr-code-wrapper {
+.transfer-transaction-page .qr-code-wrapper {
 	display: inline-block;
 	padding: 1rem;
 	background: white;
@@ -238,17 +243,17 @@
 	border: 2px solid #e5e7eb;
 }
 
-.user-id-input-container {
+.transfer-transaction-page .user-id-input-container {
 	display: flex;
 	gap: 0.5rem;
 	align-items: flex-start;
 }
 
-.user-id-input {
+.transfer-transaction-page .user-id-input {
 	flex: 1;
 }
 
-.scan-btn {
+.transfer-transaction-page .scan-btn {
 	padding: 0.75rem;
 	background-color: #030213;
 	color: white;
@@ -260,18 +265,18 @@
 	gap: 0.5rem;
 }
 
-.scan-btn:hover {
+.transfer-transaction-page .scan-btn:hover {
 	background-color: #303037;
 }
 
-.scan-btn-active {
+.transfer-transaction-page .scan-btn-active {
 	background-color: #ef4444;
 }
-.scan-btn-active:hover {
+.transfer-transaction-page .scan-btn-active:hover {
 	background-color: #dc2626;
 }
 
-.recipient-info {
+.transfer-transaction-page .recipient-info {
 	margin-top: 0.5rem;
 	padding: 0.75rem;
 	background: #f0f9ff;
@@ -279,13 +284,13 @@
 	border: 1px solid #bae6fd;
 }
 
-.recipient-utorid {
+.transfer-transaction-page .recipient-utorid {
 	margin: 0.25rem 0 0 0;
 	font-size: 0.875rem;
 	color: #6b7280;
 }
 
-.qr-scanner-container {
+.transfer-transaction-page .qr-scanner-container {
 	margin: 1rem 0;
 	padding: 1rem;
 	background: #edeff0;
@@ -293,27 +298,27 @@
 	border: 1px solid #dadce1;
 }
 
-.qr-scanner-visible {
+.transfer-transaction-page .qr-scanner-visible {
 	display: block;
 }
 
-.qr-scanner-hidden {
+.transfer-transaction-page .qr-scanner-hidden {
 	display: none;
 }
 
-.qr-reader {
+.transfer-transaction-page .qr-reader {
 	width: 100%;
 }
 
-.qr-scanner-container #qr-reader {
+.transfer-transaction-page .qr-scanner-container #qr-reader {
 	border: none !important;
 }
 
-.qr-scanner-container #qr-reader__dashboard {
+.transfer-transaction-page .qr-scanner-container #qr-reader__dashboard {
 	display: none;
 }
 
-.qr-scanner-instruction {
+.transfer-transaction-page .qr-scanner-instruction {
 	text-align: center;
 	margin-top: 0.5rem;
 	color: #6b7280;
@@ -321,11 +326,11 @@
 }
 
 @media (max-width: 768px) {
-	.transaction-form-container {
+	.transfer-transaction-page .transaction-form-container {
 		display: grid;
 		grid-template-columns: 1fr;
 	}
-	.transaction-form {
+	.transfer-transaction-page .transaction-form {
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;

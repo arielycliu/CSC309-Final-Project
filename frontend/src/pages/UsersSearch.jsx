@@ -9,16 +9,18 @@ import { toast } from 'sonner';
 
 
 const UserSearch = () => {
+    const navigate = useNavigate();
     const { logout, activeRole, user} = useAuth();
     const [page, setPage] = useState(1);
     const [limit] = useState(5);
     const [count, setCount] = useState(0);
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [fadeOut, setFadeOut] = useState(false);
     const isSuperuser = activeRole && activeRole.includes('superuser');
     
     const [filters, setFilters] = useState({
-        search: '',
+        name: '',
         role: '',
         verified: '',
         suspicious: '',
@@ -29,23 +31,32 @@ const UserSearch = () => {
 
     const fetchUsers = async () => {
         try {
+            setFadeOut(true);
             setLoading(true);
+            console.log("Fetching users with filters:", filters, "and page:", page);    
             const params = {
                 page,
                 limit,
-                ...(filters.search && { name: filters.search }),
+                ...(filters.name && { name: filters.name }),
                 ...(filters.role && { role: filters.role }),
                 ...(filters.verified && { verified: filters.verified }),
                 ...(filters.suspicious && { suspicious: filters.suspicious }),
                 ...(filters.orderByPoints && { orderByPoints: filters.orderByPoints })
             };
             const data = await getUsers(params);
+            console.log("Fetched users data:", data);
+            
+            // Small delay to allow fade out animation
+            await new Promise(resolve => setTimeout(resolve, 150));
+            
             setUsers(data.results || []);
             setCount(data.count || 0);
+            setFadeOut(false);
         } catch (e) {
             console.error("Failed to load users:", e);
             setUsers([]);
             setCount(0);
+            setFadeOut(false);
         } finally {
             setLoading(false);
         }
@@ -67,7 +78,7 @@ const UserSearch = () => {
 
     const clearFilters = () => {
         setFilters({
-            search: '',
+            name: '',
             role: '',
             verified: '',
             suspicious: '',
@@ -100,7 +111,7 @@ const UserSearch = () => {
                         <p id="utorid"><strong>UtorId:</strong> {user.utorid}</p> 
                     </div>
                 </div>
-                <button className="edit-user-btn" onClick={() => console.log('Edit user', user.id)}>
+                <button className="edit-user-btn" onClick={() => navigate('edit', { state: { user }})}> 
                     <Edit size={16} />
                     Edit
                 </button>
@@ -110,7 +121,7 @@ const UserSearch = () => {
 
     return(
         <div>
-            <button className="create-user-btn" onClick={() => console.log('Create user')}>
+            <button className="create-user-btn" onClick={() => navigate('create')}>
                     <UserPlus size={16} />
                     Create User
             </button>
@@ -124,9 +135,9 @@ const UserSearch = () => {
                                 <label>Search</label>
                                 <input 
                                     type="search" 
-                                    placeholder="name, email, utorid"
-                                    value={filters.search}
-                                    onChange={(e) => handleFilterChange('search', e.target.value)}
+                                    placeholder="name"
+                                    value={filters.name}
+                                    onChange={(e) => handleFilterChange('name', e.target.value)}
                                 />
                             </div>
                             <div>
@@ -184,20 +195,22 @@ const UserSearch = () => {
                         </div>
                         <div className="update-filters">
                             <button type="submit" className="apply-filters-button">Apply Filters</button>
-                            <button type="button" className="reset-filters-button" onClick={clearFilters}>Reset Filters</button>
+                            <button type="button" className="reset-filters-button" onClick={clearFilters}>Reset</button>
                         </div>
                     </form>
                 </div>
                 <div className="users-list">
-                    {loading ? (
-                        <div className="loading-state">Loading users...</div>
-                    ) : users.length === 0 ? (
-                        <div className="empty-state">No users found</div>
-                    ) : (
-                        users.map(user => (
-                            <UserProfile key={user.id} user={user} />
-                        ))
-                    )}
+                    <div className={`users-content ${fadeOut ? 'fade-out' : 'fade-in'}`}>
+                        {loading && fadeOut ? (
+                            <div className="loading-state">Loading users...</div>
+                        ) : users.length === 0 ? (
+                            <div className="empty-state">No users found</div>
+                        ) : (
+                            users.map(user => (
+                                <UserProfile key={user.id} user={user} />
+                            ))
+                        )}
+                    </div>
                 
                     {/* Pagination */}
                     <div className="pagination">

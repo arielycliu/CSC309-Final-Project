@@ -115,24 +115,24 @@ const ProfileAuthUpdate = () => {
             </div> 
             <form className="password" onSubmit={handleSubmit}>
                 <div className="right-inputs">
-                    <label>Old Password</label>
+                    <label className="required">Old Password</label>
                     <div className="password-input-wrapper">
-                        <input type={showold ? "text" : "password"} name="old" value={formData.old} onChange={handleChange} />
+                        <input type={showold ? "text" : "password"} name="old" value={formData.old} onChange={handleChange} required/>
                         <EyeToggle show={showold} setShow={setShowOld} color="black"/>
                     </div>
                     <p className="input-error">{errors.old || "\u00A0"}</p>
 
-                    <label>New Password</label>
+                    <label className="required">New Password</label>
                     <div className="password-input-wrapper">
-                        <input type={shownew ? "text" : "password"}  name="new" value={formData.new} onChange={handleChange} />
+                        <input type={shownew ? "text" : "password"}  name="new" value={formData.new} onChange={handleChange} required/>
                        <EyeToggle show={shownew} setShow={setShowNew} color="black"/>
                     </div>
                     <p className={errors.new? "input-error": "input-error message"}>{errors.new || 
                     "Password must be 8–20 characters with one upper, lower, number, and special character."}</p>
 
-                    <label>Confirm Password</label>
+                    <label className="required">Confirm Password</label>
                     <div className="password-input-wrapper">
-                        <input type={showconfirm ? "text" : "password"} name="confirm" value={formData.confirm} onChange={handleChange}/>
+                        <input type={showconfirm ? "text" : "password"} name="confirm" value={formData.confirm} onChange={handleChange} required/>
                         <EyeToggle show={showconfirm} setShow={setShowConfirm} color="black"/>
                     </div>
                     <p className="input-error">{errors.confirm || "\u00A0"}</p>

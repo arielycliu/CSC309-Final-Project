@@ -18,10 +18,11 @@ import AdjustmentTransaction from './pages/AdjustmentTransaction.jsx';
 import TransferTransaction from './pages/TransferTransaction.jsx';
 import ManageTransactions from './pages/ManageTransactions.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
-
 import ManagerEvents from "./pages/ManagerEvents.jsx";
 import Users from './components/Users.jsx';
 import UserSearch from './pages/UsersSearch.jsx';
+import EditUser from './pages/EditUser.jsx'
+import CreateUser from './pages/CreateUser.jsx';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import { AuthProvider } from './context/AuthContext';
@@ -58,6 +59,8 @@ function App() {
                 <Route path="transactions/transfer/:userId?" element={<TransferTransaction />} />
                 <Route path="users" element={<Users />}>
                   <Route index element={<UserSearch />} />
+                  <Route path="edit" element={<EditUser />} />
+                  <Route path="create" element={<CreateUser />} />
                 </Route>
                 {/* add other route paths as they are created*/}
               </Route>

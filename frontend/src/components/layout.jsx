@@ -1,6 +1,6 @@
 import { Wallet, LayoutDashboard, QrCode, Send, Gift, Clock, Tag, Calendar, History, User, Settings, 
     LogOut, DollarSign, TrendingUp, ArrowLeftRight, ChevronDown, ChevronUp, Gem, ClipboardClock, FolderPen,
-    Users } from "lucide-react";
+    UserPlus, Users} from "lucide-react";
 import '../styles/layout.css';
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import RoleSwitcher from "./RoleSwitcher.jsx";
@@ -71,9 +71,14 @@ const Layout = () => {
                 )
             }
             {isCashier && (
+                <>
                 <NavLink to="/transactions/purchase" className="nav-button">
                         <DollarSign className="icon" />Create Purchase
                 </NavLink>
+                <NavLink to="/users/create" className="nav-button">
+                        <UserPlus className="icon" />Create User
+                </NavLink>
+                </>
             )}
 
             {isManagerOrAbove && (

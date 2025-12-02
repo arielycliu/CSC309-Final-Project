@@ -8,7 +8,7 @@ export const getUsers = async (params = {}) => {
     if (params.limit) queryParams.append('limit', params.limit);
     
     // Add filters
-    if (params.search) queryParams.append('search', params.search);
+    if (params.name) queryParams.append('name', params.name);
     if (params.role) queryParams.append('role', params.role);
     if (params.verified !== undefined) queryParams.append('verified', params.verified);
     if (params.suspicious !== undefined) queryParams.append('suspicious', params.suspicious);
@@ -21,7 +21,7 @@ export const getUsers = async (params = {}) => {
     
     if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || 'Failed to fetch users');
+        throw error;
     }
     
     return await response.json();
@@ -35,4 +35,53 @@ export const getUserAvatarUrl = (avatarPath) => {
     }
     // Otherwise, prepend API_BASE
     return `${API_BASE}${avatarPath.startsWith('/') ? '' : '/'}${avatarPath}`;
+};
+
+export const patchUser = async (params = {}) => {
+    const body = {};
+    if (params.name !== undefined) body.name = params.name;
+    if (params.email !== undefined) body.email = params.email;
+    if (params.verified !== undefined) body.verified = params.verified;
+    if (params.suspicious !== undefined) body.suspicious = params.suspicious;
+    if (params.role !== undefined) body.role = params.role;
+
+    const response = await fetch(`${API_BASE}/users/${params.userId}`, {
+        method: 'PATCH',
+        headers: {                  
+            ...getAuthHeaders(),
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+    });
+
+    if (!response.ok) {
+        const error = await response.json();
+        throw error;
+    }
+
+    return await response.json();
+};
+
+export const createUser = async (params = {}) => {
+    const body = {
+        utorid: params.utorid, 
+        name: params.name,
+        email: params.email,
+    };
+
+    const response = await fetch(`${API_BASE}/users`, {
+        method: 'POST',
+        headers: {                  
+            ...getAuthHeaders(),
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+    });
+
+    if (!response.ok) {
+        const error = await response.json();
+        throw error;
+    }
+
+    return await response.json();
 };

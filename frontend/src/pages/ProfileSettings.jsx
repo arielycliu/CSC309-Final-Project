@@ -166,12 +166,12 @@ const ProfileSettings = () => {
                 </div>
 
                 <div className="right-inputs">
-                    <label>Full Name</label>
-                    <input type="text"  placeholder="Your Name" value={formData?.name ?? ""} name="name" onChange={handleChange} />
+                    <label className="required">Full Name</label>
+                    <input type="text"  placeholder="Your Name" value={formData?.name ?? ""} name="name" onChange={handleChange} required/>
                     <p className={errors.name? "input-error": "input-error message"}>{errors.name || "Maximum 50 chanracters"}</p>
 
-                    <label>Email</label>
-                    <input type="email"  placeholder="@mail.utoronto.ca" value={formData?.email ?? ""} name="email" onChange={handleChange} />
+                    <label className="required">Email</label>
+                    <input type="email"  placeholder="@mail.utoronto.ca" value={formData?.email ?? ""} name="email" onChange={handleChange} required/>
                     <p className={errors.email? "input-error": "input-error message"}>{errors.email || "Email must be of domain @mail.utoronto.ca"}</p>
 
                     <label>Birthday</label>

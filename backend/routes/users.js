@@ -40,7 +40,7 @@ router.post("/", requireClearance(CLEARANCE.CASHIER), validatePayload(createUser
 
    if(existing_user){
         const duplicatedField = existing_user.utorid === utorid  ? "utorid" : 'email';
-        return res.status(409).json({error: `${duplicatedField} already exists`});
+        return res.status(409).json({error: { [duplicatedField]: `${duplicatedField} already exists`}});
    }
 
    //create user 
@@ -426,7 +426,7 @@ router.patch("/:userId", requireClearance(CLEARANCE.MANAGER), validatePayload(pa
 
     if(isNaN(userId)){
         //console.log("in patch Invalid user ID - must be a number");
-        return res.status(400).json({error: "Invalid user ID - must be a number"});
+        return res.status(400).json({error: {general: "Invalid user ID - must be a number"}});
     }
 
     if(email){
@@ -447,10 +447,11 @@ router.patch("/:userId", requireClearance(CLEARANCE.MANAGER), validatePayload(pa
         data.verified = verified;
         select.verified = true;
     }
-    if (suspicious){
+    if(suspicious!==undefined){
         data.suspicious = suspicious;
         select.suspicious = true;
     }
+
     if(role){
         //for manager can only update roles of cashier or regular
         if(req.auth.role === 'manager' && (role === 'manager' || role === 'superuser') ){  
@@ -462,17 +463,34 @@ router.patch("/:userId", requireClearance(CLEARANCE.MANAGER), validatePayload(pa
             // method: req.method,
             // url: req.url,
             // error: `manager not permitted to make role update for role - ${role}`})  
-            return res.status(403).json({error: `manager not permitted to make role update for role - ${role}`});   
+            return res.status(403).json({error: {general: `manager not permitted to make role update for role - ${role}`}});   
         }
 
-        if(role === 'cashier'){
-            const user = await prisma.user.findUnique({
-                where: {id: userId},
-                select: {suspicious: true}
-            });
+        // Get current user to check their role
+        const user = await prisma.user.findUnique({
+            where: {id: userId},
+            select: {suspicious: true, role: true}
+        });
 
+        if(!user){
+            return res.status(404).json({error: {general: "user not found"}});
+        }
+
+        // Define role hierarchy
+        const roleHierarchy = {
+            'regular': 0,
+            'cashier': 1,
+            'manager': 2,
+            'superuser': 3
+        };
+
+        const currentRoleLevel = roleHierarchy[user.role];
+        const newRoleLevel = roleHierarchy[role];
+
+        // Check if trying to promote (moving to a higher role)
+        if(newRoleLevel > currentRoleLevel && suspicious){
             if(user.suspicious){
-                return res.status(400).json({error: "cannot promote a suspicious user"});
+                return res.status(400).json({error: {role: "cannot promote a suspicious user"}});
             }
         }
         
@@ -481,7 +499,7 @@ router.patch("/:userId", requireClearance(CLEARANCE.MANAGER), validatePayload(pa
     }
 
     if(!data|| Object.keys(data).length === 0){
-        return res.status(400).json({error: "empty payload"})
+        return res.status(400).json({error: {general: "empty payload"}});
     }
 
     select.id = true;
@@ -497,7 +515,7 @@ router.patch("/:userId", requireClearance(CLEARANCE.MANAGER), validatePayload(pa
         return res.status(200).json(user);
     }catch(err){
         
-        return res.status(500).json({error: `error updating user ${userId} -> ${err.message}`})
+        return res.status(500).json({error: {general: `error updating user ${userId} -> ${err.message}`}});
     }
 
 });

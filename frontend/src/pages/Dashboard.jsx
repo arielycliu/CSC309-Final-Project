@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import "../styles/Dashboard.css";
 import "../styles/DashboardCharts.css";
 import { Link } from "react-router-dom";
-import { Wallet, QrCode, Send, Gift, Calendar, DollarSign, Award, TrendingUp, ArrowRightLeft, PieChartIcon, BarChart3, LineChart as LineChartIcon } from "lucide-react";
+import { Wallet, QrCode, Send, Gift, Calendar, DollarSign, Award, TrendingUp, ArrowRightLeft, PieChartIcon, BarChart3, LineChart as LineChartIcon, ClipboardClock, Tag, FolderPen, Users } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { toast } from "sonner";
 import PieChart from "../components/charts/PieChart";
@@ -11,30 +11,72 @@ import LineChart from "../components/charts/LineChart";
 
 const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3000';
 
-const quickActions = [
+const regularQuickActions = [
     {
         title: "Show QR Code",
         desc: "For receiving points",
         icon: Wallet,
-        path: "/"
+        path: "/my-qr-code"
     },
     {
         title: "Transfer Points",
         desc: "Transfer points to other users",
         icon: Send,
-        path: "/"
+        path: "/transactions/transfer"
     },
     {
         title: "Redeem Points",
         desc: "Redeem your points for rewards",
         icon: Gift,
-        path: "/"
+        path: "/transactions/redemption"
     },
     {
         title: "Browse Events",
         desc: "View and RSVP to events",
         icon: Calendar,
         path: "/events"
+    },
+];
+
+const cashierQuickActions = [
+    {
+        title: "Process Redemptions",
+        desc: "Process pending redemption requests",
+        icon: ClipboardClock,
+        path: "/transactions/process-redemptions"
+    },
+    {
+        title: "Create Purchase",
+        desc: "Record a purchase transaction",
+        icon: DollarSign,
+        path: "/transactions/purchase"
+    },
+];
+
+const managerQuickActions = [
+    {
+        title: "Manage Events",
+        desc: "Create and manage events",
+        icon: Calendar,
+        path: "/events/manage"
+    },
+    {
+        title: "Promotions",
+        desc: "View all promotions",
+        icon: Tag,
+        path: "/promotions"
+    },
+    {
+        title: "Manage Promotions",
+        desc: "Create and manage promotions",
+        icon: FolderPen,
+        path: "/promotions/manage"
+    },
+    {
+        title: "Manage Users",
+        desc: "View and manage users",
+        icon: Users,
+        path: "/users"
     },
 ];
 
@@ -61,7 +103,7 @@ function QuickActionCard({ title, desc, icon: Icon, path }) {
 }
 
 export default function Dashboard() {
-    const { token } = useAuth();
+    const { token, activeRole } = useAuth();
     const [userData, setUserData] = useState(null);
     const [recentTransactions, setRecentTransactions] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -274,7 +316,15 @@ export default function Dashboard() {
                 <div>
                     <h4>Quick actions</h4>
                     <div className="quick-actions-div">
-                        {quickActions.map((action, index) => (
+                        {(() => {
+                            if (activeRole === 'manager' || activeRole === 'superuser') {
+                                return managerQuickActions;
+                            } else if (activeRole === 'cashier') {
+                                return cashierQuickActions;
+                            } else {
+                                return regularQuickActions;
+                            }
+                        })().map((action, index) => (
                             <QuickActionCard key={index} {...action} />
                         ))}
                     </div>

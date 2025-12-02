@@ -81,7 +81,6 @@ const RedemptionRequest = () => {
         <div className="redemption-request-page">
             <div className="page-header">
                 <h2>Create Redemption Request</h2>
-                <p>Request to redeem your points</p>
             </div>
 
             {createdTransaction ? (

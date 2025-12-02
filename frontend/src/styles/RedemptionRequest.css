@@ -28,6 +28,9 @@
 
 .redemption-request-page .transaction-form {
 	height: fit-content;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
 	background: white;
 	border-radius: 12px;
 	padding: 2rem;

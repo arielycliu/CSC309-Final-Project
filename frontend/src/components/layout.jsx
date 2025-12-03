@@ -31,12 +31,12 @@ const Layout = () => {
 
             {isRegular && (
                 <>
-                    <NavLink to="/not-working" className="nav-button">
+                    <NavLink to="/my-qr-code" className="nav-button">
                         <QrCode className="icon" /> My QR Code 
                     </NavLink>
 
                     <div className="points nav-button user-dropdown">
-                        <NavLink to="/not-working" className="nav-button">
+                        <NavLink to="/transactions/transfer" className="nav-button">
                             <Gem className="icon"/>
                             <p>Points
                                 <ChevronDown className=" icon chevron-down" />
@@ -45,13 +45,13 @@ const Layout = () => {
                         </NavLink>
 
                         <div className="dropdown-content">
-                            <NavLink to="/not-working" className="nav-button">
+                            <NavLink to="/transactions/transfer" className="nav-button">
                                 <Send className="icon" /> Transfer Points
                             </NavLink>
-                            <NavLink to="/not-working" className="nav-button">
+                            <NavLink to="/transactions/redemption" className="nav-button">
                                 <Gift className="icon" />Redeem Points 
                             </NavLink>
-                            <NavLink to="/not-working" className="nav-button">
+                            <NavLink to="/transactions/pending-redemptions" className="nav-button">
                                 <Clock className="icon" />Pending Redemptions
                             </NavLink>
                         </div>
@@ -64,13 +64,15 @@ const Layout = () => {
                 </>
             )} 
             {isCashierOrAbove && (
-                    <>
-                    <NavLink to="/not-working" className="nav-button">
-                        <ClipboardClock className="icon" />Process Redemptions
-                    </NavLink>
-                    </>
-                )
-            }
+                <>
+                    <div className="transactions nav-button user-dropdown">
+                        <NavLink to="/transactions/process-redemptions" className="nav-button">
+                            <ClipboardClock className="icon"/>
+                            <p>Process Redemptions</p>
+                        </NavLink>
+                    </div>
+                </>
+            )}
             {isCashier && (
                 <>
                 <NavLink to="/transactions/purchase" className="nav-button">
@@ -102,14 +104,18 @@ const Layout = () => {
                             <Send className="icon" />Transfer Points
                         </NavLink>
 
+                        <NavLink to="/transactions/redemption" className="nav-button">
+                            <Gift className="icon" />Redemption Request
+                        </NavLink>
+
+                        <NavLink to="/transactions/pending-redemptions" className="nav-button">
+                            <Clock className="icon" />Pending Redemptions
+                        </NavLink>
+
                         <NavLink to="/transactions/manage" className="nav-button">
                             <FolderPen className="icon" />Manage Transactions
                         </NavLink>
-
                     </div>
-                    
-                    
-
                 </div>
                 <NavLink to="/users" className="nav-button">
                         <Users className="icon" />Manage Users
@@ -117,7 +123,7 @@ const Layout = () => {
                 </>
             )}
 
-                {(isManagerOrAbove || isRegular || isOrganizer) && (
+            {(isManagerOrAbove || isRegular || isOrganizer) && (
                 <>  
                     
                     <NavLink to={isManagerOrAbove || isOrganizer ? "/events/manage" : "/events"} className="nav-button">
@@ -125,9 +131,19 @@ const Layout = () => {
                     </NavLink>
 
                     {!isOrganizer && (
-                        <NavLink to="/promotions" className="nav-button">
-                            <Tag className="icon" />{isManagerOrAbove ? "Manage Promotions" : "Promotions"}
-                        </NavLink>
+                        <div className="promotions nav-button user-dropdown">
+                            <NavLink to="/promotions" className="nav-button">
+                                <Tag className="icon"/>
+                                <p>Promotions {isManagerOrAbove && <ChevronDown className="icon" />}</p>
+                            </NavLink>
+                            {isManagerOrAbove && (
+                                <div className="dropdown-content">
+                                    <NavLink to="/promotions/manage" className="nav-button">
+                                        <FolderPen className="icon" />Manage Promotions
+                                    </NavLink>
+                                </div>
+                            )}
+                        </div>
                     )}
                 </>
             )}

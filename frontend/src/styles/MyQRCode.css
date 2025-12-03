@@ -1,0 +1,87 @@
+.my-qr-code-page {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 2rem;
+}
+
+.my-qr-code-page .qr-code-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 60vh;
+}
+
+.my-qr-code-page .qr-code-card {
+	background: white;
+	border-radius: 12px;
+	padding: 3rem;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	text-align: center;
+	max-width: 500px;
+	width: 100%;
+}
+
+.my-qr-code-page .qr-code-header {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.75rem;
+	margin-bottom: 1rem;
+}
+
+.my-qr-code-page .qr-code-header h3 {
+	font-size: 1.5rem;
+	font-weight: 700;
+	color: #111827;
+	margin: 0;
+}
+
+.my-qr-code-page .qr-code-description {
+	color: #6b7280;
+	font-size: 0.875rem;
+	margin-bottom: 2rem;
+	line-height: 1.5;
+}
+
+.my-qr-code-page .qr-code-wrapper {
+	display: inline-block;
+	padding: 1.5rem;
+	background: white;
+	border-radius: 12px;
+	border: 2px solid #e5e7eb;
+	margin-bottom: 2rem;
+}
+
+.my-qr-code-page .qr-code-info {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+.my-qr-code-page .qr-code-user-id,
+.my-qr-code-page .qr-code-user-name,
+.my-qr-code-page .qr-code-utorid {
+	margin: 0;
+	font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+	.my-qr-code-page {
+		padding: 1rem;
+	}
+
+	.my-qr-code-page .qr-code-card {
+		padding: 2rem 1.5rem;
+	}
+
+	.my-qr-code-page .qr-code-wrapper {
+		padding: 1rem;
+	}
+
+	.my-qr-code-page .qr-code-wrapper svg {
+		width: 100%;
+		height: auto;
+		max-width: 250px;
+	}
+}
+

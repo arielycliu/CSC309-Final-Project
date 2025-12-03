@@ -1,0 +1,323 @@
+.process-redemptions-page {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 2rem;
+}
+
+.process-redemptions-page .page-header {
+	margin-bottom: 2rem;
+}
+
+.process-redemptions-page .page-header h2 {
+	font-size: 2rem;
+	font-weight: 700;
+	color: #111827;
+	margin-bottom: 0.5rem;
+}
+
+.process-redemptions-page .page-header p {
+	color: #6b7280;
+	font-size: 1rem;
+}
+
+.process-redemptions-page .process-form-container {
+	display: grid;
+	grid-template-columns: 2fr 1fr;
+	gap: 2rem;
+}
+
+.process-redemptions-page .process-form {
+	background: white;
+	border-radius: 12px;
+	padding: 2rem;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.process-redemptions-page .form-group {
+	margin-bottom: 1.5rem;
+}
+
+.process-redemptions-page .form-group label {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 0.875rem;
+	font-weight: 600;
+	color: #374151;
+	margin-bottom: 0.5rem;
+}
+
+.process-redemptions-page .form-group input {
+	width: 100%;
+	padding: 0.75rem;
+	border: 1px solid #d1d5db;
+	border-radius: 8px;
+	font-size: 1rem;
+	transition: border-color 0.2s;
+}
+
+.process-redemptions-page .form-group input:focus {
+	outline: none;
+	border-color: #030213;
+	box-shadow: 0 0 0 3px rgba(3, 2, 19, 0.1);
+}
+
+.process-redemptions-page .form-group small {
+	display: block;
+	margin-top: 0.5rem;
+	font-size: 0.75rem;
+	color: #6b7280;
+}
+
+.process-redemptions-page .transaction-id-input-container {
+	display: flex;
+	gap: 0.5rem;
+	align-items: flex-start;
+}
+
+.process-redemptions-page .transaction-id-input {
+	flex: 1;
+}
+
+.process-redemptions-page .scan-btn,
+.process-redemptions-page .form-group .upload-btn {
+	padding: 0.75rem;
+	background-color: #030213;
+	color: white;
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	transition: background-color 0.2s;
+}
+
+.process-redemptions-page .upload-btn {
+	margin: 0;
+}
+
+.process-redemptions-page .scan-btn:hover,
+.process-redemptions-page .upload-btn:hover {
+	background-color: #303037;
+}
+
+.process-redemptions-page .scan-btn-active {
+	background-color: #ef4444;
+}
+
+.process-redemptions-page .scan-btn-active:hover {
+	background-color: #dc2626;
+}
+
+.process-redemptions-page .qr-scanner-container {
+	margin: 1rem 0;
+	padding: 1rem;
+	background: #edeff0;
+	border-radius: 8px;
+	border: 1px solid #dadce1;
+}
+
+.process-redemptions-page .qr-scanner-visible {
+	display: block;
+}
+
+.process-redemptions-page .qr-scanner-hidden {
+	display: none;
+}
+
+.process-redemptions-page .qr-reader {
+	width: 100%;
+}
+
+.process-redemptions-page .qr-scanner-container #qr-reader {
+	border: none !important;
+}
+
+.process-redemptions-page .qr-scanner-container #qr-reader__dashboard {
+	display: none;
+}
+
+.process-redemptions-page .qr-scanner-instruction {
+	text-align: center;
+	margin-top: 0.5rem;
+	color: #6b7280;
+	font-size: 0.875rem;
+}
+
+.process-redemptions-page .transaction-info {
+	margin: 1.5rem 0;
+	padding: 1.5rem;
+	border-radius: 8px;
+	border: 2px solid;
+}
+
+.process-redemptions-page .transaction-pending {
+	background: #fef3c7;
+	border-color: #f59e0b;
+}
+
+.process-redemptions-page .transaction-processed {
+	background: #d1fae5;
+	border-color: #10b981;
+}
+
+.process-redemptions-page .transaction-invalid {
+	background: #fee2e2;
+	border-color: #ef4444;
+}
+
+.process-redemptions-page .transaction-info-header {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin-bottom: 1rem;
+}
+
+.process-redemptions-page .transaction-info-header h3 {
+	font-size: 1.125rem;
+	font-weight: 700;
+	margin: 0;
+}
+
+.process-redemptions-page .status-icon {
+	flex-shrink: 0;
+}
+
+.process-redemptions-page .status-icon.processed {
+	color: #10b981;
+}
+
+.process-redemptions-page .status-icon.pending {
+	color: #f59e0b;
+}
+
+.process-redemptions-page .status-icon.invalid {
+	color: #ef4444;
+}
+
+.process-redemptions-page .transaction-details {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+.process-redemptions-page .detail-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	gap: 1rem;
+}
+
+.process-redemptions-page .detail-label {
+	font-weight: 600;
+	color: #222933;
+	font-size: 0.875rem;
+}
+
+.process-redemptions-page .detail-value {
+	color: #222933;
+	font-size: 0.875rem;
+	text-align: right;
+}
+
+.process-redemptions-page .invalid-message {
+	color: #d03939;
+	font-size: 0.8rem;
+	font-weight: 600;
+	margin-bottom: 1rem;
+	text-align: left;
+}
+
+.process-redemptions-page .form-actions {
+	display: flex;
+	gap: 1rem;
+	margin-top: 2rem;
+}
+
+.process-redemptions-page .cancel-btn,
+.process-redemptions-page .submit-btn {
+	flex: 1;
+	padding: 0.875rem 1.5rem;
+	border: none;
+	border-radius: 8px;
+	font-size: 1rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.2s;
+}
+
+.process-redemptions-page .cancel-btn {
+	background: #f3f4f6;
+	color: #374151;
+}
+
+.process-redemptions-page .cancel-btn:hover {
+	background: #e5e7eb;
+}
+
+.process-redemptions-page .submit-btn {
+	background: #030213;
+	color: white;
+}
+
+.process-redemptions-page .submit-btn:hover:not(:disabled) {
+	background: #202025;
+}
+
+.process-redemptions-page .submit-btn:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+.process-redemptions-page .info-panel {
+	background: white;
+	border-radius: 12px;
+	padding: 2rem;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	height: fit-content;
+}
+
+.process-redemptions-page .info-panel h3 {
+	font-size: 1.25rem;
+	font-weight: 700;
+	margin-bottom: 1.5rem;
+}
+
+.process-redemptions-page .info-item {
+	margin-bottom: 1.5rem;
+	padding-bottom: 1.5rem;
+	border-bottom: 1px solid #d9dbde;
+}
+
+.process-redemptions-page .info-item:last-child {
+	border-bottom: none;
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+.process-redemptions-page .info-item strong {
+	display: block;
+	font-size: 0.875rem;
+	font-weight: 600;
+	color: #353e4c;
+	margin-bottom: 0.5rem;
+}
+
+.process-redemptions-page .info-item p {
+	font-size: 0.875rem;
+	color: #484d56;
+	line-height: 1.5;
+	margin: 0.25rem 0;
+}
+
+@media (max-width: 768px) {
+	.process-redemptions-page .process-form-container {
+		grid-template-columns: 1fr;
+	}
+
+	.process-redemptions-page .process-redemptions-page {
+		padding: 1rem;
+	}
+}
+

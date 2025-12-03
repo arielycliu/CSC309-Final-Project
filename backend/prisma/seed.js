@@ -359,6 +359,6 @@ const seedTransactionPromotion = [
         console.error(`Error during seeding: ${err.message}`);
         process.exit(1);
     } finally {
-        // await prisma.$disconnect();
+        await prisma.$disconnect();
     }
 })();

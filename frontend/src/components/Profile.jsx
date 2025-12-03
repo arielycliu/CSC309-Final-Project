@@ -2,6 +2,7 @@ import{NavLink, Outlet, useNavigate } from "react-router-dom"
 import '../styles/profile.css';
 import{User, UserPen, UserLock} from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import UserImage from '../icons/user_image.png';
 
 const Profile = ()=>{;
     const {user} = useAuth();
@@ -13,6 +14,7 @@ const Profile = ()=>{;
                 src={user.avatarUrl}
                 alt="User Avatar" 
                 className="profile-avatar"
+                onError={(e) => { e.target.onerror = null; e.target.src = UserImage; }}
             />
             <div id="profile-name">
                 <h2>{user?.name}</h2>

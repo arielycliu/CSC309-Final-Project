@@ -92,8 +92,8 @@ const seedEvents = [
         name: 'Bingo Night',
         description: 'Bingo fun for all.',
         location: 'Toronto, ON',
-        startTime: new Date('2026-01-15T09:00:00'),
-        endTime: new Date('2026-01-15T17:00:00'),
+        startTime: new Date('2025-12-08T09:00:00'),
+        endTime: new Date('2025-12-08T17:00:00'),
         capacity: 150,
         pointsTotal: 5000,
         pointsRemain: 5000,
@@ -109,7 +109,7 @@ const seedEvents = [
         capacity: 100,
         pointsTotal: 3000,
         pointsRemain: 0,
-        published: false,
+        published: true,
         createdById: 2,
     },
     {
@@ -121,7 +121,7 @@ const seedEvents = [
         capacity: 200,
         pointsTotal: 4000,
         pointsRemain: 4000,
-        published: false,
+        published: true,
         createdById: 2, //manager
     },
     {
@@ -271,8 +271,6 @@ const seedTransactionPromotion = [
     { transactionId: 7, promotionId: 5 }, // Welcome Gift
     { transactionId: 6, promotionId: 3 }, // First Purchase Bonus
 ];
-
-
 
 (async function () {
     // to clear, first run npx prisma db push --force-reset in terminal 

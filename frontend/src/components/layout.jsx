@@ -5,6 +5,7 @@ import '../styles/layout.css';
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import RoleSwitcher from "./RoleSwitcher.jsx";
 import { useAuth } from "../context/AuthContext";
+import UserImage from '../icons/user_image.png';
 
 const Layout = () => {
     const { logout, activeRole, user} = useAuth();
@@ -166,6 +167,7 @@ const Layout = () => {
                         src={user.avatarUrl}
                         alt="User Avatar"
                         id="user-avatar"
+                        onError={(e) => { e.target.onerror = null; e.target.src = UserImage; }}
                     />
                     <div className="dropdown-content">
                         <div className="extra-dropdown">

@@ -7,7 +7,6 @@ import { getUsers, getUserAvatarUrl} from "../lib/Users";
 import UserImage from '../icons/user_image.png';
 import { toast } from 'sonner';
 
-
 const UserSearch = () => {
     const navigate = useNavigate();
     const { logout, activeRole, user} = useAuth();
@@ -29,19 +28,19 @@ const UserSearch = () => {
     
     const totalPages = Math.ceil(count / limit);
 
-    const fetchUsers = async () => {
+    const fetchUsers = async (filtersParam) => {
         try {
             setFadeOut(true);
             setLoading(true);
-            console.log("Fetching users with filters:", filters, "and page:", page);    
+            console.log("Fetching users with filters:", filtersParam, "and page:", page);    
             const params = {
                 page,
                 limit,
-                ...(filters.name && { name: filters.name }),
-                ...(filters.role && { role: filters.role }),
-                ...(filters.verified && { verified: filters.verified }),
-                ...(filters.suspicious && { suspicious: filters.suspicious }),
-                ...(filters.orderByPoints && { orderByPoints: filters.orderByPoints })
+                ...(filtersParam.name && { name: filtersParam.name }),
+                ...(filtersParam.role && { role: filtersParam.role }),
+                ...(filtersParam.verified && { verified: filtersParam.verified }),
+                ...(filtersParam.suspicious && { suspicious: filtersParam.suspicious }),
+                ...(filtersParam.orderByPoints && { orderByPoints: filtersParam.orderByPoints })
             };
             const data = await getUsers(params);
             console.log("Fetched users data:", data);
@@ -63,7 +62,7 @@ const UserSearch = () => {
     };
 
     useEffect(() => {
-        fetchUsers();
+        fetchUsers(filters);
     }, [page]);
 
     const handleFilterChange = (field, value) => {
@@ -73,19 +72,20 @@ const UserSearch = () => {
     const applyFilters = (e) => {
         e.preventDefault();
         setPage(1);
-        fetchUsers();
+        fetchUsers(filters);
     };
 
     const clearFilters = () => {
-        setFilters({
+        const clearedFilters = {
             name: '',
             role: '',
             verified: '',
             suspicious: '',
             orderByPoints: 'desc'
-        });
+        };
+        setFilters(clearedFilters);
         setPage(1);
-        setTimeout(fetchUsers, 100);
+        fetchUsers(clearedFilters);
     };
     
 
@@ -94,6 +94,7 @@ const UserSearch = () => {
             <div className="user-profile" key={user.id}>
                 <img className="profile-image" 
                     src={user.avatarUrl ? getUserAvatarUrl(user.avatarUrl) : UserImage}
+                    onError={(e) => { e.target.onerror = null; e.target.src = UserImage; }}
                 />
                 <div className="user-info">
                     <div className="user-name-status">

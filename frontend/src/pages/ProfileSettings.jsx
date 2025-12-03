@@ -5,6 +5,7 @@ import '../styles/profile.css';
 import { useAuth } from "../context/AuthContext";
 import { toast } from 'sonner';
 import { updateUserProfile } from "../lib/Profile";
+import UserImage from '../icons/user_image.png';
 
 
 const patchSelfPayload = z.object({
@@ -133,7 +134,7 @@ const ProfileSettings = () => {
                 <div className="profile-avatar-section">
                     <label>Profile picture</label>
                     <div className="avatar-wrapper">
-                        <img src={avatar} alt="User Avatar" className="profile-avatar"/>
+                        <img src={avatar} alt="User Avatar" className="profile-avatar"onError={(e) => { e.target.onerror = null; e.target.src = UserImage; }}/>
                         <button type="button" className="edit-avatar-button" onClick={handleEditClick}>
                             <Pen size={16}/>
                             Edit

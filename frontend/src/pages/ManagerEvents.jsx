@@ -90,6 +90,10 @@ export default function ManagerEvents() {
     remark: "",
   });
 
+  // filter satate
+  const [statusFilter, setStatusFilter] = useState("all");
+  // "all" | "published-active" | "draft-active" | "published-ended"
+
   const totalPages = Math.max(1, Math.ceil(count / limit));
 
   const isManagerOrSuper = role === "manager" || role === "superuser";
@@ -484,6 +488,30 @@ export default function ManagerEvents() {
     };
   };
 
+  // ----- filter -----
+  const now = new Date();
+
+  const filteredEvents = events.filter((ev) => {
+    const hasEnd = !!ev.endTime;
+    const isActive = hasEnd ? new Date(ev.endTime) >= now : true; // if no endTime, treat as active
+    const isPublished = !!ev.published;
+
+    switch (statusFilter) {
+      case "published-active":
+        // published AND not ended yet
+        return isPublished && isActive;
+      case "draft-active":
+        // NOT published AND not ended yet
+        return !isPublished && isActive;
+      case "published-ended":
+        // published AND already ended
+        return isPublished && !isActive;
+      case "all":
+      default:
+        return true;
+    }
+  });
+
   const { text: attendanceText, percent: attendancePercent } =
     getAttendanceInfo();
 
@@ -647,9 +675,40 @@ export default function ManagerEvents() {
 
           <div className="manager-card manager-events-list-card">
             <div className="manager-card-header-row">
-              <h2>{isManagerOrSuper ? "All Events" : "My Events"}</h2>
-              <span className="manager-chip">{count} total</span>
+              <div className="manager-card-header-left">
+                <h2>{isManagerOrSuper ? "All Events" : "My Events"}</h2>
+                <span className="manager-chip">
+                  {filteredEvents.length} shown
+                  {filteredEvents.length !== count ? ` of ${count} total` : ""}
+                </span>
+              </div>
+
+              <div className="manager-filter">
+                {/* <label
+                  htmlFor="event-status-filter"
+                  className="manager-filter-label"
+                >
+                  Filter
+                </label> */}
+                <select
+                  id="event-status-filter"
+                  className="manager-filter-select"
+                  value={statusFilter}
+                  onChange={(e) => {
+                    setStatusFilter(e.target.value);
+                    if (isManagerOrSuper) {
+                      setPage(1);
+                    }
+                  }}
+                >
+                  <option value="all">All</option>
+                  <option value="published-active">Published (Active)</option>
+                  <option value="draft-active">Non-published (Active)</option>
+                  <option value="published-ended">Published (Ended)</option>
+                </select>
+              </div>
             </div>
+
 
             {loadingList || loadingRole ? (
               <p className="manager-muted">Loading events…</p>
@@ -657,31 +716,36 @@ export default function ManagerEvents() {
               <p className="manager-muted">No events.</p>
             ) : (
               <ul className="manager-events-list">
-                {events.map((ev) => (
-                  <li
-                    key={ev.id}
-                    className={
-                      "manager-event-row" +
-                      (ev.id === selectedId ? " manager-event-row-active" : "")
-                    }
-                    onClick={() => setSelectedId(ev.id)}
-                  >
-                    <div className="manager-event-row-main">
-                      <span className="manager-event-row-title">
-                        {ev.name}
+                {filteredEvents.length === 0 ? (
+                  <li className="manager-muted">No events match this filter.</li>
+                ) : (
+                  filteredEvents.map((ev) => (
+                    <li
+                      key={ev.id}
+                      className={
+                        "manager-event-row" +
+                        (ev.id === selectedId ? " manager-event-row-active" : "")
+                      }
+                      onClick={() => setSelectedId(ev.id)}
+                    >
+                      <div className="manager-event-row-main">
+                        <span className="manager-event-row-title">
+                          {ev.name}
+                        </span>
+                        <span className="manager-event-row-sub">
+                          {ev.location} •{" "}
+                          {new Date(ev.startTime).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <span className="manager-tag">
+                        {ev.published ? "Published" : "Draft"}
                       </span>
-                      <span className="manager-event-row-sub">
-                        {ev.location} •{" "}
-                        {new Date(ev.startTime).toLocaleDateString()}
-                      </span>
-                    </div>
-                    <span className="manager-tag">
-                      {ev.published ? "Published" : "Draft"}
-                    </span>
-                  </li>
-                ))}
+                    </li>
+                  ))
+                )}
               </ul>
-            )}
+            )
+            }
 
             <div className="manager-pagination">
               <button
@@ -857,10 +921,10 @@ export default function ManagerEvents() {
                               setEditLocationSuggestions([]);
 
                               setEditForm(prev => ({
-                              ...prev,
-                              location: s.label,
-                            }));
-                              
+                                ...prev,
+                                location: s.label,
+                              }));
+
                             }}
                           >
                             {s.label}
@@ -1006,7 +1070,9 @@ export default function ManagerEvents() {
                           <li key={o.id}>
                             <div>
                               <span className="manager-person-main">{o.name}</span>
+                              {" ("}
                               <span className="manager-person-sub">{o.utorid}</span>
+                              {") "}
                             </div>
                             {/* remove button only for manager/superuser */}
                             <button
@@ -1055,9 +1121,12 @@ export default function ManagerEvents() {
                             <span className="manager-person-main">
                               {g.name}
                             </span>
+                             {" ("}
+                             
                             <span className="manager-person-sub">
                               {g.utorid}
                             </span>
+                            {") "}
                           </div>
                           <button
                             type="button"

@@ -1,9 +1,9 @@
-const { CLEARANCE, requireClearance, validatePayload} = require('./auth_middleware');
-const { v4: uuidv4 } = require('uuid');
-const {z} = require("zod");
-const bcrypt = require('bcrypt');
-const prisma = require('../prisma/client');
-const express = require("express");
+import { CLEARANCE, requireClearance, validatePayload} from './auth_middleware.js';
+import { v4 as uuidv4 } from 'uuid';
+import {z} from "zod";
+import bcrypt from 'bcrypt';
+import prisma from '../prisma/client.js';
+import express from "express";
 const router = express.Router();
 
 
@@ -187,9 +187,14 @@ async function getUsersValidPromotions(user){
     return promotions;
 }
 
-const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
+import multer from "multer";
+import path from "path";
+import fs from "fs";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const upload =  multer({ storage: multer.memoryStorage() });
 const patchSelfPayload = z.object({
     name: z.string().min(1, "name too short").max(50, "name too long").optional().nullable(),
@@ -569,7 +574,7 @@ router.patch("/me/password", requireClearance(CLEARANCE.REGULAR), validatePayloa
 });
 
 // Ariel's subrouter for /users/transactions
-const userTransactionsRouter = require('./users_transactions');
+import userTransactionsRouter from './users_transactions.js';
 router.use('/', userTransactionsRouter);
 
-module.exports = router;
+export default router;

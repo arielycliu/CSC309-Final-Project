@@ -1,8 +1,8 @@
-const { CLEARANCE, requireClearance } = require('./auth_middleware');
-const { validateString, validateEnum, validateNumber, validateInputFields } = require('./utils/validators');
-const { TransactionType } = require('@prisma/client');
-const prisma = require('../prisma/client');
-const express = require("express");
+import { CLEARANCE, requireClearance } from './auth_middleware.js';
+import { validateString, validateEnum, validateNumber, validateInputFields } from './utils/validators.js';
+import { TransactionType } from '@prisma/client';
+import prisma from '../prisma/client.js';
+import express from "express";
 const router = express.Router();
 
 const validators = {
@@ -283,4 +283,4 @@ router.all('/', async (req, res) => {
     res.status(405).json({ 'error': 'Method Not Allowed' });
 });
 
-module.exports = router;
+export default router;

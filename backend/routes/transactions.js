@@ -1,9 +1,9 @@
-const express = require("express");
-const {
+import express from "express";
+import {
 	TransactionType,
 	PromotionType,
-} = require("@prisma/client");
-const prisma = require("../prisma/client");
+} from "@prisma/client";
+import prisma from "../prisma/client.js";
 
 const router = express.Router();
 
@@ -746,7 +746,7 @@ router.patch(
 
 // Ariel's subrouter for transactions/processed
 // keep in separate file for now to avoid complicated merge conflicts but can be put in transactions later
-const transactionsProcessedRouter = require('./transactions_processed');
+import transactionsProcessedRouter from './transactions_processed.js';
 router.use('/', transactionsProcessedRouter);
 
-module.exports = router;
+export default router;

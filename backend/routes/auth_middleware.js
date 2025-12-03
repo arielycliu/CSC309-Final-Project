@@ -1,7 +1,6 @@
 const { expressjwt: jwt } = require('express-jwt');
 require('dotenv').config();
-const { PrismaClient} = require('@prisma/client');
-const prisma = new PrismaClient();
+const prisma = require('../prisma/client');
 
 const CLEARANCE = {
   ANY: 0,

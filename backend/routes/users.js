@@ -2,9 +2,7 @@ const { CLEARANCE, requireClearance, validatePayload} = require('./auth_middlewa
 const { v4: uuidv4 } = require('uuid');
 const {z} = require("zod");
 const bcrypt = require('bcrypt');
-const { PrismaClient} = require('@prisma/client');
-
-const prisma = new PrismaClient();
+const prisma = require('../prisma/client');
 const express = require("express");
 const router = express.Router();
 

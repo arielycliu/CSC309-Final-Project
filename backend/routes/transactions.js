@@ -1,12 +1,11 @@
 const express = require("express");
 const {
-	PrismaClient,
 	TransactionType,
 	PromotionType,
 } = require("@prisma/client");
+const prisma = require("../prisma/client");
 
 const router = express.Router();
-const prisma = new PrismaClient();
 
 const roleRank = {
 	regular: 1,

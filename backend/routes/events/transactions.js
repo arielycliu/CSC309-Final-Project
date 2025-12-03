@@ -1,6 +1,6 @@
 const express = require('express');
-const { PrismaClient, TransactionType } = require('@prisma/client');
-const prisma = new PrismaClient();
+const { TransactionType } = require('@prisma/client');
+const prisma = require('../../prisma/client');
 const { CLEARANCE, requireClearance, roleRank } = require('../auth_middleware');
 
 const router = express.Router({ mergeParams: true });

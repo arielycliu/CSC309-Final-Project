@@ -1,8 +1,7 @@
 const { CLEARANCE, requireClearance } = require('./auth_middleware');
 const { validateString, validateEnum, validateNumber, validateInputFields } = require('./utils/validators');
-const { PrismaClient, TransactionType } = require('@prisma/client');
-
-const prisma = new PrismaClient();
+const { TransactionType } = require('@prisma/client');
+const prisma = require('../prisma/client');
 const express = require("express");
 const router = express.Router();
 

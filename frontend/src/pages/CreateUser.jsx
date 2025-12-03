@@ -92,7 +92,7 @@ const CreateUser = () => {
             </div>
 
             <form className="create user-form" onSubmit={handleSubmit}>
-                <label className='required'>UtorID</label>
+                <label className='required'>UTORid</label>
                 <input type="text" placeholder="UTORid" name="utorid" onChange={handleChange} value={formData.utorid || ""} required style={{fontFamily: "'Courier New', Courier, monospace"}}></input>
                 <p className={errors.utorid? "input-error": "input-error message"}>{errors.utorid || "At least 7 characters"}</p>
 

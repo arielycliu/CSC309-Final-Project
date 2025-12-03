@@ -113,6 +113,7 @@ const EditUser = () => {
             <div className="user-profile">
                 <img className="profile-image" 
                     src={userFromState?.avatarUrl ? getUserAvatarUrl(userFromState.avatarUrl) : UserImage}
+                    onError={(e) => { e.target.onerror = null; e.target.src = UserImage; }}
                 />
                 <div className="user-info">
                     <div>

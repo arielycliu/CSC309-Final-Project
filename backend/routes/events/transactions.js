@@ -1,5 +1,6 @@
 import express from 'express';
-import { TransactionType } from '@prisma/client';
+import pkg from '@prisma/client';
+const { TransactionType } = pkg;
 import prisma from '../../prisma/client.js';
 import { CLEARANCE, requireClearance, roleRank } from '../auth_middleware.js';
 

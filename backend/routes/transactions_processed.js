@@ -1,6 +1,7 @@
 import { CLEARANCE, requireClearance, roleRank } from './auth_middleware.js';
 import { validateString, validateEnum, validateDate, validateNumber, validateBoolean, validateInputFields } from './utils/validators.js';
-import { TransactionType } from '@prisma/client';
+import pkg from '@prisma/client';
+const { TransactionType } = pkg;
 import prisma from '../prisma/client.js';
 import express from "express";
 const router = express.Router();

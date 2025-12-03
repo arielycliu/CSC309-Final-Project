@@ -1,8 +1,6 @@
 import express from "express";
-import {
-	TransactionType,
-	PromotionType,
-} from "@prisma/client";
+import pkg from "@prisma/client";
+const { TransactionType, PromotionType } = pkg;
 import prisma from "../prisma/client.js";
 
 const router = express.Router();

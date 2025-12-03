@@ -104,7 +104,12 @@ router.get("/", requireClearance(CLEARANCE.MANAGER), validatePayload(getUsersPay
         NOT: { id: req.auth.sub } // Exclude self
     };
 
-    if (name) where.name = name;
+    if (name) {
+        where.OR = [
+            { name: { contains: name } },
+            { utorid: { contains: name } }
+        ];
+    }
     if (role) where.role = role;
     if (suspicious !== undefined && suspicious !== null) where.suspicious = suspicious;
     

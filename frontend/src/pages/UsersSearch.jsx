@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight, Edit, UserPlus } from 'lucide-react';
 import { getUsers, getUserAvatarUrl} from "../lib/Users";
 import UserImage from '../icons/user_image.png';
 import { toast } from 'sonner';
+//what functionality should manager have for superusers?
 
 const UserSearch = () => {
     const navigate = useNavigate();
@@ -136,7 +137,7 @@ const UserSearch = () => {
                                 <label>Search</label>
                                 <input 
                                     type="search" 
-                                    placeholder="name"
+                                    placeholder="name, utorid"
                                     value={filters.name}
                                     onChange={(e) => handleFilterChange('name', e.target.value)}
                                 />

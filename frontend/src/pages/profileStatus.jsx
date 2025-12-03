@@ -1,4 +1,4 @@
-import '../styles/profile.css';
+import '../styles/Profile.css';
 import {Shield} from "lucide-react";
 import {useAuth} from "../context/AuthContext";
 

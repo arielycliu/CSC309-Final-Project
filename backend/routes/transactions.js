@@ -1,12 +1,9 @@
-const express = require("express");
-const {
-	PrismaClient,
-	TransactionType,
-	PromotionType,
-} = require("@prisma/client");
+import express from "express";
+import pkg from "@prisma/client";
+const { TransactionType, PromotionType } = pkg;
+import prisma from "../prisma/client.js";
 
 const router = express.Router();
-const prisma = new PrismaClient();
 
 const roleRank = {
 	regular: 1,
@@ -747,7 +744,7 @@ router.patch(
 
 // Ariel's subrouter for transactions/processed
 // keep in separate file for now to avoid complicated merge conflicts but can be put in transactions later
-const transactionsProcessedRouter = require('./transactions_processed');
+import transactionsProcessedRouter from './transactions_processed.js';
 router.use('/', transactionsProcessedRouter);
 
-module.exports = router;
+export default router;

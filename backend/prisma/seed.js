@@ -1,4 +1,4 @@
-const { createUser, createEvents, createPromotions, createTransaction, createTransactionPromotion, createEventOrganizer, createEventGuest, prisma } = require('./seed-helper');
+import { createUser, createEvents, createPromotions, createTransaction, createTransactionPromotion, createEventOrganizer, createEventGuest, prisma } from './seed-helper.js';
 
 // Seed database with 10 users (1 superuser, 1 manager, 1 cashier, 7 regular users)
 

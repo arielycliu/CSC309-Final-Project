@@ -137,4 +137,4 @@ function validateInputFields(validations, res) {
     return false;
 }
 
-module.exports = { validateString, validateEnum, validateDate, validateNumber, validateBoolean, validateInputFields };
+export { validateString, validateEnum, validateDate, validateNumber, validateBoolean, validateInputFields };

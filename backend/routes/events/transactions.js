@@ -1,7 +1,8 @@
-const express = require('express');
-const { PrismaClient, TransactionType } = require('@prisma/client');
-const prisma = new PrismaClient();
-const { CLEARANCE, requireClearance, roleRank } = require('../auth_middleware');
+import express from 'express';
+import pkg from '@prisma/client';
+const { TransactionType } = pkg;
+import prisma from '../../prisma/client.js';
+import { CLEARANCE, requireClearance, roleRank } from '../auth_middleware.js';
 
 const router = express.Router({ mergeParams: true });
 
@@ -152,4 +153,4 @@ router.post('/', requireClearance(CLEARANCE.REGULAR), async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

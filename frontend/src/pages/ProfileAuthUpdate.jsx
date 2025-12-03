@@ -1,6 +1,6 @@
 import {useState } from "react";
 import { z } from "zod";
-import '../styles/profile.css';
+import '../styles/Profile.css';
 import{NavLink} from "react-router-dom"
 import { toast } from 'sonner';
 import {useAuth} from "../context/AuthContext";

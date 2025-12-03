@@ -1,7 +1,6 @@
-const express = require('express');
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
-const { CLEARANCE, requireClearance, roleRank } = require('../auth_middleware');
+import express from 'express';
+import prisma from "../../prisma/client.js";
+import { CLEARANCE, requireClearance, roleRank } from '../auth_middleware.js';
 
 const router = express.Router({ mergeParams: true });
 
@@ -67,4 +66,4 @@ router.delete('/:userId', requireClearance(CLEARANCE.MANAGER), async (req, res) 
   }
 });
 
-module.exports = router;
+export default router;

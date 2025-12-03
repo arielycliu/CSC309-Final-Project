@@ -28,6 +28,6 @@ import { createUser, prisma } from './seed-helper.js';
         console.error(`Error creating superuser: ${err.message}`);
         process.exit(1);
     } finally {
-        await prisma.$disconnect();
+        // await prisma.$disconnect();
     }
 })();

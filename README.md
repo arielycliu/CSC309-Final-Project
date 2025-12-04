@@ -1,4 +1,4 @@
-# CSC309 Project - Web Application for Managing Points and Events
+# CSC309 Project - Kian Optimum
 
 A points-based reward system. Users can earn points through purchases and event participation, redeem them for rewards, and transfer points to other users. The system includes role-based access control for regular users, cashiers, managers, and superusers.
 

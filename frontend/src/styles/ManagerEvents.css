@@ -468,3 +468,65 @@
 .location-suggestions li:hover {
   background: #f5f5f5;
 }
+
+/* Header left + filter */
+.manager-card-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Filter container on the right of header */
+.manager-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+
+/* Filter label */
+.manager-filter-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #9ca3af;
+}
+
+/* The dropdown */
+.manager-filter-select {
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  padding: 4px 12px;
+  font-size: 12px;
+  background: #f9fafb;
+  color: #111827;
+  cursor: pointer;
+  appearance: none;           
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  position: relative;
+}
+
+/* Hover states*/
+.manager-filter-select:hover {
+  background: #f3f4f6;
+}
+
+.manager-filter-select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 1px #3b82f6;
+}
+
+@media (max-width: 600px) {
+  .manager-card-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .manager-filter {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}

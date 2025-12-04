@@ -165,6 +165,7 @@ router.get('/me/transactions', requireClearance(CLEARANCE.REGULAR), async (req, 
             type: true,
             spent: true,
             amount: true,
+            createdAt: true,
             promotions: { select: { promotionId: true }},
             remark: true
         },
@@ -177,6 +178,7 @@ router.get('/me/transactions', requireClearance(CLEARANCE.REGULAR), async (req, 
         type: t.type,
         spent: t.spent,
         amount: t.amount,
+        createdAt: t.createdAt,
         promotionIds: t.promotions.map(p => p.promotionId), // flatten
         remark: t.remark
     }));

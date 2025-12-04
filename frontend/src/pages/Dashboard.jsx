@@ -119,12 +119,17 @@ export default function Dashboard() {
     
     useEffect(() => {
         fetchUserData();
-        fetchAllTransactionsForCharts();
     }, []);
 
     useEffect(() => {
         fetchRecentTransactions();
     }, [currentPage]);
+
+    useEffect(() => {
+        if (userData) {
+            fetchAllTransactionsForCharts();
+        }
+    }, [userData]);
 
     const fetchUserData = async () => {
         try {
@@ -202,43 +207,33 @@ export default function Dashboard() {
             value
         }));
 
-        // 2. Points Over Time (Line Chart) - Group by date
-        const pointsByDate = {};
-        let cumulativePoints = 0;
-        
-        // Sort transactions by date (assuming newest first, reverse for chronological)
-        const sortedTx = [...transactions].reverse();
-        
-        sortedTx.forEach(tx => {
-            const amount = tx.amount || 0;
-            cumulativePoints += amount;
-            
-            // Use transaction ID as proxy for date grouping (simplified)
-            // In real scenario, you'd parse actual dates
-            const dateKey = new Date().toISOString().split('T')[0]; // Today's date as example
-            pointsByDate[dateKey] = cumulativePoints;
+        // 2. Points Over Time (Line Chart) - use real transaction dates
+        const changesByDate = {};
+        transactions.forEach(tx => {
+            const dateKey = tx.createdAt
+                ? new Date(tx.createdAt).toISOString().split('T')[0]
+                : new Date().toISOString().split('T')[0];
+            changesByDate[dateKey] = (changesByDate[dateKey] || 0) + (tx.amount || 0);
         });
 
-        // Generate last 7 days data
-        const last7Days = [];
+        const dateLabels = [];
         const today = new Date();
         for (let i = 6; i >= 0; i--) {
             const date = new Date(today);
             date.setDate(date.getDate() - i);
-            const dateStr = date.toISOString().split('T')[0];
-            last7Days.push({
-                date: dateStr,
-                value: Math.max(0, (userData?.points || 0) - Math.floor(Math.random() * 50))
-            });
+            dateLabels.push(date.toISOString().split('T')[0]);
         }
-        
-        // Add today's actual points
-        last7Days[6] = {
-            date: today.toISOString().split('T')[0],
-            value: userData?.points || 0
-        };
 
-        const pointsOverTime = last7Days;
+        const totalWindowChange = dateLabels.reduce((sum, key) => sum + (changesByDate[key] || 0), 0);
+        let baselinePoints = (userData?.points || 0) - totalWindowChange;
+
+        const pointsOverTime = dateLabels.map((dateKey) => {
+            baselinePoints += changesByDate[dateKey] || 0;
+            return {
+                date: dateKey,
+                value: Math.max(0, baselinePoints)
+            };
+        });
 
         // 3. Earnings vs Spending (Bar Chart)
         let totalEarned = 0;

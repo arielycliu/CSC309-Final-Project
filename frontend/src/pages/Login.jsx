@@ -55,7 +55,7 @@ function Login() {
               </defs>
             </svg>
           </div>
-          <h2 className="app-name">APP NAME</h2>
+          <h2 className="app-name">Kian Optimum</h2>
         </div>
 
         <div className="login-content">

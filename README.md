@@ -2,14 +2,6 @@
 
 A points-based reward system. Users can earn points through purchases and event participation, redeem them for rewards, and transfer points to other users. The system includes role-based access control for regular users, cashiers, managers, and superusers.
 
-
-## Tech Stack
-
-- **Frontend**: React with Vite, React Router
-- **Backend**: Node.js, Express
-- **Database**: SQLite with Prisma ORM
-- **Authentication**: JWT with bcrypt password hashing
-
 ## Deployment
 
 To be updated. Database has been pre-populated with data using `backend/prisma/seed.js` script.

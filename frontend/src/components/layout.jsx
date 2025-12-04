@@ -1,4 +1,4 @@
-import { Wallet, LayoutDashboard, QrCode, Send, Gift, Clock, Tag, Calendar, History, User, Settings, 
+import { LayoutDashboard, QrCode, Send, Gift, Clock, Tag, Calendar, History, User, Settings, 
     LogOut, DollarSign, TrendingUp, ArrowLeftRight, ChevronDown, ChevronUp, Gem, ClipboardClock, FolderPen,
     UserPlus, Users} from "lucide-react";
 import '../styles/layout.css';
@@ -6,6 +6,7 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import RoleSwitcher from "./RoleSwitcher.jsx";
 import { useAuth } from "../context/AuthContext";
 import UserImage from '../icons/user_image.png';
+import FaviconImage from '/favicon.svg';
 
 const Layout = () => {
     const { logout, activeRole, user} = useAuth();
@@ -152,7 +153,7 @@ const Layout = () => {
     return <div className="layout-container">
         <header className='top-bar'> 
             <NavLink to="/" id="app-div">
-                <Wallet id="app-icon" />App
+                <img src={FaviconImage} alt="Logo" id="app-icon" />Kian Optimum
             </NavLink>
 
             <nav id='page-links'>

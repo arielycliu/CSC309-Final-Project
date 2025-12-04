@@ -4,7 +4,7 @@ import {use, useState, useEffect } from "react";
 import { set, z } from "zod";
 import { useAuth } from "../context/AuthContext";
 import { ArrowLeft } from 'lucide-react';
-import "../styles/users.css"
+import "../styles/Users.css"
 import UserImage from '../icons/user_image.png';
 import { patchUser , getUserAvatarUrl} from "../lib/Users";
 import { toast } from 'sonner';
@@ -43,6 +43,8 @@ const EditUser = () => {
         role: userFromState?.role || "",
     });
     const isSuperuser = activeRole && activeRole === 'superuser'; 
+    const userIsSuperuser = userFromState.role === 'superuser';
+    const isManager = activeRole && activeRole === 'manager';
     
     const updateUser = async () => {
         setLoading(true);
@@ -147,15 +149,19 @@ const EditUser = () => {
                 <input type="email" placeholder={userFromState?.email} name="email" onChange={handleChange} value={formData.email || ""} required></input>
                 <p className={errors.email? "input-error": "input-error message"}>{errors.email || "Email must be of domain @mail.utoronto.ca"}</p>
 
-                <label>Role</label>
-                <select className="select-dropdown"name="role" onChange={handleChange} value={formData.role || ""}>
-                    <option value="" disabled>Select role</option>
-                    <option value="regular">Regular</option>
-                    <option value="cashier">Cashier</option>
-                    {isSuperuser && <option value="manager">Manager</option>}
-                    {isSuperuser && <option value="superuser">Superuser</option>}
-                </select>
-                <p className={errors.role? "input-error": "input-error message"}>{errors.role || "Cannot promote a suspicious user"}</p>
+                {!(isManager && userIsSuperuser) && (
+                    <>
+                        <label>Role</label>
+                        <select className="select-dropdown" name="role" onChange={handleChange} value={formData.role || ""}>
+                            <option value="" disabled>Select role</option>
+                            <option value="regular">Regular</option>
+                            <option value="cashier">Cashier</option>
+                            {isSuperuser && <option value="manager">Manager</option>}
+                            {isSuperuser && <option value="superuser">Superuser</option>}
+                        </select>
+                        <p className={errors.role? "input-error": "input-error message"}>{errors.role || "Cannot promote a suspicious user"}</p>
+                    </>
+                )}
 
                 {!userFromState?.verified && (
                     <div className='verify-checkbox'>

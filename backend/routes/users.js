@@ -18,7 +18,7 @@ const router = express.Router();
 
 
 const createUsersPayload = z.object({
-    utorid: z.string().min(7, "must be atleast 7 characters long").max(8, "utorid too long"),
+    utorid: z.string().min(7, "must be atleast 7 characters long").max(8, "too long max 8 characters"),
     name: z.string().min(1, "too short").max(50, "too long"),
     email: z.string().email("invalid email format").refine(val => val.endsWith("@mail.utoronto.ca"), {
         message: "must be of domain @mail.utoronto.ca"
@@ -494,7 +494,7 @@ router.patch("/:userId", requireClearance(CLEARANCE.MANAGER), validatePayload(pa
 
         // Check if trying to promote (moving to a higher role)
         if(newRoleLevel > currentRoleLevel && suspicious){
-            if(user.suspicious){
+            if(user.suspicious || suspicious){ //already suspicious or tying to make suspicious
                 return res.status(400).json({error: {role: "cannot promote a suspicious user"}});
             }
         }

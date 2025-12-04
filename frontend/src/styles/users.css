@@ -119,7 +119,7 @@
 
 .filter-form input[type="search"],
 .select-dropdown{
-    background-color: #f3f4f6; 
+    background-color: #fff; 
     border: 1px solid #d1d5db;
     border-radius: 0.5rem;      
     padding: 0.5rem 1rem;    

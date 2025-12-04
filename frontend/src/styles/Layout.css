@@ -204,6 +204,19 @@
 
 
 @media (max-width: 1100px) {
+  .nav-button{
+    width: 100%;
+  }
+  
+  /* using click on smaller screen*/
+  .nav-button.user-dropdown:hover .dropdown-content {
+    display: none !important;
+  }
+
+  .nav-button.user-dropdown.mobile-open .dropdown-content {
+    display: flex !important;
+  }
+
   .user-dropdown .dropdown-content {
     position: fixed;       
     top: 3rem;                 

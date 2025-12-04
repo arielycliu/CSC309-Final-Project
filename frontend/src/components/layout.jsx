@@ -35,14 +35,13 @@ const Layout = () => {
                         <QrCode className="icon" /> My QR Code 
                     </NavLink>
 
-                    <div className="points nav-button user-dropdown">
-                        <NavLink to="/transactions/transfer" className="nav-button">
+                    <div className="points nav-button user-dropdown" onClick={(e) => e.currentTarget.classList.toggle('mobile-open')}>
+                        <div className="nav-button">
                             <Gem className="icon"/>
                             <p>Points
                                 <ChevronDown className=" icon chevron-down" />
                             </p>
-                           
-                        </NavLink>
+                        </div>
 
                         <div className="dropdown-content">
                             <NavLink to="/transactions/transfer" className="nav-button">
@@ -86,11 +85,11 @@ const Layout = () => {
 
             {isManagerOrAbove && (
                 <> 
-                <div className="transactions nav-button user-dropdown">
-                    <NavLink to="/transactions" className="nav-button">
+                <div className="transactions nav-button user-dropdown" onClick={(e) => e.currentTarget.classList.toggle('mobile-open')}>
+                    <div className="nav-button">
                         <ArrowLeftRight className="icon"/>
                         <p>Transactions <ChevronDown className="icon" /></p>
-                    </NavLink>
+                    </div>
                     <div className="dropdown-content">
                         <NavLink to="/transactions/purchase" className="nav-button">
                             <DollarSign className="icon" />Create Purchase
@@ -131,7 +130,7 @@ const Layout = () => {
                     </NavLink>
 
                     {!isOrganizer && (
-                        <div className="promotions nav-button user-dropdown">
+                        <div className="promotions nav-button user-dropdown" onClick={(e) => isManagerOrAbove && e.currentTarget.classList.toggle('mobile-open')}>
                             <NavLink to="/promotions" className="nav-button">
                                 <Tag className="icon"/>
                                 <p>Promotions {isManagerOrAbove && <ChevronDown className="icon" />}</p>

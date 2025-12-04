@@ -1,4 +1,4 @@
-import "../styles/users.css"
+import "../styles/Users.css"
 import{NavLink, Outlet, useNavigate } from "react-router-dom"; 
 import { useAuth } from "../context/AuthContext";
 import { useEffect, useState } from "react";
@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight, Edit, UserPlus } from 'lucide-react';
 import { getUsers, getUserAvatarUrl} from "../lib/Users";
 import UserImage from '../icons/user_image.png';
 import { toast } from 'sonner';
+
 //what functionality should manager have for superusers?
 
 const UserSearch = () => {

@@ -85,6 +85,14 @@ const seedUsers = [
         role: 'regular',
         verified: true,
     },
+    {
+        utorid: 'maxel123',
+        email: 'bob.maxel@mail.utoronto.ca',
+        password: 'SuperAdmin001!',
+        name: 'Bob Maxel',
+        role: 'superuser',
+        verified: true,
+    },
 ];
 
 const seedEvents = [

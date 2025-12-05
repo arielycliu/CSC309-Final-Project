@@ -28,6 +28,21 @@ import {
 import "../styles/ManagerEvents.css";
 import { toast } from "sonner";
 
+function toLocalDateTimeInput(isoString) {
+  if (!isoString) return "";
+  const d = new Date(isoString); // this is the correct moment in time
+
+  const pad = (n) => String(n).padStart(2, "0");
+
+  const year = d.getFullYear();
+  const month = pad(d.getMonth() + 1); // 0-based
+  const day = pad(d.getDate());
+  const hours = pad(d.getHours());     // LOCAL hours
+  const minutes = pad(d.getMinutes());
+
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+
 export default function ManagerEvents() {
   const [events, setEvents] = useState([]);
   const [count, setCount] = useState(0);
@@ -181,8 +196,8 @@ export default function ManagerEvents() {
           name: data.name || "",
           description: data.description || "",
           location: data.location || "",
-          startTime: data.startTime ? data.startTime.slice(0, 16) : "",
-          endTime: data.endTime ? data.endTime.slice(0, 16) : "",
+          startTime: data.startTime ? toLocalDateTimeInput(data.startTime) : "",
+          endTime: data.endTime ? toLocalDateTimeInput(data.endTime) : "",
           capacity:
             data.capacity === null || data.capacity === undefined
               ? ""
@@ -225,8 +240,12 @@ export default function ManagerEvents() {
         name: createForm.name.trim(),
         description: createForm.description.trim(),
         location: createForm.location.trim(),
-        startTime: createForm.startTime,
-        endTime: createForm.endTime,
+        startTime: createForm.startTime
+          ? new Date(createForm.startTime).toISOString()
+          : null,
+        endTime: createForm.endTime
+          ? new Date(createForm.endTime).toISOString()
+          : null,
         capacity: createForm.capacity ? Number(createForm.capacity) : null,
         points: Number(createForm.points),
       };
@@ -284,18 +303,24 @@ export default function ManagerEvents() {
 
 
 
+    const originalStartLocal = toLocalDateTimeInput(selectedEvent.startTime);
+    const originalEndLocal = toLocalDateTimeInput(selectedEvent.endTime);
+
     if (
       editForm.startTime &&
-      editForm.startTime !== selectedEvent.startTime?.slice(0, 16)
+      editForm.startTime !== originalStartLocal
     ) {
       payload.startTime = new Date(editForm.startTime).toISOString();
     }
     if (
       editForm.endTime &&
-      editForm.endTime !== selectedEvent.endTime?.slice(0, 16)
+      editForm.endTime !== originalEndLocal
     ) {
       payload.endTime = new Date(editForm.endTime).toISOString();
     }
+
+
+
     if (
       editForm.capacity !== "" &&
       Number(editForm.capacity) !== selectedEvent.capacity
@@ -1121,8 +1146,8 @@ export default function ManagerEvents() {
                             <span className="manager-person-main">
                               {g.name}
                             </span>
-                             {" ("}
-                             
+                            {" ("}
+
                             <span className="manager-person-sub">
                               {g.utorid}
                             </span>

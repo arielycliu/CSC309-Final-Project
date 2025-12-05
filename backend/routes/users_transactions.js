@@ -138,7 +138,7 @@ router.get('/me/transactions', requireClearance(CLEARANCE.REGULAR), async (req, 
         return res.status(500).json({ 'error': 'UserId of self not found' })
     }
 
-    filters = { userId: userId }
+    const filters = { userId: userId }
     if (type != null) {
         filters.type = type
     }

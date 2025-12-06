@@ -48,6 +48,7 @@ const ProfileSettings = () => {
     const handleUpdateProfile = async () => {
         setLoading(true);
         try {
+            //get file from ref (input type file)
             const avatarFile = fileInputRef.current?.files[0];
             const userData = await updateUserProfile(formData, avatarFile);
             
@@ -79,6 +80,7 @@ const ProfileSettings = () => {
     };
 
     const handleEditClick = () => {
+        //open file dialog
         fileInputRef.current.click();
     };
 
@@ -97,12 +99,13 @@ const ProfileSettings = () => {
         if (!result.success) {
             // Convert Zod errors into { field: message }
             const fieldErrors = {};
-            console.log("FULL ZOD ERROR OBJ:", result.error._zod.def);
+            //console.log("FULL ZOD ERROR OBJ:", result.error._zod.def);
             result.error._zod.def.forEach(err => {
                 const field = err.path[0];
                 fieldErrors[field] = err.message;
             });
             setErrors(fieldErrors);
+            toast.error(`Failed to update profile. Please try again.`);
             return; // stop submit
         }
 

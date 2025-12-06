@@ -4,12 +4,22 @@ A points-based reward system. Users can earn points through purchases and event 
 
 ## Deployment
 
-To be updated. Database has been pre-populated with data using `backend/prisma/seed.js` script.
+The application has been deployed on Railway with a PostgreSQL database. The database has been pre-populated with test data using the `backend/prisma/seed.js` script.
 
+**Live URL:** https://csc309-final-project-production-6454.up.railway.app
 
 ## Demo Credentials
 
 User credentials to be used in demo:
+**Regular User**
+- UTORid: `lee9876`
+- Email: `jessica.lee@mail.utoronto.ca`
+- Password: `Jessica987!`
+
+**Regular User**
+- UTORid: `martin12`
+- Email: `robert.martin@mail.utoronto.ca`
+- Password: `Robert456!`
 
 **Regular User**
 - UTORid: `brown123`
@@ -31,8 +41,13 @@ User credentials to be used in demo:
 - Email: `sarah.johnson@mail.utoronto.ca`
 - Password: `SuperAdmin123!`
 
-**Superuser (Alternative)**
+**Superuser**
 - UTORid: `maxel123`
 - Email: `bob.maxel@mail.utoronto.ca`
 - Password: `SuperAdmin001!`
+
+**New user created in demo**
+- UTORid: `Tina123`
+- Name: `Tina Maxwell`
+- Email: `tina.maxwell@mail.utoronto.ca`
 

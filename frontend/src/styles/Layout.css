@@ -53,6 +53,7 @@
   flex-direction: column;
   font-size: small;
   padding: 0.5rem;
+  align-self: flex-end;
 }
 
 
@@ -67,16 +68,16 @@
 }
 
 
-.user-dropdown:hover{
-  cursor:pointer;
-}
-
 .user-dropdown {
   position: relative;
   display: flex;
   flex-direction: row;
   padding: 0;
   gap: 0.5rem;
+}
+
+.user-dropdown:hover{
+  cursor:pointer;
 }
 
 .user-dropdown .dropdown-content {
@@ -139,7 +140,6 @@
 .nav-button.user-dropdown:hover .dropdown-content{
   display: flex;
 }
-
 
 
 .user-dropdown .dropdown-content .dropdown-button:hover {

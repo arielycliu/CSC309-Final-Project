@@ -18,7 +18,7 @@ const Layout = () => {
     };
 
     // Determine if user has cashier or higher role
-    const isRegular = activeRole && activeRole === 'regular'; // put back after testing 
+    const isRegular = activeRole && activeRole === 'regular';  
     const isCashier = activeRole && activeRole === 'cashier';
     const isOrganizer = activeRole && activeRole === 'organizer';
     const isCashierOrAbove = activeRole && ['cashier', 'manager', 'superuser'].includes(activeRole);

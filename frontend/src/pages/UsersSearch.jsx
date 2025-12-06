@@ -13,7 +13,7 @@ const UserSearch = () => {
     const navigate = useNavigate();
     const { logout, activeRole, user} = useAuth();
     const [page, setPage] = useState(1);
-    const [limit] = useState(5);
+    const [limit] = useState(5); // 5 users per page
     const [count, setCount] = useState(0);
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -215,7 +215,7 @@ const UserSearch = () => {
                         )}
                     </div>
                 
-                    {/* Pagination */}
+
                     <div className="pagination">
                         <button
                             className="pagination-btn"

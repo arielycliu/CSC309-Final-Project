@@ -69,12 +69,13 @@ const EditUser = () => {
         if (!result.success) {
             // Convert Zod errors into { field: message }
             const fieldErrors = {};
-            console.log("FULL ZOD ERROR OBJ:", result.error._zod.def);
+            //console.log("FULL ZOD ERROR OBJ:", result.error._zod.def);
             result.error._zod.def.forEach(err => {
                 const field = err.path[0];
                 fieldErrors[field] = err.message;
             });
             setErrors(fieldErrors);
+            toast.error("Failed to update user. Please try again.");
             return; // stop submit
         }
 

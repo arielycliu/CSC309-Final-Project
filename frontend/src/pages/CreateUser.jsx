@@ -44,7 +44,7 @@ const CreateUser = () => {
             setLoading(false);
             setErrors(error.error || {});
             console.error("Failed to create user:", JSON.stringify(error));
-            toast.error("Failed to create user.");
+            toast.error("Failed to create user. Please try again.");
         }
     };
     const handleSubmit = async(e) => {
@@ -55,11 +55,12 @@ const CreateUser = () => {
         if (!result.success) {
             // Convert Zod errors into { field: message }
             const fieldErrors = {};
-            console.log("FULL ZOD ERROR OBJ:", result.error._zod.def);
+            //console.log("FULL ZOD ERROR OBJ:", result.error._zod.def);
             result.error._zod.def.forEach(err => {
                 const field = err.path[0];
                 fieldErrors[field] = err.message;
             });
+            toast.error("Failed to create user. Please try again.");
             setErrors(fieldErrors);
             return; // stop submit
         }

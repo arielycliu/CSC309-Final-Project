@@ -76,6 +76,7 @@ const ProfileAuthUpdate = () => {
                 fieldErrors[field] = err.message;
             });
             setErrors(fieldErrors);
+            toast.error("Failed to update password. Please try again.");
             return; // stop submit
         }
 

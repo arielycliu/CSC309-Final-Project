@@ -75,7 +75,7 @@ const seedUsers = [
         name: 'Robert Martin',
         role: 'regular',
         verified: true,
-        
+
     },
     {
         utorid: 'ahmed345',
@@ -164,9 +164,9 @@ const seedEventGuest = [
     { eventId: 3, userId: 6 },
     { eventId: 3, userId: 7 },
     { eventId: 4, userId: 6 },
-    { eventId: 4, userId: 9 }, 
+    { eventId: 4, userId: 9 },
     { eventId: 2, userId: 10 },
-    { eventId: 2, userId: 6 },  
+    { eventId: 2, userId: 6 },
 ];
 
 const seedPromotions = [
@@ -220,6 +220,66 @@ const seedPromotions = [
         rate: null,
         points: 50,
     },
+    {
+        name: 'Prime Day',
+        description: 'Get 100 points on purchases above $50',
+        type: 'onetime',
+        startTime: new Date('2025-07-01T00:00:00'),
+        endTime: new Date('2025-07-01T23:59:59'),
+        minSpending: 50,
+        rate: null,
+        points: 100,
+    },
+    {
+        name: 'Boxing Day',
+        description: 'Double points on all purchases',
+        type: 'onetime',
+        startTime: new Date('2025-12-26T00:00:00'),
+        endTime: new Date('2025-12-26T23:59:59'),
+        minSpending: null,
+        rate: 2.0,
+        points: null,
+    },
+    {
+        name: 'Summer Splash Bonus',
+        description: 'Earn 150 bonus points when spending $75 or more during summer',
+        type: 'automatic',
+        startTime: new Date('2026-06-21T00:00:00'),
+        endTime: new Date('2026-09-22T23:59:59'),
+        minSpending: 75.0,
+        rate: null,
+        points: 150,
+    },
+    {
+        name: 'Holiday Cheer',
+        description: 'Double points on all purchases during the holiday season',
+        type: 'automatic',
+        startTime: new Date('2025-12-15T00:00:00'),
+        endTime: new Date('2025-12-31T23:59:59'),
+        minSpending: null,
+        rate: 2.0,
+        points: null,
+    },
+    {
+        name: 'Birthday Treat',
+        description: 'Receive 120 bonus points on our birthday month',
+        type: 'onetime',
+        startTime: new Date('2026-06-01T00:00:00'),
+        endTime: new Date('2026-06-31T23:59:59'),
+        minSpending: null,
+        rate: null,
+        points: 120,
+    },
+    {
+        name: 'Weekend Booster',
+        description: 'Triple points on all weekend purchases',
+        type: 'automatic',
+        startTime: new Date('2025-01-01T00:00:00'),
+        endTime: new Date('2025-12-31T23:59:59'),
+        minSpending: null,
+        rate: 3.0,
+        points: null,
+    },
 ];
 
 const seedTransactions = [
@@ -240,7 +300,7 @@ const seedTransactions = [
     { type: 'purchase', userId: 8, createdById: 3, spent: 40.00, amount: 150, remark: 'Course materials', createdAt: new Date('2025-12-06T09:00:00') }, // Error: should be 160 ($40 * 4), adjustment will add missing 10
     { type: 'purchase', userId: 9, createdById: 3, spent: 8.00, amount: 147, remark: 'Drink', createdAt: new Date('2025-12-06T15:00:00') }, // Error: 32 base + 100 bonus + 15 extra by mistake, adjustment will remove 15
     { type: 'purchase', userId: 10, createdById: 3, spent: 20.00, amount: 130, remark: 'Supplies', createdAt: new Date('2025-12-07T16:00:00') }, // 80 base + 50 bonus
-    { type: 'purchase', userId: 2, createdById: 3, spent: 12.00, amount: 48, remark: 'Breakfast', createdAt: new Date('2025-11-12T08:00:00') }, 
+    { type: 'purchase', userId: 2, createdById: 3, spent: 12.00, amount: 48, remark: 'Breakfast', createdAt: new Date('2025-11-12T08:00:00') },
 
     // Adjustment transactions 4 (done)
     { type: 'adjustment', userId: 8, createdById: 2, amount: 10, remark: 'Correction: missing points', relatedTransactionId: 11, createdAt: new Date('2025-12-07T09:00:00') }, // Fixing purchase 11 (user 8)
@@ -276,7 +336,7 @@ const seedTransactionPromotion = [
     // to clear, first run npx prisma db push --force-reset in terminal 
     try {
         console.log('Starting database seed...\n');
-        
+
         // Create users
         console.log('--- Creating Users ---');
         for (const userData of seedUsers) {
@@ -335,12 +395,12 @@ const seedTransactionPromotion = [
         console.log('\n--- Creating Transactions ---');
         // Create transactions
         for (const txData of seedTransactions) {
-            try{
+            try {
                 const tx = await createTransaction(txData);
                 console.log(`created ${tx.type} transaction for user ${tx.userId}`);
             } catch (err) {
                 console.error(`Failed to create transaction for user ${txData.userId}: ${err.message}`);
-            }   
+            }
         }
 
         console.log('\n--- Linking Transactions to Promotions ---');
@@ -353,7 +413,7 @@ const seedTransactionPromotion = [
                 console.error(`Failed to link transaction to promotion: ${err.message}`);
             }
         }
-    
+
         console.log('\n Database seed completed');
     } catch (err) {
         console.error(`Error during seeding: ${err.message}`);

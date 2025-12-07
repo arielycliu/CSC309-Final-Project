@@ -138,7 +138,7 @@ const RedemptionRequest = () => {
                                 step="1"
                                 required
                             />
-                            <small>You have {user?.points || 0} points available</small>
+                            {/* <small>You have {user?.points || 0} points available</small> */}
                         </div>
 
                         <div className="form-group">

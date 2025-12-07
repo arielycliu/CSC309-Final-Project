@@ -191,7 +191,7 @@ router.get('/', requireClearance(CLEARANCE.REGULAR), async (req, res) => {
         where: filters,
         skip,
         take,
-        orderBy: { id: 'asc' },
+        orderBy: { startTime: 'asc' },
         select: {
             id: true,
             name: true,

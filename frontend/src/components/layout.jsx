@@ -1,7 +1,7 @@
 import { LayoutDashboard, QrCode, Send, Gift, Clock, Tag, Calendar, History, User, Settings, 
     LogOut, DollarSign, TrendingUp, ArrowLeftRight, ChevronDown, ChevronUp, Gem, ClipboardClock, FolderPen,
     UserPlus, Users} from "lucide-react";
-import '../styles/layout.css';
+import '../styles/Layout.css';
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import RoleSwitcher from "./RoleSwitcher.jsx";
 import { useAuth } from "../context/AuthContext";

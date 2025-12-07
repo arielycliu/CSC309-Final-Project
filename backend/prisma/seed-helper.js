@@ -2,13 +2,10 @@
  * If you need to initialize your database with some data, you may write a script
  * to do so here.
  */
-'use strict';
 
-const { PrismaClient } = require('@prisma/client');
-const bcrypt = require('bcrypt');
-const { z } = require('zod');
-
-const prisma = new PrismaClient();
+import prisma from '../prisma/client.js';
+import bcrypt from 'bcrypt';
+import { z } from 'zod';
 
 const createUserSchema = z.object({
   utorid: z.string().regex(/^[a-zA-Z0-9]+$/, {
@@ -220,4 +217,4 @@ async function createTransactionPromotion(transactionPromotionData){
   return transactionPromotion;
 }
 
-module.exports = { createUser, createEvents, createPromotions, createTransaction, createTransactionPromotion, createEventOrganizer, createEventGuest, prisma };
+export { createUser, createEvents, createPromotions, createTransaction, createTransactionPromotion, createEventOrganizer, createEventGuest, prisma };

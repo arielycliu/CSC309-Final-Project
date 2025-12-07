@@ -1,12 +1,11 @@
-const express = require("express");
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+import express from "express";
+import prisma from "../../prisma/client.js";
 
-const organizersRouter = require('./organizers');
-const guestsRouter = require('./guests');
-const eventTxRouter = require('./transactions');
+import organizersRouter from './organizers.js';
+import guestsRouter from './guests.js';
+import eventTxRouter from './transactions.js';
 
-const { CLEARANCE, requireClearance, roleRank } = require('../auth_middleware');
+import { CLEARANCE, requireClearance, roleRank } from '../auth_middleware.js';
 
 
 const router = express.Router();
@@ -488,4 +487,4 @@ router.use('/:eventId/organizers', organizersRouter);
 router.use('/:eventId/guests', guestsRouter);
 router.use('/:eventId/transactions', eventTxRouter);
 
-module.exports = router;
+export default router;

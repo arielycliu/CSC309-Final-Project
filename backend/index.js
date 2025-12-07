@@ -1,7 +1,11 @@
 #!/usr/bin/env node
-'use strict';
-require('dotenv').config();
-const path = require('path');
+import 'dotenv/config';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const Port = () => {
     const args = process.argv;
@@ -20,9 +24,9 @@ const Port = () => {
     return num;
 };
 
-const express = require("express");
-const { expressjwt: jwt } = require("express-jwt");
-const cors = require("cors");
+import express from "express";
+import { expressjwt as jwt } from "express-jwt";
+import cors from "cors";
 const app = express();
 
 // CORS configuration - allow frontend to access backend
@@ -45,11 +49,11 @@ app.use(
     })
 );
 
-const authRoutes = require("./routes/auth");
-const eventRoutes = require("./routes/events");
-const promotionRoutes = require("./routes/promotions");
-const transactionRoutes = require("./routes/transactions");
-const userRoutes = require("./routes/users");
+import authRoutes from "./routes/auth.js";
+import eventRoutes from "./routes/events/index.js";
+import promotionRoutes from "./routes/promotions.js";
+import transactionRoutes from "./routes/transactions.js";
+import userRoutes from "./routes/users.js";
 
 app.use("/auth", authRoutes);
 app.use("/events", eventRoutes);
@@ -64,16 +68,15 @@ app.use((err, req, res, next) => {
     return next(err);
 });
 
-if (require.main === module) {
-    const port = Port();
-    const server = app.listen(port, () => {
-        console.log(`Server running on port ${port}`);
-    });
+// Start server when run directly (ES module equivalent of require.main === module)
+const port = Port();
+const server = app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+});
 
-    server.on("error", (err) => {
-        console.error(`cannot start server: ${err.message}`);
-        process.exit(1);
-    });
-}
+server.on("error", (err) => {
+    console.error(`cannot start server: ${err.message}`);
+    process.exit(1);
+});
 
-module.exports = app;
+export default app;

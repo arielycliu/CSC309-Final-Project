@@ -1,7 +1,6 @@
-const { expressjwt: jwt } = require('express-jwt');
-require('dotenv').config();
-const { PrismaClient} = require('@prisma/client');
-const prisma = new PrismaClient();
+import { expressjwt as jwt } from 'express-jwt';
+import 'dotenv/config';
+import prisma from '../prisma/client.js';
 
 const CLEARANCE = {
   ANY: 0,
@@ -127,7 +126,7 @@ function requireClearanceUpdateRole(minClearance) {
 }
 
 
-module.exports = { CLEARANCE, requireClearance, requireAuth, roleRank, validatePayload, requireClearanceUpdateRole, attachUser};
+export { CLEARANCE, requireClearance, requireAuth, roleRank, validatePayload, requireClearanceUpdateRole, attachUser};
 
 // temp_middleware.js
 // require('dotenv').config();

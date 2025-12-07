@@ -1,5 +1,5 @@
 import{NavLink, Outlet, useNavigate } from "react-router-dom"
-import '../styles/profile.css';
+import '../styles/Profile.css';
 import{User, UserPen, UserLock} from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import UserImage from '../icons/user_image.png';

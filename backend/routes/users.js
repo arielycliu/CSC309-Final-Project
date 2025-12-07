@@ -1,11 +1,9 @@
-const { CLEARANCE, requireClearance, validatePayload} = require('./auth_middleware');
-const { v4: uuidv4 } = require('uuid');
-const {z} = require("zod");
-const bcrypt = require('bcrypt');
-const { PrismaClient} = require('@prisma/client');
-
-const prisma = new PrismaClient();
-const express = require("express");
+import { CLEARANCE, requireClearance, validatePayload} from './auth_middleware.js';
+import { v4 as uuidv4 } from 'uuid';
+import {z} from "zod";
+import bcrypt from 'bcrypt';
+import prisma from '../prisma/client.js';
+import express from "express";
 const router = express.Router();
 
 
@@ -45,8 +43,8 @@ router.post("/", requireClearance(CLEARANCE.CASHIER), validatePayload(createUser
 
    //create user 
    try{
-        resetToken = uuidv4();
-        expiresAtDate = new Date();
+        const resetToken = uuidv4();
+        const expiresAtDate = new Date();
         expiresAtDate.setDate(expiresAtDate.getDate() + 7); //7 days 
         const resetExpiresAt = expiresAtDate.toISOString();
         const user = await prisma.user.create({
@@ -157,19 +155,19 @@ router.get("/count", requireClearance(CLEARANCE.MANAGER), async(req, res)=> {
 
 
 async function getUsersValidPromotions(user){
-    promotions = [];
+    let promotions = [];
 
     //get user promotions 
-    used_promotions = user.ownedTransactions;
+    const used_promotions = user.ownedTransactions;
     if(!used_promotions){
         return promotions;
     }
-    used_prmotions_id = used_promotions.map(promotion => promotion.id);
+    const used_prmotions_id = used_promotions.map(promotion => promotion.id);
 
     //console.log("promotions used", promotions_id);
 
     //get all promotions that are not these ids 
-    promotions_found = await prisma.promotions.findMany({
+    const promotions_found = await prisma.promotions.findMany({
         where: {
             id:{
                 notIn: used_prmotions_id
@@ -189,9 +187,14 @@ async function getUsersValidPromotions(user){
     return promotions;
 }
 
-const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
+import multer from "multer";
+import path from "path";
+import fs from "fs";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const upload =  multer({ storage: multer.memoryStorage() });
 const patchSelfPayload = z.object({
     name: z.string().min(1, "name too short").max(50, "name too long").optional().nullable(),
@@ -294,7 +297,8 @@ router.get("/me", requireClearance(CLEARANCE.REGULAR), async(req, res) =>{
                 createdAt: true, lastLogin: true, verified: true, avatarUrl: true}
         });
 
-        promotions = await getUsersValidPromotions(user);
+        
+        const promotions = await getUsersValidPromotions(user);
         user.promotions = promotions
         return res.json(user);
 
@@ -571,7 +575,7 @@ router.patch("/me/password", requireClearance(CLEARANCE.REGULAR), validatePayloa
 });
 
 // Ariel's subrouter for /users/transactions
-const userTransactionsRouter = require('./users_transactions');
+import userTransactionsRouter from './users_transactions.js';
 router.use('/', userTransactionsRouter);
 
-module.exports = router;
+export default router;

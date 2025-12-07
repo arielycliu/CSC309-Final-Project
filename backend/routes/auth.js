@@ -1,11 +1,10 @@
-const express = require("express");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const { v4: uuidv4 } = require("uuid");
-const { PrismaClient } = require("@prisma/client");
+import express from "express";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { v4 as uuidv4 } from "uuid";
+import prisma from "../prisma/client.js";
 
 const router = express.Router();
-const prisma = new PrismaClient();
 
 const TOKEN_EXPIRY_MS = 60 * 60 * 1000; // 1 hour
 const RESET_EXPIRY_MS = 60 * 60 * 1000; // 1 hour
@@ -196,4 +195,4 @@ router.post("/resets/:resetToken", async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;

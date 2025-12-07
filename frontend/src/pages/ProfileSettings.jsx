@@ -1,7 +1,7 @@
 import { use, useRef, useState, useEffect } from "react";
 import { Pen } from "lucide-react";
 import { z } from "zod";
-import '../styles/profile.css';
+import '../styles/Profile.css';
 import { useAuth } from "../context/AuthContext";
 import { toast } from 'sonner';
 import { updateUserProfile } from "../lib/Profile";

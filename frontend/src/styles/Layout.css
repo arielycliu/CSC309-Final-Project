@@ -277,6 +277,11 @@
   .nav-button.active .icon{
     color:black;
   }
+
+  .top-bar {
+    padding: 0; 
+  }
+
 }
 
 

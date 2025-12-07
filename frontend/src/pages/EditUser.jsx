@@ -140,7 +140,7 @@ const EditUser = () => {
                             />
                             <span className="slider"></span>
                         </label>
-                        <span>{formData.suspicious ? 'Suspicious' : 'Not Suspicious'}</span>
+                        <span>Suspicious</span>
                     </div>
                 </div>
             </div>

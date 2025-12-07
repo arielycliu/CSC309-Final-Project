@@ -336,7 +336,7 @@ label.required::after {
 
 @media (max-width: 1100px) { 
     .settings-page {
-        width: 80%;      
+        width: 98%;      
         max-width: 900px;  
         margin: 0 auto;    
     }

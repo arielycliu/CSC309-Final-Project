@@ -38,6 +38,15 @@ const regularQuickActions = [
     },
 ];
 
+const organizerQuickActions = [
+    {
+        title: "Manage Events",
+        desc: "Create and update events",
+        icon: Calendar,
+        path: "/events"
+    },
+];
+
 const cashierQuickActions = [
     {
         title: "Process Redemptions",
@@ -316,6 +325,8 @@ export default function Dashboard() {
                                 return managerQuickActions;
                             } else if (activeRole === 'cashier') {
                                 return cashierQuickActions;
+                            } else if (activeRole === 'organizer') {
+                                return organizerQuickActions
                             } else {
                                 return regularQuickActions;
                             }

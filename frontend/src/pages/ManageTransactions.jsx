@@ -184,7 +184,7 @@ export default function ManageTransactions() {
     if (transaction.received !== undefined) return `+${transaction.received}`;
     if (transaction.awarded !== undefined) return `+${transaction.awarded}`;
     if (transaction.amount !== null && transaction.amount !== undefined) {
-      return transaction.amount >= 0 ? `+${transaction.amount}` : transaction.amount;
+      return transaction.amount >= 0 ? `+${transaction.amount}` : `${transaction.amount}`;
     }
     return '0';
   };

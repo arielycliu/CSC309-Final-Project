@@ -86,4 +86,4 @@ VITE_MAPBOX_TOKEN="pk.eyJ1IjoiYWxsb2YwMiIsImEiOiJjbWlqdmJwZDMxNjFzM2twc3JtZ2FseX
 
 ### Mount volume for persistent storage (for avatar pictures):
 1. Click "Create" -> "Volume" -> "backend"
-2. Add volumne mount path "/uploads/avatars"
+2. Add volume mount path "/uploads/avatars"

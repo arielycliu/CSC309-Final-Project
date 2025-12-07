@@ -35,7 +35,7 @@ const ProcessRedemptions = () => {
                 qrbox: { width: 250, height: 250 },
             },
             (decodedText) => {
-                setTransactionId(decodedText);
+                setTransactionId(decodedText.trim());
                 fetchTransactionInfo(decodedText);
                 stopScanning();
                 toast.success('QR code scanned successfully!');

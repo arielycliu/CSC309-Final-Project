@@ -12,7 +12,7 @@ const PendingRedemptions = () => {
     const [loading, setLoading] = useState(true);
     const [allRedemptions, setAllRedemptions] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const limit = 5;
+    const limit = 3;
 
     useEffect(() => {
         fetchPendingRedemptions();
@@ -58,7 +58,7 @@ const PendingRedemptions = () => {
             }
             
             const pending = allTransactions.filter(
-                transaction => transaction.type === 'redemption' && !transaction.processedBy
+                transaction => transaction.processedById == null
             );
             setAllRedemptions(pending);
         } catch (error) {
@@ -107,7 +107,7 @@ const PendingRedemptions = () => {
                                 <div className="redemption-qr-section">
                                     <div className="qr-code-wrapper">
                                         <QRCodeSVG 
-                                            value={btoa(redemption.id.toString())} 
+                                            value={redemption.id.toString()}
                                             size={200}
                                             level="M"
                                         />

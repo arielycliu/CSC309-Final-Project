@@ -5,7 +5,10 @@
 }
 
 .process-redemptions-page .page-header {
+	display: flex;
+	flex-direction: column;
 	margin-bottom: 2rem;
+	gap: 0em;
 }
 
 .process-redemptions-page .page-header h2 {
@@ -15,18 +18,17 @@
 	margin-bottom: 0.5rem;
 }
 
-.process-redemptions-page .page-header p {
-	color: #6b7280;
-	font-size: 1rem;
-}
-
 .process-redemptions-page .process-form-container {
 	display: grid;
-	grid-template-columns: 2fr 1fr;
+	grid-template-columns: 2fr 1.25fr;
 	gap: 2rem;
 }
 
 .process-redemptions-page .process-form {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	height: fit-content;
 	background: white;
 	border-radius: 12px;
 	padding: 2rem;
@@ -311,7 +313,7 @@
 	margin: 0.25rem 0;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
 	.process-redemptions-page .process-form-container {
 		grid-template-columns: 1fr;
 	}

@@ -204,18 +204,17 @@ const patchSelfPayload = z.object({
     birthday: z.string()
     .optional()
     .nullable()
-    .refine((val) => {
-    if (!val) return true; // allow null/undefined
-        const date = new Date(val);
-        if (isNaN(date.getTime())) return false; // invalid date
-        const [year, month, day] = val.split("-").map(Number);
-        return (
-        date.getFullYear() === year &&
-        date.getMonth() + 1 === month && 
-        date.getDate() + 1 === day
-        );
-    }, "Birthday must be a valid date in YYYY-MM-DD format")
-    
+    // .refine((val) => {
+    // if (!val) return true; // allow null/undefined
+    //     const date = new Date(val);
+    //     if (isNaN(date.getTime())) return false; // invalid date
+    //     const [year, month, day] = val.split("-").map(Number);
+    //     return (
+    //     date.getFullYear() === year &&
+    //     date.getMonth() + 1 === month && 
+    //     date.getDate()  === day
+    //     );
+    // }, "Birthday must be a valid date in YYYY-MM-DD format")
 });
 
 router.patch("/me", requireClearance(CLEARANCE.REGULAR), upload.single("avatar"), validatePayload(patchSelfPayload), async(req, res)=> {

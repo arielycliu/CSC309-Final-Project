@@ -26,6 +26,7 @@ import UserSearch from './pages/UsersSearch.jsx';
 import EditUser from './pages/EditUser.jsx'
 import CreateUser from './pages/CreateUser.jsx';
 import MyQRCode from './pages/MyQRCode.jsx';
+import NotFound from './pages/NotFound.jsx';
 import PendingRedemptions from './pages/PendingRedemptions.jsx';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'sonner';
@@ -75,6 +76,7 @@ function App() {
                 {/* add other route paths as they are created*/}
               </Route>
             </Route>
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
       </BrowserRouter>

@@ -33,5 +33,57 @@ You should write detailed description on:
 9. Add our mapbox token to your `.env` file or generate a new one: `VITE_MAPBOX_TOKEN="pk.eyJ1IjoiYWxsb2YwMiIsImEiOiJjbWlqdmJwZDMxNjFzM2twc3JtZ2FseXFwIn0.lBIEqvbWuYKITrzW1qZezA"`
 10. Run `npm run dev` to start the frontend server locally
 
+TLDR:
+Backend env
+```
+JWT_SECRET=<Your-secret-here>
+FRONTEND_URL="http://localhost:5173"
+DATABASE_URL="postgres://f21a662169a1a4cf1c0f196f46631b526c125f412a66466b36ab5e2049f0e6ce:sk_kBEftsUXEZ82wznWwEXjE@db.prisma.io:5432/postgres?sslmode=require"
+```
+
+Frontend env
+```
+VITE_API_BASE="http://localhost:3000"
+VITE_MAPBOX_TOKEN="pk.eyJ1IjoiYWxsb2YwMiIsImEiOiJjbWlqdmJwZDMxNjFzM2twc3JtZ2FseXFwIn0.lBIEqvbWuYKITrzW1qZezA"
+```
 
 ## DEPLOYING ON RAILWAY
+1. Start a new project -> choose empty project
+
+### Set up backend:
+2. Add a service, give railway github permission to the repo -> select CSC309-Final-Project
+3. Go to settings -> click "Add Root Directory" under "Source Repo"
+4. Select `/backend`
+5. Click "Generate Domain" under "Networking"
+6. Scroll down to the "Build" section, add `npx prisma generate` as the custom build command
+7. Set `node index.js 3000` as the "Custom Start Command" under section "Deploy"
+8. Configure environmental variables
+    a. Go the the variable tab:
+    ```
+    DATABASE_URL = postgres://f21a662169a1a4cf1c0f196f46631b526c125f412a66466b36ab5e2049f0e6ce:sk_kBEftsUXEZ82wznWwEXjE@db.prisma.io:5432/postgres?sslmode=require
+    JWT_SECRET = <Your-secret-here>
+    FRONTEND_URL = <blank>
+    ```
+    b. We will update FRONTEND_URL later
+9. Deploy changes
+
+### Set up frontend:
+2. Click "Create" in the upper right hand corner -> "Github Repo" -> select "CSC309-Final-Project"
+3. Go to settings -> click "Add Root Directory" under "Source Repo"
+4. Select `/frontend`
+5. Click "Generate Domain" under "Networking"
+6. Scroll down to the "Build" section, add `npm run build` as the custom build command
+7. Set `npx serve -s dist` as the "Custom Start Command" under section "Deploy"
+8. Configure environmental variables
+    a. Go the the variable tab:
+    ```
+    VITE_API_BASE = <Generated-backend-url>
+    VITE_MAPBOX_TOKEN = "pk.eyJ1IjoiYWxsb2YwMiIsImEiOiJjbWlqdmJwZDMxNjFzM2twc3JtZ2FseXFwIn0.lBIEqvbWuYKITrzW1qZezA"
+    ```
+    b. Go to the backend service -> Settings -> Networking -> Public Networking -> and copy the domain for `VITE_API_BASE`
+    c. Can also do `${{<railway-backend-name>.RAILWAY_PRIVATE_DOMAIN}}`
+9. Deploy changes
+
+### Set up postgres db (for avatar pictures):
+1. Click "Create" -> "Database" -> "Postgres"
+2. 

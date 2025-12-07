@@ -133,11 +133,11 @@ const TransactionHistory = () => {
       case 'redemption':
         return `Redemption - Points redeemed`;
       case 'adjustment':
-        return `Adjustment - Related ID: ${transaction.relatedId || 'N/A'}`;
+        return transaction.relatedId ? `Adjustment - Related Transaction: #${transaction.relatedId}` : 'Adjustment';
       case 'transfer':
         return transaction.amount >= 0 ? 'Transfer received' : 'Transfer sent';
       case 'event':
-        return `Event reward - Related ID: ${transaction.relatedId || 'N/A'}`;
+        return transaction.relatedId ? `Event reward - Event #${transaction.relatedId}` : 'Event reward';
       default:
         return transaction.type;
     }

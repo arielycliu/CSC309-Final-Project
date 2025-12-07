@@ -40,6 +40,7 @@ User credentials to be used in demo:
 - UTORid: `johnson1`
 - Email: `sarah.johnson@mail.utoronto.ca`
 - Password: `SuperAdmin123!`
+- To be temporarily updated for demo to: SuperAdmin124!
 
 **Superuser**
 - UTORid: `maxel123`

@@ -85,7 +85,10 @@ const Layout = () => {
             )}
 
             {isManagerOrAbove && (
-                <> 
+                <>
+                <NavLink to="/my-qr-code" className="nav-button">
+                    <QrCode className="icon" /> My QR Code 
+                </NavLink>
                 <div className="transactions nav-button user-dropdown" onClick={(e) => e.currentTarget.classList.toggle('mobile-open')}>
                     <div className="nav-button">
                         <ArrowLeftRight className="icon"/>

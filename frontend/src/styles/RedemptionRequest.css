@@ -22,7 +22,7 @@
 
 .redemption-request-page .transaction-form-container {
 	display: grid;
-	grid-template-columns: 2fr 1fr;
+	grid-template-columns: 2fr 1.25fr;
 	gap: 2rem;
 }
 
@@ -31,7 +31,7 @@
 	display: flex;
 	flex-direction: column;
 	align-items: stretch;
-	background: white;
+	gap: 1rem;
 	border-radius: 12px;
 	padding: 2rem;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -58,7 +58,6 @@
 	border: 1px solid #d1d5db;
 	border-radius: 8px;
 	font-size: 1rem;
-	transition: border-color 0.2s;
 }
 
 .redemption-request-page .form-group input:focus,
@@ -68,22 +67,10 @@
 	box-shadow: 0 0 0 3px rgba(3, 2, 19, 0.1);
 }
 
-.redemption-request-page .form-group small {
-	display: block;
-	margin-top: 0.5rem;
-	font-size: 0.75rem;
-	color: #6b7280;
-}
-
-.redemption-request-page .form-group textarea {
-	resize: vertical;
-	font-family: inherit;
-}
-
 .redemption-request-page .form-actions {
 	display: flex;
 	gap: 1rem;
-	margin-top: 2rem;
+	margin-top: 0rem;
 }
 
 .redemption-request-page .cancel-btn,
@@ -187,12 +174,6 @@
 	margin: 0.5rem 0;
 }
 
-.redemption-request-page .qr-instruction {
-	font-weight: 600;
-	color: #374151;
-	margin-top: 1rem;
-}
-
 .redemption-request-page .qr-code-display {
 	margin: 2rem 0;
 }
@@ -203,13 +184,6 @@
 	background: white;
 	border-radius: 8px;
 	border: 2px solid #e5e7eb;
-}
-
-.redemption-request-page .qr-code-label {
-	margin-top: 1rem;
-	font-size: 0.875rem;
-	color: #6b7280;
-	font-weight: 600;
 }
 
 .redemption-request-page .success-actions {
@@ -227,7 +201,6 @@
 	font-size: 1rem;
 	font-weight: 600;
 	cursor: pointer;
-	transition: all 0.2s;
 }
 
 .redemption-request-page .create-another-btn {

@@ -326,11 +326,16 @@ const seedTransactions = [
 
     // Redemption transactions 6  not yet processed (done)
     { type: 'redemption', userId: 1, createdById: 1, amount: -10, remark: 'Gift card' },
+    { type: 'redemption', userId: 1, createdById: 1, amount: -50, remark: 'Merchandise' },
+    { type: 'redemption', userId: 1, createdById: 1, amount: -12, remark: 'Voucher' },
+    { type: 'redemption', userId: 1, createdById: 1, amount: -300, remark: 'TV' },
+    { type: 'redemption', userId: 1, createdById: 1, amount: -5, remark: 'Bananas' },
+    { type: 'redemption', userId: 1, createdById: 1, amount: -100, remark: 'Pot' },
     { type: 'redemption', userId: 3, createdById: 3, amount: -50, remark: 'Merchandise' },
     { type: 'redemption', userId: 7, createdById: 7, amount: -15, remark: 'Voucher' },
     { type: 'redemption', userId: 8, createdById: 8, amount: -80, remark: 'TV' },
     { type: 'redemption', userId: 9, createdById: 9, amount: -20, remark: 'Coupon' },
-    { type: 'redemption', userId: 10, createdById: 10, amount: -5, remark: 'apples' },
+    { type: 'redemption', userId: 10, createdById: 10, amount: -5, remark: 'Apples' },
 
 ];
 

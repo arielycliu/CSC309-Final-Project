@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useAuth } from '../context/AuthContext';
-import { Gift, DollarSign, FileText, QrCode } from 'lucide-react';
+import { DollarSign, FileText } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import '../styles/RedemptionRequest.css';
 
@@ -97,12 +97,11 @@ const RedemptionRequest = () => {
                     <div className="qr-code-display">
                         <div className="qr-code-wrapper">
                             <QRCodeSVG 
-                                value={btoa(createdTransaction.id.toString())} 
+                                value={createdTransaction.id.toString()} 
                                 size={256}
                                 level="M"
                             />
                         </div>
-                        <p className="qr-code-label">Transaction ID: {createdTransaction.id}</p>
                     </div>
                     <div className="success-actions">
                         <button
@@ -138,7 +137,6 @@ const RedemptionRequest = () => {
                                 step="1"
                                 required
                             />
-                            <small>You have {user?.points || 0} points available</small>
                         </div>
 
                         <div className="form-group">
@@ -152,7 +150,7 @@ const RedemptionRequest = () => {
                                 value={formData.remark}
                                 onChange={handleChange}
                                 placeholder="Add any additional notes..."
-                                rows="3"
+                                rows="4"
                             />
                         </div>
 
@@ -178,21 +176,13 @@ const RedemptionRequest = () => {
                         <h3>Redemption Info</h3>
                         <div className="info-item">
                             <strong>How it works:</strong>
-                            <p>Enter the amount of points you want to redeem</p>
                             <p>After creating the request, you'll receive a QR code</p>
                             <p>Show the QR code to a cashier to complete the redemption</p>
                         </div>
                         <div className="info-item">
                             <strong>Requirements:</strong>
-                            <p>You must be verified to create redemption requests</p>
-                            <p>You must have sufficient points in your account</p>
-                            <p>Points are deducted when the cashier processes your request</p>
-                        </div>
-                        <div className="info-item">
-                            <strong>QR Code:</strong>
-                            <p>Each redemption request has a unique QR code</p>
-                            <p>The QR code contains the transaction ID</p>
-                            <p>Cashiers will scan this to process your redemption</p>
+                            <p>You must be verified</p>
+                            <p>You must have sufficient points</p>
                         </div>
                     </div>
                 </div>

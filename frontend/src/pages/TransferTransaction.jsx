@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useAuth } from '../context/AuthContext';
-import { ArrowRightLeft, User, DollarSign, FileText, QrCode, X } from 'lucide-react';
+import { User, DollarSign, FileText, QrCode, X } from 'lucide-react';
 import { Html5Qrcode } from 'html5-qrcode';
 import { QRCodeSVG } from 'qrcode.react';
 import '../styles/TransferTransaction.css';
@@ -12,7 +12,6 @@ const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3000';
 const TransferTransaction = () => {
     const { token, user } = useAuth();
     const navigate = useNavigate();
-    const { userId: urlUserId } = useParams();
     const [loading, setLoading] = useState(false);
     const [scanning, setScanning] = useState(false);
     const [showMyQR, setShowMyQR] = useState(false);
@@ -23,13 +22,6 @@ const TransferTransaction = () => {
         amount: '',
         remark: '',
     });
-
-    useEffect(() => {
-        if (urlUserId) {
-            setFormData(prev => ({ ...prev, userId: urlUserId }));
-            fetchRecipientInfo(urlUserId);
-        }
-    }, [urlUserId]);
 
     const fetchRecipientInfo = async (userId) => {
         try {
@@ -87,6 +79,7 @@ const TransferTransaction = () => {
                 },
                 (errorMessage) => {
                     console.log(errorMessage);
+                    toast.error(errorMessage);
                 }
             ).catch((err) => {
                 toast.error('Failed to start camera. Please check permissions.');
@@ -103,6 +96,7 @@ const TransferTransaction = () => {
                 setScanning(false);
             }).catch((err) => {
                 console.error('Error stopping scanner:', err);
+                toast.error('Error stopping scanner')
                 setScanning(false);
             });
         }
@@ -173,14 +167,13 @@ const TransferTransaction = () => {
                 <div className="page-header-content">
                     <div>
                         <h2>Transfer Points</h2>
-                        <p>Send points to another user</p>
                     </div>
                     <button
                         onClick={() => setShowMyQR(!showMyQR)}
                         className={`show-qr-btn ${showMyQR ? 'show-qr-btn-active' : ''}`}
                     >
                         <QrCode size={18} />
-                        {showMyQR ? 'Hide My QR' : 'Show My QR'}
+                        {showMyQR ? 'Hide My QR Code' : 'Show My QR Code'}
                     </button>
                 </div>
             </div>
@@ -237,9 +230,10 @@ const TransferTransaction = () => {
                                     {scanning ? 'Stop' : 'Scan'}
                                 </button>
                             </div>
+                            {/* Will not show if regular user to maintain security standards from A2 */}
                             {recipientInfo && (
                                 <div className="recipient-info">
-                                    <strong>{recipientInfo.name || 'User'}</strong>
+                                    <strong>{recipientInfo.name || 'User Found'}</strong>
                                     {recipientInfo.utorid && <p className="recipient-utorid">UTORid: {recipientInfo.utorid}</p>}
                                 </div>
                             )}
@@ -271,7 +265,6 @@ const TransferTransaction = () => {
                                 step="1"
                                 required
                             />
-                            <small>Number of points to transfer (must be a positive integer)</small>
                         </div>
 
                         <div className="form-group">
@@ -287,7 +280,6 @@ const TransferTransaction = () => {
                                 placeholder="Add any additional notes..."
                                 rows="3"
                             />
-                            <small>Optional message or reason for the transfer</small>
                         </div>
                     </div>
 
@@ -317,16 +309,9 @@ const TransferTransaction = () => {
                         <p>The points will be deducted from your account and added to theirs</p>
                     </div>
                     <div className="info-item">
-                        <strong>QR Code Scanning:</strong>
-                        <p>Click the "Scan" button to open your camera</p>
-                        <p>Point your camera at the recipient's QR code</p>
-                        <p>The user ID will be automatically filled in</p>
-                    </div>
-                    <div className="info-item">
                         <strong>Requirements:</strong>
                         <p>You must be verified to transfer points</p>
                         <p>You must have sufficient points in your account</p>
-                        <p>The recipient must have a valid account</p>
                     </div>
                     <div className="info-item">
                         <strong>Irreversible:</strong>

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'sonner';
-import { Gift, QrCode, X, CheckCircle, Clock, AlertCircle, Upload } from 'lucide-react';
+import { Gift, QrCode, X, CheckCircle, Clock, AlertCircle } from 'lucide-react';
 import { Html5Qrcode } from 'html5-qrcode';
 import '../styles/ProcessRedemptions.css';
 
@@ -14,14 +14,13 @@ const ProcessRedemptions = () => {
     const [transactionId, setTransactionId] = useState('');
     const [transactionInfo, setTransactionInfo] = useState(null);
     const html5QrCodeRef = useRef(null);
-    const fileInputRef = useRef(null);
 
     const startScanning = () => {
         setScanning(true);
         const elementId = "qr-reader";
         const element = document.getElementById(elementId);
         if (!element) {
-            toast.error('Scanner element not found. Please try again.');
+            toast.error('Scanner element not found. Please reload page.');
             setScanning(false);
             return;
         }
@@ -33,20 +32,20 @@ const ProcessRedemptions = () => {
             { facingMode: "environment" }, // rear camera
             {
                 fps: 10,
-                qrbox: { width: 250, height: 250 }
+                qrbox: { width: 250, height: 250 },
             },
             (decodedText) => {
-                const scannedTransactionId = decodeTransactionId(decodedText);
-                setTransactionId(scannedTransactionId);
-                fetchTransactionInfo(scannedTransactionId);
+                setTransactionId(decodedText.trim());
+                fetchTransactionInfo(decodedText);
                 stopScanning();
                 toast.success('QR code scanned successfully!');
             },
             (errorMessage) => {
                 console.log(errorMessage);
+                throw new Error(errorMessage);
             }
         ).catch((err) => {
-            toast.error('Failed to start camera. Please check permissions.');
+            toast.error(err);
             setScanning(false);
         });
     };
@@ -61,47 +60,6 @@ const ProcessRedemptions = () => {
                 console.error('Error stopping scanner:', err);
                 setScanning(false);
             });
-        }
-    };
-
-    const handleFileUpload = async (e) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-
-        if (!file.type.startsWith('image/')) {
-            toast.error('Please upload an image file');
-            return;
-        }
-
-        try {
-            const html5QrCode = new Html5Qrcode();
-            const decodedText = await html5QrCode.scanFile(file, false);
-            const scannedTransactionId = decodeTransactionId(decodedText);
-            setTransactionId(scannedTransactionId);
-            fetchTransactionInfo(scannedTransactionId);
-            toast.success('QR code scanned successfully from image!');
-        } catch (error) {
-            console.error('Error scanning file:', error);
-            toast.error('Failed to scan QR code from image. Please ensure the image contains a valid QR code.');
-        } finally {
-            if (fileInputRef.current) {
-                fileInputRef.current.value = '';
-            }
-        }
-    };
-
-
-    const decodeTransactionId = (encodedText) => {
-        try {
-            // base64
-            const decoded = atob(encodedText.trim());
-            if (/^\d+$/.test(decoded)) { // validate is number
-                return decoded;
-            }
-            throw new Error('Error decoding QR code text');
-        } catch (error) {
-            toast.error('Error decoding QR code text');
-            return encodedText.trim();
         }
     };
 
@@ -177,11 +135,10 @@ const ProcessRedemptions = () => {
         };
     }, []);
 
-    return (
+    return ( 
         <div className="process-redemptions-page">
             <div className="page-header">
                 <h2>Process Redemptions</h2>
-                <p>Scan or enter a redemption transaction ID to process it</p>
             </div>
 
             <div className="process-form-container">
@@ -201,17 +158,6 @@ const ProcessRedemptions = () => {
                                 placeholder="Enter transaction ID or scan QR code"
                                 className="transaction-id-input"
                             />
-                            {/* <label htmlFor="file-upload" className="upload-btn">
-                                <Upload size={18} />
-                                <input
-                                    type="file"
-                                    id="file-upload"
-                                    ref={fileInputRef}
-                                    onChange={handleFileUpload}
-                                    accept="image/*"
-                                    style={{ display: 'none' }}
-                                />
-                            </label> */}
                             <button
                                 type="button"
                                 onClick={scanning ? stopScanning : startScanning}
@@ -274,7 +220,7 @@ const ProcessRedemptions = () => {
                                             </div>
                                             <div className="detail-row">
                                                 <span className="detail-label">Points to Redeem:</span>
-                                                <span className="detail-value">{transactionInfo.redeemed || Math.abs(transactionInfo.amount || 0)}</span>
+                                                <span className="detail-value">{Math.abs(transactionInfo.amount || 0)}</span>
                                             </div>
                                             {transactionInfo.remark && (
                                                 <div className="detail-row">
@@ -315,28 +261,14 @@ const ProcessRedemptions = () => {
                     <h3>Processing Info</h3>
                     <div className="info-item">
                         <strong>How it works:</strong>
-                        <p>Scan the customer's redemption QR code or enter the transaction ID</p>
+                        <p>Scan the customer's redemption QR code</p>
                         <p>Review the transaction details</p>
                         <p>Click "Process Redemption" to complete the transaction</p>
-                    </div>
-                    <div className="info-item">
-                        <strong>QR Code Scanning:</strong>
-                        <p>Click the "Scan" button to open your camera</p>
-                        <p>Point your camera at the customer's redemption QR code</p>
-                        <p>Or click the upload button to select an image file containing the QR code</p>
-                        <p>The transaction ID will be automatically filled in</p>
                     </div>
                     <div className="info-item">
                         <strong>Requirements:</strong>
                         <p>Transaction must be of type "redemption"</p>
                         <p>Transaction must not already be processed</p>
-                        <p>Customer must have sufficient points (already verified when request was created)</p>
-                    </div>
-                    <div className="info-item">
-                        <strong>After Processing:</strong>
-                        <p>Points will be deducted from the customer's account</p>
-                        <p>The transaction will be marked as processed</p>
-                        <p>You will be recorded as the processor</p>
                     </div>
                 </div>
             </div>

@@ -28,9 +28,6 @@
 	align-items: center;
 	margin-bottom: 0.5rem;
 }
-.transfer-transaction-page .page-header-content p {
-	text-align: left;
-}
 
 .transfer-transaction-page .show-qr-btn {
 	padding: 0.75rem 1.5rem;
@@ -74,11 +71,15 @@
 	flex-direction: column;
 	align-items: stretch;
 	justify-content: space-between;
+	gap: 0rem;
 }
 
 .transfer-transaction-page .form-group {
 	display: flex;
 	margin-bottom: 1.5rem;
+}
+.transfer-transaction-page .form-group:last-child {
+	margin-bottom: 0rem;
 }
 
 .transfer-transaction-page .form-group label {

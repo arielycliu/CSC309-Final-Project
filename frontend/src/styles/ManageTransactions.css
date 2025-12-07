@@ -249,20 +249,36 @@
 }
 
 .action-btn {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 32px;
   height: 32px;
+  min-width: 32px;
+  min-height: 32px;
   border-radius: 6px;
   border: none;
   cursor: pointer;
   transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.action-btn svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  stroke-width: 2;
 }
 
 .view-btn {
   background: #eff6ff;
   color: #3b82f6;
+}
+
+.view-btn svg {
+  color: #3b82f6;
+  stroke: currentColor;
 }
 
 .view-btn:hover {
@@ -275,6 +291,11 @@
   color: #dc2626;
 }
 
+.toggle-btn.mark-suspicious svg {
+  color: #dc2626;
+  stroke: currentColor;
+}
+
 .toggle-btn.mark-suspicious:hover {
   background: #fee2e2;
   transform: scale(1.05);
@@ -283,6 +304,11 @@
 .toggle-btn.mark-normal {
   background: #f0fdf4;
   color: #16a34a;
+}
+
+.toggle-btn.mark-normal svg {
+  color: #16a34a;
+  stroke: currentColor;
 }
 
 .toggle-btn.mark-normal:hover {

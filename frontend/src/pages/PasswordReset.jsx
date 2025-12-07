@@ -149,9 +149,12 @@ const PasswordReset = () => {
               value={resetData.password}
               onChange={handleResetChange}
               required
-              placeholder="Min 8 chars with mixed case, number, symbol"
             />
 
+            <p className="password-requirements">
+              Password must be 8-20 characters long and contain at least one uppercase letter, one lowercase letter, and one special character.
+            </p>
+            
             <label htmlFor="confirm">Confirm password</label>
             <input
               id="confirm"

@@ -149,18 +149,18 @@ router.get('/', requireClearance(CLEARANCE.REGULAR), async (req, res) => {
     }
 
     if (isManagerOrHigher) {
-        if (started && ended) {
+        if ((started === true || started === "true") && (ended === true || ended === "true")) {
             return res.status(400).json({ 'error': 'Bad request: both "started" and "ended" fields are specified' });
         }
         if (started === true || started === "true") {
             filters.startTime = { lte: now };
         } else if (started === false || started === "false") {
-            filters.startTime = { gt: now };
+            // filters.startTime = { gt: now };
         }
         if (ended === true || ended === "true") {
             filters.endTime = { lt: now };
         } else if (ended === false || ended === "false") {
-            filters.endTime = { gte: now };
+            // filters.endTime = { gte: now };
         }
     }
     if (isRegular || isCashier) {

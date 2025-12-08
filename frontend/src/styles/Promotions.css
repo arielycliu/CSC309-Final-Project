@@ -27,6 +27,78 @@
     color: white;
 }
 
+.promotions-page .promotions-filter {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.promotions-page .promotions-filter-form-wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, auto);
+    gap: 1rem;
+}
+
+.promotions-page .form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.promotions-page .form-group input {
+    width: 100%;
+}
+
+.promotions-page .form-group select {
+    padding: 0.8rem;
+    font-size: 1rem;
+    background-color: white;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    color: #0c1118;
+}
+
+.promotions-page .checkbox-inline {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.promotions-page .checkbox-inline input {
+    width: fit-content;
+    margin-top: 2.5px;
+}
+
+.promotions-page .form-actions {
+    margin-top: 0rem;
+}
+
+.promotions-page .form-actions button {
+    padding: 0.75rem 1.5rem;
+	background-color: #030213;
+	color: white;
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 0.875rem;
+	font-weight: 600;
+    margin: 0rem;
+}
+
+.promotions-page .form-actions button:hover {
+	background-color: #37373d;
+}
+
+
 .promotions-page .promotions-grid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;

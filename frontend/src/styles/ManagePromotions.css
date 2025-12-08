@@ -228,8 +228,15 @@
 }
 
 @media (max-width: 750px) {
+    .manage-promotions-page .promotions-table-container,
+    .manage-promotions-page .form-container {
+        width: 90vw;
+        overflow: auto;
+    }
     .manage-promotions-page .form-grid {
         display: flex;
         flex-direction: column;
+        width: 100%;
+        overflow: auto;
     }
 }

@@ -8,6 +8,8 @@ const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3000';
 
 export default function ManagePromotions() {
     const { token } = useAuth();
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalCount, setTotalCount] = useState(0);
     const [promotions, setPromotions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
@@ -22,6 +24,7 @@ export default function ManagePromotions() {
         rate: '',
         points: '',
     });
+    const limit = 5;
 
     useEffect(() => {
         fetchPromotions();
@@ -29,7 +32,7 @@ export default function ManagePromotions() {
 
     const fetchPromotions = async () => {
         try {
-            const response = await fetch(`${API_BASE}/promotions`, {
+            const response = await fetch(`${API_BASE}/promotions?page=${currentPage}&limit=${limit}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -42,6 +45,7 @@ export default function ManagePromotions() {
 
             const data = await response.json();
             setPromotions(data.results || []);
+            setTotalCount(data.count || 0);
         } catch (error) {
             console.error('Failed to load promotions:', error);
             toast.error(error.message || 'Failed to load promotions');
@@ -163,7 +167,7 @@ export default function ManagePromotions() {
         e.preventDefault();
         try {
             const payload = {};
-            
+
             if (formData.name) payload.name = formData.name;
             if (formData.description) payload.description = formData.description;
             if (formData.type) payload.type = formData.type;
@@ -195,6 +199,16 @@ export default function ManagePromotions() {
             toast.error(error.message || 'Failed to update promotion');
         }
     };
+
+    useEffect(() => {
+        fetchPromotions();
+    }, [currentPage]);
+
+    const handlePageChange = (newPage) => {
+        setCurrentPage(newPage);
+    };
+
+    const totalPages = Math.ceil(totalCount / limit);
 
     const handleDelete = async (id) => {
         if (!window.confirm('Are you sure you want to delete this promotion?')) {
@@ -231,7 +245,7 @@ export default function ManagePromotions() {
         const now = new Date();
         const endTime = new Date(promotion.endTime);
         const startTime = promotion.startTime ? new Date(promotion.startTime) : null;
-        
+
         if (startTime && startTime > now) return 'Upcoming';
         if (endTime < now) return 'Expired';
         return 'Active';
@@ -253,8 +267,8 @@ export default function ManagePromotions() {
                     <h4>Create, update, and delete promotions</h4>
                 </div>
                 {!showForm && (
-                    <button 
-                        className="create-button" 
+                    <button
+                        className="create-button"
                         onClick={() => {
                             resetForm();
                             setShowForm(true);
@@ -277,7 +291,7 @@ export default function ManagePromotions() {
                     <form onSubmit={editingId ? handleUpdate : handleCreate}>
                         <div className="form-grid">
                             {/* start time */}
-                            <div className="form-group"> 
+                            <div className="form-group">
                                 <label htmlFor="startTime">Start Time *</label>
                                 <input
                                     type="datetime-local"
@@ -377,7 +391,7 @@ export default function ManagePromotions() {
                                     step="1"
                                     min="0"
                                 />
-                            </div>                        
+                            </div>
                         </div>
 
                         <div className="form-actions">
@@ -448,6 +462,27 @@ export default function ManagePromotions() {
                     </tbody>
                 </table>
             </div>
+            {totalPages > 1 && (
+                <div className="pagination">
+                    <button
+                        className="page-btn"
+                        disabled={currentPage === 1}
+                        onClick={() => handlePageChange(currentPage - 1)}
+                    >
+                        Previous
+                    </button>
+                    <span className="page-info">
+                        Page {currentPage} of {totalPages}
+                    </span>
+                    <button
+                        className="page-btn"
+                        disabled={currentPage >= totalPages}
+                        onClick={() => handlePageChange(currentPage + 1)}
+                    >
+                        Next
+                    </button>
+                </div>
+            )}
         </div>
     );
 }

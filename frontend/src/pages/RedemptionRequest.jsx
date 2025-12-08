@@ -111,10 +111,10 @@ const RedemptionRequest = () => {
                             Create Another Request
                         </button>
                         <button
-                            onClick={() => navigate('/transactions')}
-                            className="view-transactions-btn"
+                            onClick={() => navigate('/transactions/pending-redemptions')}
+                            className="view-redemptions-btn"
                         >
-                            View All Transactions
+                            View All Pending Redemptions
                         </button>
                     </div>
                 </div>

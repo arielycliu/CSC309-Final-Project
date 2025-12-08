@@ -42,7 +42,7 @@ const ProcessRedemptions = () => {
             },
             (errorMessage) => {
                 console.log(errorMessage);
-                throw new Error(errorMessage);
+                // throw new Error(errorMessage);
             }
         ).catch((err) => {
             toast.error(err);

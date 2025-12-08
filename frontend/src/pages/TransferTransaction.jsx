@@ -79,7 +79,7 @@ const TransferTransaction = () => {
                 },
                 (errorMessage) => {
                     console.log(errorMessage);
-                    toast.error(errorMessage);
+                    // toast.error(errorMessage);
                 }
             ).catch((err) => {
                 toast.error('Failed to start camera. Please check permissions.');

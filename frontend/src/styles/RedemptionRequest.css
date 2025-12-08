@@ -194,7 +194,7 @@
 }
 
 .redemption-request-page .create-another-btn,
-.redemption-request-page .view-transactions-btn {
+.redemption-request-page .view-redemptions-btn {
 	padding: 0.875rem 1.5rem;
 	border: none;
 	border-radius: 8px;
@@ -212,12 +212,12 @@
 	background: #202025;
 }
 
-.redemption-request-page .view-transactions-btn {
+.redemption-request-page .view-redemptions-btn {
 	background: #f3f4f6;
 	color: #374151;
 }
 
-.redemption-request-page .view-transactions-btn:hover {
+.redemption-request-page .view-redemptions-btn:hover {
 	background: #e5e7eb;
 }
 

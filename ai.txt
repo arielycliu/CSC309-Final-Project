@@ -1,2 +1,3 @@
 - used AI in setting up QR code scanning and generation
 - used AI in generating random data for seeding script
+- used AI in generating icons for Manage Transactions page

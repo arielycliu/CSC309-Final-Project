@@ -47,6 +47,15 @@ VITE_API_BASE="http://localhost:3000"
 VITE_MAPBOX_TOKEN="pk.eyJ1IjoiYWxsb2YwMiIsImEiOiJjbWlqdmJwZDMxNjFzM2twc3JtZ2FseXFwIn0.lBIEqvbWuYKITrzW1qZezA"
 ```
 
+Backend packages
+```
+npm install @prisma/adapter-pg bcrypt cors dotenv express express-jwt jsonwebtoken multer pg sqlite3 uuid zod
+```
+Frontend packages
+```
+npm install @radix-ui/react-slot class-variance-authority d3 html5-qrcode lucide-react mapbox-gl qrcode.react react react-dom react-router-dom sonner
+```
+
 ## DEPLOYING ON RAILWAY
 1. Start a new project -> choose empty project
 

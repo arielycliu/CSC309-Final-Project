@@ -119,6 +119,7 @@
 .promotions-page .promotion-header {
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
 }
 .promotions-page .promotion-header h4 {
     margin: 0;
@@ -194,4 +195,19 @@
 .promotions-page .page-info {
     font-size: 0.875rem;
     color: #6b7280;
+}
+
+@media (max-width: 768px) {
+    .promotions-page .promotions-filter-form-wrapper {
+        display: flex;
+        flex-direction: column;
+    }
+    .promotions-page .promotions-filter {
+        padding: 1.5rem;
+    }
+    .promotions-page .promotions-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
 }

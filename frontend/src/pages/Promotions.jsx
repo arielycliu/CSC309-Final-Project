@@ -15,7 +15,7 @@ export default function Promotions() {
     const [totalCount, setTotalCount] = useState(0);
 
     const defaultPage = 1;
-    const defaultLimit = 5;
+    const defaultLimit = 100;
 
     const [filters, setFilters] = useState({
         name: "",

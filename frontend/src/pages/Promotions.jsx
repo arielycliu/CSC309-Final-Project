@@ -35,7 +35,7 @@ export default function Promotions() {
             params.set("limit", defaultLimit);
             setSearchParams(params, { replace: true });
         }
-    }, []);
+    }, [location.pathname]); // rerun on page switch
 
     const handleChange = (e) => {
         // update url to match filters

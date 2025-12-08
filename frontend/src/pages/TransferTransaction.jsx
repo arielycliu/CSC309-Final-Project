@@ -111,6 +111,10 @@ const TransferTransaction = () => {
                 throw new Error('Recipient user ID is required');
             }
 
+            if (formData.userId == user.id) {
+                throw new Error('You cannot transfer points to yourself');
+            }
+
             const pointAmount = parseInt(formData.amount, 10);
 
             if (pointAmount <= 0) {
